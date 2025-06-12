@@ -1,0 +1,39 @@
+<div class="controls">
+  <label>
+    Width:
+    <input
+      type="number"
+      [value]="room().width"
+      (input)="updateRoomWidth($event)"
+    />
+  </label>
+
+  <label>
+    Height:
+    <input
+      type="number"
+      [value]="room().height"
+      (input)="updateRoomHeight($event)"
+    />
+  </label>
+
+  <button (click)="addElement('rect')">Add Rectangle</button>
+  <button (click)="addElement('circle')">Add Circle</button>
+  <button (click)="addEntrance()">Add Entrance</button>
+  <button (click)="clearElements()">Clear</button>
+</div>
+
+<canvas #canvas style="border: 1px solid black"></canvas>
+
+<h3>Exported JSON</h3>
+<pre>{{ exportJSON() }}</pre>
+
+<h3>Import Layout</h3>
+<textarea
+  rows="6"
+  cols="60"
+  [value]="importedJSON()"
+  (input)="importedJSON.set($any($event.target).value)"
+></textarea
+><br />
+<button (click)="importFromJSON()">Import</button>

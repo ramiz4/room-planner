@@ -33,9 +33,9 @@ export class CanvasDrawingService {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
     // Draw elements in order: walls, decorations, tables, entrances
-    this.drawElements(ctx, room.walls || [], selectedId);
-    this.drawElements(ctx, room.decorations || [], selectedId);
-    this.drawElements(ctx, room.tables, selectedId);
+    this.drawElements(ctx, room.walls || [], selectedId, true);
+    this.drawElements(ctx, room.decorations || [], selectedId, true);
+    this.drawElements(ctx, room.tables, selectedId, true);
     this.drawElements(ctx, room.entrances, selectedId, true);
   }
 

@@ -36,17 +36,27 @@
               <span>Interactive Mode</span>
             </div>
           </div>
-          <div class="flex justify-center overflow-auto">
-            <div class="max-w-full max-h-[500px] overflow-auto">
+          <div class="flex justify-center overflow-auto touch-pan-y">
+            <div class="max-w-full max-h-[500px] overflow-auto relative">
               <canvas
                 #canvas
                 appCanvasInteraction
                 [room]="room()"
                 [selectedId]="selectedId()"
                 (interaction)="onCanvasInteraction($event)"
-                class="block max-w-none border bg-white"
+                class="block max-w-none border bg-white touch-none select-none"
               >
               </canvas>
+              <!-- Mobile touch hint -->
+              <div
+                class="absolute top-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded md:hidden pointer-events-none"
+              >
+                <div class="text-center">
+                  <div>Tap: Select</div>
+                  <div>Drag: Move</div>
+                  <div>Pinch: Resize</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

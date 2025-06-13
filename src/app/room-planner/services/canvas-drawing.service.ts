@@ -23,6 +23,13 @@ export class CanvasDrawingService {
     canvas.height = room.height;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw grid lines
+    this.drawGrid(ctx, canvas.width, canvas.height);
+
+    // Draw room border
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
     // Draw elements in order: walls, decorations, tables, entrances
@@ -135,6 +142,32 @@ export class CanvasDrawingService {
       ctx.fillText(el.label!, centerX, centerY);
     } else {
       ctx.fillText(el.label!, el.x + el.width / 2, el.y + el.height / 2);
+    }
+  }
+
+  private drawGrid(
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number
+  ): void {
+    ctx.strokeStyle = '#e5e7eb'; // Light gray color
+    ctx.lineWidth = 1;
+    ctx.setLineDash([]);
+
+    // Draw vertical grid lines
+    for (let x = this.GRID_SIZE; x < width; x += this.GRID_SIZE) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    }
+
+    // Draw horizontal grid lines
+    for (let y = this.GRID_SIZE; y < height; y += this.GRID_SIZE) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
     }
   }
 

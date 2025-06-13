@@ -69,10 +69,13 @@ export class RoomPlannerComponent {
   }
 
   // Event handlers for child components
-  onAddElement(event: { elementType: string; shapeType: string }): void {
+  onAddElement(event: {
+    elementType: 'table' | 'entrance' | 'decoration' | 'wall';
+    shapeType: 'rect' | 'circle';
+  }): void {
     const element = this.elementService.createElement(
-      event.shapeType as 'rect' | 'circle',
-      event.elementType as 'table' | 'entrance' | 'decoration' | 'wall'
+      event.shapeType,
+      event.elementType
     );
 
     this.room.update((room) => {

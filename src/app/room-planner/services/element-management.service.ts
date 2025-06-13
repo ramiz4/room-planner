@@ -29,6 +29,14 @@ export class ElementManagementService {
 
     // Customize based on element type
     switch (elementType) {
+      case 'table':
+        return {
+          ...baseElement,
+          width: this.snap(80),
+          height: this.snap(40),
+          color: '#FFD700',
+          label: 'Table',
+        };
       case 'entrance':
         return {
           ...baseElement,
@@ -45,6 +53,7 @@ export class ElementManagementService {
           width: this.snap(200),
           height: this.snap(20),
           color: '#8B4513',
+          label: 'Wall',
         };
       case 'decoration':
         return {
@@ -52,6 +61,7 @@ export class ElementManagementService {
           width: this.snap(50),
           height: this.snap(50),
           color: '#32CD32',
+          label: 'Deco',
         };
       default:
         return baseElement;

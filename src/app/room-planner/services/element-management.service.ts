@@ -13,7 +13,7 @@ import { Room } from '../interfaces/room.interface';
   providedIn: 'root',
 })
 export class ElementManagementService {
-  private readonly GRID_SIZE = ROOM_PLANNER_CONSTANTS.GRID_SIZE;
+  private readonly GRID_SIZE = ROOM_PLANNER_CONSTANTS.ROOM_GRID_SIZE;
 
   snap(value: number): number {
     return Math.round(value / this.GRID_SIZE) * this.GRID_SIZE;
@@ -22,65 +22,24 @@ export class ElementManagementService {
   private nextZIndex = 1;
 
   createElement(elementType: ElementType, shapeType: ShapeType): RoomElement {
-    const baseElement: RoomElement = {
+    return {
       id: crypto.randomUUID(),
-      x: this.snap(100),
-      y: this.snap(100),
-      width: this.snap(100),
-      height: this.snap(60),
-      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+      x: this.snap(ROOM_PLANNER_CONSTANTS.ELEMENT_X_POSITION),
+      y: this.snap(ROOM_PLANNER_CONSTANTS.ELEMENT_Y_POSITION),
+      width: this.snap(ROOM_PLANNER_CONSTANTS.ELEMENT_WIDTH),
+      height: this.snap(ROOM_PLANNER_CONSTANTS.ELEMENT_HEIGHT),
+      color: ROOM_PLANNER_CONSTANTS.ELEMENT_COLOR,
+      label: elementType === ElementTypeEnum.TABLE ? 'Table' : 'Static Element',
       elementType: elementType,
       shapeType: shapeType,
       zIndex: this.nextZIndex++,
     };
-
-    // Customize based on element type
-    switch (elementType) {
-      case ElementTypeEnum.TABLE:
-        return {
-          ...baseElement,
-          width: this.snap(80),
-          height: this.snap(40),
-          color: '#FFD700',
-          label: 'Table',
-        };
-      case ElementTypeEnum.ENTRANCE:
-        return {
-          ...baseElement,
-          x: this.snap(50),
-          y: this.snap(0),
-          width: this.snap(80),
-          height: this.snap(30),
-          color: '#808080',
-          label: 'Entrance',
-        };
-      case ElementTypeEnum.WALL:
-        return {
-          ...baseElement,
-          width: this.snap(200),
-          height: this.snap(20),
-          color: '#8B4513',
-          label: 'Wall',
-        };
-      case ElementTypeEnum.DECORATION:
-        return {
-          ...baseElement,
-          width: this.snap(50),
-          height: this.snap(50),
-          color: '#32CD32',
-          label: 'Deco',
-        };
-      default:
-        return baseElement;
-    }
   }
 
   updateElement(room: Room, id: string, update: Partial<RoomElement>): Room {
     // Find which array the element belongs to
     const tableEl = room.tables.find((el) => el.id === id);
-    const entranceEl = room.entrances.find((el) => el.id === id);
-    const decorationEl = room.decorations?.find((el) => el.id === id);
-    const wallEl = room.walls?.find((el) => el.id === id);
+    const staticEl = room.staticElements.find((el) => el.id === id);
 
     if (tableEl) {
       return {
@@ -89,24 +48,10 @@ export class ElementManagementService {
           el.id === id ? { ...el, ...update } : el
         ),
       };
-    } else if (entranceEl) {
+    } else if (staticEl) {
       return {
         ...room,
-        entrances: room.entrances.map((el) =>
-          el.id === id ? { ...el, ...update } : el
-        ),
-      };
-    } else if (decorationEl) {
-      return {
-        ...room,
-        decorations: room.decorations!.map((el) =>
-          el.id === id ? { ...el, ...update } : el
-        ),
-      };
-    } else if (wallEl) {
-      return {
-        ...room,
-        walls: room.walls!.map((el) =>
+        staticElements: room.staticElements.map((el) =>
           el.id === id ? { ...el, ...update } : el
         ),
       };
@@ -117,12 +62,9 @@ export class ElementManagementService {
   findElementAt(room: Room, x: number, y: number): RoomElement | null {
     // Combine all element types into a single array for hit testing
     // Sort by z-index (highest first) to check elements on top first
-    const allElements = [
-      ...(room.walls || []),
-      ...(room.decorations || []),
-      ...room.tables,
-      ...room.entrances,
-    ].sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+    const allElements = [...room.staticElements, ...room.tables].sort(
+      (a, b) => (b.zIndex || 0) - (a.zIndex || 0)
+    );
 
     return (
       allElements.find((el) => {
@@ -189,21 +131,14 @@ export class ElementManagementService {
 
     return (
       room.tables.find((el) => el.id === selectedId) ||
-      room.entrances.find((el) => el.id === selectedId) ||
-      room.decorations?.find((el) => el.id === selectedId) ||
-      room.walls?.find((el) => el.id === selectedId) ||
+      room.staticElements.find((el) => el.id === selectedId) ||
       null
     );
   }
 
   bringElementToFront(room: Room, elementId: string): Room {
     // Find the current highest z-index
-    const allElements = [
-      ...room.tables,
-      ...room.entrances,
-      ...(room.decorations || []),
-      ...(room.walls || []),
-    ];
+    const allElements = [...room.tables, ...room.staticElements];
 
     const maxZIndex = Math.max(...allElements.map((el) => el.zIndex || 0));
     const newZIndex = maxZIndex + 1;
@@ -214,12 +149,7 @@ export class ElementManagementService {
 
   initializeZIndices(room: Room): Room {
     let zIndex = 1;
-    const allElementArrays = [
-      room.walls || [],
-      room.decorations || [],
-      room.tables,
-      room.entrances,
-    ];
+    const allElementArrays = [room.staticElements, room.tables];
 
     // Assign z-indices to elements that don't have them
     allElementArrays.forEach((elements) => {
@@ -242,9 +172,7 @@ export class ElementManagementService {
     return {
       ...room,
       tables: room.tables.filter((el) => el.id !== elementId),
-      entrances: room.entrances.filter((el) => el.id !== elementId),
-      decorations: (room.decorations || []).filter((el) => el.id !== elementId),
-      walls: (room.walls || []).filter((el) => el.id !== elementId),
+      staticElements: room.staticElements.filter((el) => el.id !== elementId),
     };
   }
 }

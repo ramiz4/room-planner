@@ -10,6 +10,7 @@ import {
 import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonManagerComponent } from './components/json-manager.component';
 import { RoomControlsComponent } from './components/room-controls.component';
+import { ROOM_PLANNER_CONSTANTS } from './constants/room-planner.constants';
 import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
 import {
   CanvasInteractionEvent,
@@ -27,7 +28,6 @@ import { ElementManagementService } from './services/element-management.service'
 
 @Component({
   selector: 'app-room-planner',
-  standalone: true,
   templateUrl: './room-planner.component.html',
   imports: [
     RoomControlsComponent,
@@ -46,12 +46,10 @@ export class RoomPlannerComponent {
 
   // 📦 Reactive state
   readonly room = signal<Room>({
-    width: 600,
-    height: 400,
+    width: ROOM_PLANNER_CONSTANTS.ROOM_WIDTH,
+    height: ROOM_PLANNER_CONSTANTS.ROOM_HEIGHT,
     tables: [],
-    entrances: [],
-    decorations: [],
-    walls: [],
+    staticElements: [],
   });
 
   readonly selectedId = signal<string | null>(null);
@@ -101,15 +99,8 @@ export class RoomPlannerComponent {
       switch (event.elementType) {
         case ElementTypeEnum.TABLE:
           return { ...room, tables: [...room.tables, element] };
-        case ElementTypeEnum.ENTRANCE:
-          return { ...room, entrances: [...room.entrances, element] };
-        case ElementTypeEnum.DECORATION:
-          return {
-            ...room,
-            decorations: [...(room.decorations || []), element],
-          };
-        case ElementTypeEnum.WALL:
-          return { ...room, walls: [...(room.walls || []), element] };
+        case ElementTypeEnum.STATIC:
+          return { ...room, staticElements: [...room.staticElements, element] };
         default:
           return room;
       }
@@ -123,9 +114,7 @@ export class RoomPlannerComponent {
     this.room.update((r) => ({
       ...r,
       tables: [],
-      entrances: [],
-      decorations: [],
-      walls: [],
+      staticElements: [],
     }));
     this.selectedId.set(null);
   }

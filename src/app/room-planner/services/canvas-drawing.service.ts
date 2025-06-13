@@ -10,8 +10,8 @@ import { Room } from '../interfaces/room.interface';
   providedIn: 'root',
 })
 export class CanvasDrawingService {
-  private readonly HANDLE_SIZE = ROOM_PLANNER_CONSTANTS.HANDLE_SIZE;
-  private readonly GRID_SIZE = ROOM_PLANNER_CONSTANTS.GRID_SIZE;
+  private readonly HANDLE_SIZE = ROOM_PLANNER_CONSTANTS.ELEMENT_HANDLE_SIZE;
+  private readonly GRID_SIZE = ROOM_PLANNER_CONSTANTS.ROOM_GRID_SIZE;
 
   drawRoom(
     ctx: CanvasRenderingContext2D,
@@ -28,17 +28,14 @@ export class CanvasDrawingService {
     this.drawGrid(ctx, canvas.width, canvas.height);
 
     // Draw room border
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = ROOM_PLANNER_CONSTANTS.ROOM_BORDER_COLOR;
+    ctx.lineWidth = ROOM_PLANNER_CONSTANTS.ROOM_BORDER_WIDTH;
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
     // Combine all elements and sort by z-index for proper layering
-    const allElements = [
-      ...(room.walls || []),
-      ...(room.decorations || []),
-      ...room.tables,
-      ...room.entrances,
-    ].sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+    const allElements = [...room.staticElements, ...room.tables].sort(
+      (a, b) => (a.zIndex || 0) - (b.zIndex || 0)
+    );
 
     // Draw all elements in z-index order
     this.drawElements(ctx, allElements, selectedId, true);
@@ -61,12 +58,14 @@ export class CanvasDrawingService {
     isSelected: boolean,
     drawLabel = false
   ): void {
-    ctx.fillStyle = el.color || 'gray';
-    // Apply shadow effect
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
-    ctx.shadowBlur = 4;
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
+    ctx.fillStyle = el.color || ROOM_PLANNER_CONSTANTS.ELEMENT_COLOR;
+
+    if (ROOM_PLANNER_CONSTANTS.ELEMENT_SHADOW_VISIBLE) {
+      ctx.shadowColor = ROOM_PLANNER_CONSTANTS.ELEMENT_SHADOW_COLOR;
+      ctx.shadowBlur = ROOM_PLANNER_CONSTANTS.ELEMENT_SHADOW_BLUR;
+      ctx.shadowOffsetX = ROOM_PLANNER_CONSTANTS.ELEMENT_SHADOW_OFFSET_X;
+      ctx.shadowOffsetY = ROOM_PLANNER_CONSTANTS.ELEMENT_SHADOW_OFFSET_Y;
+    }
 
     if (el.shapeType === ShapeTypeEnum.RECTANGLE) {
       this.drawRectangle(ctx, el, isSelected);
@@ -106,11 +105,7 @@ export class CanvasDrawingService {
     ctx.fill();
 
     if (isSelected) {
-      ctx.strokeStyle = 'blue';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.stroke();
+      this.drawSelectionOutline(ctx, el);
       this.drawResizeHandle(ctx, el);
     }
   }
@@ -121,7 +116,16 @@ export class CanvasDrawingService {
   ): void {
     ctx.strokeStyle = 'blue';
     ctx.lineWidth = 2;
-    ctx.strokeRect(el.x, el.y, el.width, el.height);
+    if (el.shapeType === ShapeTypeEnum.CIRCLE) {
+      const radius = Math.min(el.width, el.height) / 2;
+      const centerX = el.x + el.width / 2;
+      const centerY = el.y + el.height / 2;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.stroke();
+    } else {
+      ctx.strokeRect(el.x, el.y, el.width, el.height);
+    }
   }
 
   private drawResizeHandle(
@@ -214,8 +218,8 @@ export class CanvasDrawingService {
     width: number,
     height: number
   ): void {
-    ctx.strokeStyle = '#e5e7eb'; // Light gray color
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = ROOM_PLANNER_CONSTANTS.ROOM_GRID_COLOR;
+    ctx.lineWidth = ROOM_PLANNER_CONSTANTS.ROOM_GRID_WIDTH;
     ctx.setLineDash([]);
 
     // Draw vertical grid lines

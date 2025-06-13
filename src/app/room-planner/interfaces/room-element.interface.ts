@@ -1,8 +1,6 @@
 export enum ElementTypeEnum {
   TABLE = 'table',
-  ENTRANCE = 'entrance',
-  DECORATION = 'decoration',
-  WALL = 'wall',
+  STATIC = 'static',
 }
 
 export type ElementType = ElementTypeEnum[keyof ElementTypeEnum];

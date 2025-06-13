@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ROOM_PLANNER_CONSTANTS } from '../constants/room-planner.constants';
 import { ElementType, RoomElement } from '../interfaces/room-element.interface';
 
 @Component({
@@ -93,7 +94,10 @@ import { ElementType, RoomElement } from '../interfaces/room-element.interface';
               id="element-color"
               name="elementColor"
               type="color"
-              [value]="selectedElement.color || '#6b7280'"
+              [value]="
+                selectedElement.color ||
+                ROOM_PLANNER_CONSTANTS.ELEMENT_COLOR_SELECTED
+              "
               (change)="onColorChange($event)"
               class="h-10 border border-gray-300 rounded cursor-pointer appearance-none flex-shrink-0"
               style="min-width: 48px;"
@@ -102,7 +106,10 @@ import { ElementType, RoomElement } from '../interfaces/room-element.interface';
               id="element-color-hex"
               name="elementColorHex"
               type="text"
-              [value]="selectedElement.color || '#6b7280'"
+              [value]="
+                selectedElement.color ||
+                ROOM_PLANNER_CONSTANTS.ELEMENT_COLOR_SELECTED
+              "
               (input)="onColorInputChange($event)"
               placeholder="#6b7280"
               class="min-w-0 flex-1 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs font-mono"
@@ -238,6 +245,7 @@ export class ElementPropertiesComponent {
   @Output() deleteElement = new EventEmitter<void>();
 
   labelInput = signal('');
+  ROOM_PLANNER_CONSTANTS = ROOM_PLANNER_CONSTANTS;
 
   ngOnChanges() {
     if (this.selectedElement) {

@@ -5,6 +5,7 @@ import {
   ElementType,
   ElementTypeEnum,
   RoomElement,
+  ShapeTypeEnum,
 } from '../interfaces/room-element.interface';
 
 @Component({
@@ -143,29 +144,11 @@ import {
                 type="number"
                 [value]="selectedElement.width"
                 (input)="onWidthChange($event)"
-                (keydown.arrowup)="adjustWidth(1, $event)"
-                (keydown.arrowdown)="adjustWidth(-1, $event)"
                 min="10"
                 max="500"
                 step="1"
-                class="w-full px-2 py-1.5 pr-6 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
+                class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
               />
-              <div class="absolute inset-y-0 right-0 flex flex-col">
-                <button
-                  type="button"
-                  (click)="adjustWidth(1)"
-                  class="flex-1 px-1 text-gray-400 hover:text-gray-600 text-xs leading-none"
-                >
-                  ▲
-                </button>
-                <button
-                  type="button"
-                  (click)="adjustWidth(-1)"
-                  class="flex-1 px-1 text-gray-400 hover:text-gray-600 text-xs leading-none"
-                >
-                  ▼
-                </button>
-              </div>
             </div>
           </div>
           <div class="space-y-1">
@@ -182,34 +165,13 @@ import {
                 type="number"
                 [value]="selectedElement.height"
                 (input)="onHeightChange($event)"
-                (keydown.arrowup)="adjustHeight(1, $event)"
-                (keydown.arrowdown)="adjustHeight(-1, $event)"
                 min="10"
                 max="500"
                 step="1"
-                class="w-full px-2 py-1.5 pr-6 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
+                class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
               />
-              <div class="absolute inset-y-0 right-0 flex flex-col">
-                <button
-                  type="button"
-                  (click)="adjustHeight(1)"
-                  class="flex-1 px-1 text-gray-400 hover:text-gray-600 text-xs leading-none"
-                >
-                  ▲
-                </button>
-                <button
-                  type="button"
-                  (click)="adjustHeight(-1)"
-                  class="flex-1 px-1 text-gray-400 hover:text-gray-600 text-xs leading-none"
-                >
-                  ▼
-                </button>
-              </div>
             </div>
           </div>
-        </div>
-        <div class="text-xs text-gray-500 text-center">
-          ↑↓ Adjust with arrow keys • Shift+↑↓ for larger steps
         </div>
       </div>
 
@@ -258,14 +220,14 @@ import {
           @if (selectedElement.elementType === ElementTypeEnum.TABLE) {
           <button
             type="button"
-            (click)="setPresetSize(120, 80)"
+            (click)="setPresetSize(selectedElement, 80, 80)"
             class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
           >
             Small Table
           </button>
           <button
             type="button"
-            (click)="setPresetSize(160, 80)"
+            (click)="setPresetSize(selectedElement, 160, 80)"
             class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
           >
             Large Table
@@ -344,6 +306,7 @@ export class ElementPropertiesComponent {
   lockAspectRatio = signal(false);
   ROOM_PLANNER_CONSTANTS = ROOM_PLANNER_CONSTANTS;
   ElementTypeEnum = ElementTypeEnum;
+  ShapeTypeEnum = ShapeTypeEnum;
 
   ngOnChanges() {
     if (this.selectedElement) {
@@ -452,44 +415,11 @@ export class ElementPropertiesComponent {
     }
   }
 
-  adjustWidth(delta: number, event?: Event): void {
-    if (!this.selectedElement) return;
-
-    event?.preventDefault();
-    const step = event && (event as KeyboardEvent).shiftKey ? 10 : delta;
-    const newWidth = Math.max(
-      10,
-      Math.min(500, this.selectedElement.width + step)
-    );
-
-    if (this.lockAspectRatio()) {
-      const newHeight = Math.round(newWidth / this.aspectRatio);
-      this.updateElement.emit({ width: newWidth, height: newHeight });
-    } else {
-      this.updateElement.emit({ width: newWidth });
+  setPresetSize(element: RoomElement, width: number, height: number): void {
+    if (element.shapeType === ShapeTypeEnum.CIRCLE) {
+      height = width;
     }
-  }
-
-  adjustHeight(delta: number, event?: Event): void {
-    if (!this.selectedElement) return;
-
-    event?.preventDefault();
-    const step = event && (event as KeyboardEvent).shiftKey ? 10 : delta;
-    const newHeight = Math.max(
-      10,
-      Math.min(500, this.selectedElement.height + step)
-    );
-
-    if (this.lockAspectRatio()) {
-      const newWidth = Math.round(newHeight * this.aspectRatio);
-      this.updateElement.emit({ width: newWidth, height: newHeight });
-    } else {
-      this.updateElement.emit({ height: newHeight });
-    }
-  }
-
-  setPresetSize(width: number, height: number): void {
-    this.updateElement.emit({ width, height });
+    this.updateElement.emit({ ...element, width, height });
   }
 
   centerElement(): void {

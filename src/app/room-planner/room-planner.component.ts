@@ -74,6 +74,8 @@ export class RoomPlannerComponent {
 
   ngAfterViewInit() {
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
+    // Trigger initial drawing now that canvas context is available
+    this.drawingService.drawRoom(this.ctx, this.room(), this.selectedId());
   }
 
   // Event handlers for child components

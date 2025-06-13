@@ -1,39 +1,26 @@
-<div class="controls">
-  <label>
-    Width:
-    <input
-      type="number"
-      [value]="room().width"
-      (input)="updateRoomWidth($event)"
-    />
-  </label>
+<app-room-controls
+  [room]="room()"
+  (roomWidthChange)="onRoomWidthChange($event)"
+  (roomHeightChange)="onRoomHeightChange($event)"
+  (addElement)="onAddElement($event)"
+  (clearElements)="onClearElements()"
+>
+</app-room-controls>
 
-  <label>
-    Height:
-    <input
-      type="number"
-      [value]="room().height"
-      (input)="updateRoomHeight($event)"
-    />
-  </label>
+<canvas
+  #canvas
+  appCanvasInteraction
+  [room]="room()"
+  [selectedId]="selectedId()"
+  (interaction)="onCanvasInteraction($event)"
+  style="border: 1px solid black"
+>
+</canvas>
 
-  <button (click)="addElement('rect')">Add Table (rect)</button>
-  <button (click)="addElement('circle')">Add Table (circle)</button>
-  <button (click)="addEntrance()">Add Entrance</button>
-  <button (click)="clearElements()">Clear</button>
-</div>
-
-<canvas #canvas style="border: 1px solid black"></canvas>
-
-<h3>Exported JSON</h3>
-<pre>{{ exportJSON() }}</pre>
-
-<h3>Import Layout</h3>
-<textarea
-  rows="6"
-  cols="60"
-  [value]="importedJSON()"
-  (input)="importedJSON.set($any($event.target).value)"
-></textarea
-><br />
-<button (click)="importFromJSON()">Import</button>
+<app-json-manager
+  [room]="room()"
+  [importedJson]="importedJSON()"
+  (import)="onImportLayout($event)"
+  (importedJsonChange)="onImportedJsonChange($event)"
+>
+</app-json-manager>

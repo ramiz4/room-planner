@@ -7,6 +7,7 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
+import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonManagerComponent } from './components/json-manager.component';
 import { RoomControlsComponent } from './components/room-controls.component';
 import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
@@ -31,6 +32,7 @@ import { ElementManagementService } from './services/element-management.service'
   imports: [
     RoomControlsComponent,
     JsonManagerComponent,
+    ElementPropertiesComponent,
     CanvasInteractionDirective,
   ],
 })
@@ -74,11 +76,13 @@ export class RoomPlannerComponent {
 
   ngAfterViewInit() {
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
-    
+
     // Initialize z-indices for any existing elements
-    const roomWithZIndices = this.elementService.initializeZIndices(this.room());
+    const roomWithZIndices = this.elementService.initializeZIndices(
+      this.room()
+    );
     this.room.set(roomWithZIndices);
-    
+
     // Trigger initial drawing now that canvas context is available
     this.drawingService.drawRoom(this.ctx, this.room(), this.selectedId());
   }
@@ -149,7 +153,7 @@ export class RoomPlannerComponent {
         break;
       case CanvasInteractionEventTypeEnum.MOVE:
         if (event.elementId && event.position) {
-          this.updateElement(event.elementId, {
+          this.onUpdateElement(event.elementId, {
             x: event.position.x,
             y: event.position.y,
           });
@@ -157,7 +161,7 @@ export class RoomPlannerComponent {
         break;
       case CanvasInteractionEventTypeEnum.RESIZE:
         if (event.elementId && event.size) {
-          this.updateElement(event.elementId, {
+          this.onUpdateElement(event.elementId, {
             width: event.size.width,
             height: event.size.height,
           });
@@ -177,12 +181,21 @@ export class RoomPlannerComponent {
     this.importedJSON.set(json);
   }
 
-  private updateElement(id: string, update: Partial<RoomElement>): void {
+  onUpdateElement(elementId: string, update: Partial<RoomElement>): void {
     const updatedRoom = this.elementService.updateElement(
       this.room(),
-      id,
+      elementId,
       update
     );
     this.room.set(updatedRoom);
+  }
+
+  onDeleteElement(elementId: string): void {
+    const updatedRoom = this.elementService.deleteElement(
+      this.room(),
+      elementId
+    );
+    this.room.set(updatedRoom);
+    this.selectedId.set(null);
   }
 }

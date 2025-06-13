@@ -157,18 +157,56 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     el: RoomElement
   ): void {
-    ctx.fillStyle = 'black';
+    // Reset shadow for text
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
+    // Draw white background for better readability
     ctx.font = '14px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
+    const text = el.label || '';
+    if (!text) return;
+
+    const metrics = ctx.measureText(text);
+    const textWidth = metrics.width;
+    const textHeight = 16; // Approximate height
+
+    let centerX: number, centerY: number;
+
     if (el.shapeType === ShapeTypeEnum.CIRCLE) {
-      const centerX = el.x + el.width / 2;
-      const centerY = el.y + el.height / 2;
-      ctx.fillText(el.label!, centerX, centerY);
+      centerX = el.x + el.width / 2;
+      centerY = el.y + el.height / 2;
     } else {
-      ctx.fillText(el.label!, el.x + el.width / 2, el.y + el.height / 2);
+      centerX = el.x + el.width / 2;
+      centerY = el.y + el.height / 2;
     }
+
+    // Draw background rectangle for text
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.fillRect(
+      centerX - textWidth / 2 - 4,
+      centerY - textHeight / 2 - 2,
+      textWidth + 8,
+      textHeight + 4
+    );
+
+    // Draw border around text background
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(
+      centerX - textWidth / 2 - 4,
+      centerY - textHeight / 2 - 2,
+      textWidth + 8,
+      textHeight + 4
+    );
+
+    // Draw text
+    ctx.fillStyle = 'black';
+    ctx.fillText(text, centerX, centerY);
   }
 
   private drawGrid(

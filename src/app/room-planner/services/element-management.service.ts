@@ -237,4 +237,14 @@ export class ElementManagementService {
 
     return room;
   }
+
+  deleteElement(room: Room, elementId: string): Room {
+    return {
+      ...room,
+      tables: room.tables.filter((el) => el.id !== elementId),
+      entrances: room.entrances.filter((el) => el.id !== elementId),
+      decorations: (room.decorations || []).filter((el) => el.id !== elementId),
+      walls: (room.walls || []).filter((el) => el.id !== elementId),
+    };
+  }
 }

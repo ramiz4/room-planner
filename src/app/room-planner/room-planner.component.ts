@@ -187,4 +187,47 @@ export class RoomPlannerComponent {
     this.room.set(updatedRoom);
     this.selectedId.set(null);
   }
+
+  onDuplicateElement(elementId: string): void {
+    const element = this.elementService.getSelectedElement(this.room(), elementId);
+    if (!element) return;
+
+    const duplicatedElement = this.elementService.createElement(
+      element.elementType,
+      element.shapeType || 'rectangle'
+    );
+    
+    // Position the duplicate slightly offset from the original
+    duplicatedElement.x = element.x + 20;
+    duplicatedElement.y = element.y + 20;
+    duplicatedElement.width = element.width;
+    duplicatedElement.height = element.height;
+    duplicatedElement.color = element.color;
+    duplicatedElement.label = element.label ? `${element.label} Copy` : undefined;
+
+    this.room.update((room) => {
+      switch (element.elementType) {
+        case ElementTypeEnum.TABLE:
+          return { ...room, tables: [...room.tables, duplicatedElement] };
+        case ElementTypeEnum.STATIC:
+          return { ...room, staticElements: [...room.staticElements, duplicatedElement] };
+        default:
+          return room;
+      }
+    });
+
+    // Select the duplicated element
+    this.selectedId.set(duplicatedElement.id);
+  }
+
+  onCenterElement(elementId: string): void {
+    const element = this.elementService.getSelectedElement(this.room(), elementId);
+    if (!element) return;
+
+    const room = this.room();
+    const centerX = (room.width - element.width) / 2;
+    const centerY = (room.height - element.height) / 2;
+
+    this.onUpdateElement(elementId, { x: centerX, y: centerY });
+  }
 }

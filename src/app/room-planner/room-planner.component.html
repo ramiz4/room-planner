@@ -59,6 +59,8 @@
             [selectedElement]="selectedElement()"
             (updateElement)="onUpdateElement(selectedId()!, $event)"
             (deleteElement)="onDeleteElement(selectedId()!)"
+            (duplicateElementEvent)="onDuplicateElement(selectedId()!)"
+            (centerElementEvent)="onCenterElement(selectedId()!)"
           >
           </app-element-properties>
         </div>

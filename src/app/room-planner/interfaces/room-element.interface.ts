@@ -24,4 +24,5 @@ export interface RoomElement {
   elementType: ElementType;
   shapeType: ShapeType;
   label?: string;
+  zIndex?: number;
 }

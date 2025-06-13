@@ -74,6 +74,11 @@ export class RoomPlannerComponent {
 
   ngAfterViewInit() {
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
+    
+    // Initialize z-indices for any existing elements
+    const roomWithZIndices = this.elementService.initializeZIndices(this.room());
+    this.room.set(roomWithZIndices);
+    
     // Trigger initial drawing now that canvas context is available
     this.drawingService.drawRoom(this.ctx, this.room(), this.selectedId());
   }
@@ -105,6 +110,9 @@ export class RoomPlannerComponent {
           return room;
       }
     });
+
+    // Select the newly added element and bring it to front
+    this.selectedId.set(element.id);
   }
 
   onClearElements(): void {
@@ -129,6 +137,14 @@ export class RoomPlannerComponent {
   onCanvasInteraction(event: CanvasInteractionEvent): void {
     switch (event.type) {
       case CanvasInteractionEventTypeEnum.SELECT:
+        if (event.elementId) {
+          // Bring the selected element to front
+          const updatedRoom = this.elementService.bringElementToFront(
+            this.room(),
+            event.elementId
+          );
+          this.room.set(updatedRoom);
+        }
         this.selectedId.set(event.elementId);
         break;
       case CanvasInteractionEventTypeEnum.MOVE:
@@ -151,7 +167,9 @@ export class RoomPlannerComponent {
   }
 
   onImportLayout(room: Room): void {
-    this.room.set(room);
+    // Initialize z-indices for imported elements
+    const roomWithZIndices = this.elementService.initializeZIndices(room);
+    this.room.set(roomWithZIndices);
     this.selectedId.set(null);
   }
 

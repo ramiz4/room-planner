@@ -19,6 +19,8 @@ export class ElementManagementService {
     return Math.round(value / this.GRID_SIZE) * this.GRID_SIZE;
   }
 
+  private nextZIndex = 1;
+
   createElement(elementType: ElementType, shapeType: ShapeType): RoomElement {
     const baseElement: RoomElement = {
       id: crypto.randomUUID(),
@@ -29,6 +31,7 @@ export class ElementManagementService {
       color: '#' + Math.floor(Math.random() * 16777215).toString(16),
       elementType: elementType,
       shapeType: shapeType,
+      zIndex: this.nextZIndex++,
     };
 
     // Customize based on element type
@@ -113,13 +116,13 @@ export class ElementManagementService {
 
   findElementAt(room: Room, x: number, y: number): RoomElement | null {
     // Combine all element types into a single array for hit testing
-    // Reverse to check elements drawn on top (later in the array) first
+    // Sort by z-index (highest first) to check elements on top first
     const allElements = [
       ...(room.walls || []),
       ...(room.decorations || []),
       ...room.tables,
       ...room.entrances,
-    ].reverse();
+    ].sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
 
     return (
       allElements.find((el) => {
@@ -191,5 +194,47 @@ export class ElementManagementService {
       room.walls?.find((el) => el.id === selectedId) ||
       null
     );
+  }
+
+  bringElementToFront(room: Room, elementId: string): Room {
+    // Find the current highest z-index
+    const allElements = [
+      ...room.tables,
+      ...room.entrances,
+      ...(room.decorations || []),
+      ...(room.walls || []),
+    ];
+
+    const maxZIndex = Math.max(...allElements.map((el) => el.zIndex || 0));
+    const newZIndex = maxZIndex + 1;
+
+    // Update the selected element's z-index
+    return this.updateElement(room, elementId, { zIndex: newZIndex });
+  }
+
+  initializeZIndices(room: Room): Room {
+    let zIndex = 1;
+    const allElementArrays = [
+      room.walls || [],
+      room.decorations || [],
+      room.tables,
+      room.entrances,
+    ];
+
+    // Assign z-indices to elements that don't have them
+    allElementArrays.forEach((elements) => {
+      elements.forEach((element) => {
+        if (element.zIndex === undefined) {
+          element.zIndex = zIndex++;
+        } else {
+          zIndex = Math.max(zIndex, element.zIndex + 1);
+        }
+      });
+    });
+
+    // Update nextZIndex to continue from the highest assigned value
+    this.nextZIndex = zIndex;
+
+    return room;
   }
 }

@@ -32,11 +32,16 @@ export class CanvasDrawingService {
     ctx.lineWidth = 2;
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-    // Draw elements in order: walls, decorations, tables, entrances
-    this.drawElements(ctx, room.walls || [], selectedId, true);
-    this.drawElements(ctx, room.decorations || [], selectedId, true);
-    this.drawElements(ctx, room.tables, selectedId, true);
-    this.drawElements(ctx, room.entrances, selectedId, true);
+    // Combine all elements and sort by z-index for proper layering
+    const allElements = [
+      ...(room.walls || []),
+      ...(room.decorations || []),
+      ...room.tables,
+      ...room.entrances,
+    ].sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+
+    // Draw all elements in z-index order
+    this.drawElements(ctx, allElements, selectedId, true);
   }
 
   private drawElements(

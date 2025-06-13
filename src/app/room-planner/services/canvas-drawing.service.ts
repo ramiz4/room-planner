@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { RoomElement } from '../interfaces/room-element.interface';
-import { Room } from '../interfaces/room.interface';
 import { ROOM_PLANNER_CONSTANTS } from '../constants/room-planner.constants';
+import {
+  RoomElement,
+  ShapeTypeEnum,
+} from '../interfaces/room-element.interface';
+import { Room } from '../interfaces/room.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -48,9 +51,9 @@ export class CanvasDrawingService {
   ): void {
     ctx.fillStyle = el.color || 'gray';
 
-    if (el.type === 'rect') {
+    if (el.shapeType === ShapeTypeEnum.RECTANGLE) {
       this.drawRectangle(ctx, el, isSelected);
-    } else if (el.type === 'circle') {
+    } else if (el.shapeType === ShapeTypeEnum.CIRCLE) {
       this.drawCircle(ctx, el, isSelected);
     }
 
@@ -126,7 +129,7 @@ export class CanvasDrawingService {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    if (el.type === 'circle') {
+    if (el.shapeType === ShapeTypeEnum.CIRCLE) {
       const centerX = el.x + el.width / 2;
       const centerY = el.y + el.height / 2;
       ctx.fillText(el.label!, centerX, centerY);

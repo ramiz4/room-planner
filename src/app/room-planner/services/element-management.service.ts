@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ROOM_PLANNER_CONSTANTS } from '../constants/room-planner.constants';
-import { RoomElement } from '../interfaces/room-element.interface';
+import {
+  ElementType,
+  ElementTypeEnum,
+  RoomElement,
+  ShapeType,
+  ShapeTypeEnum,
+} from '../interfaces/room-element.interface';
 import { Room } from '../interfaces/room.interface';
 
 @Injectable({
@@ -13,10 +19,7 @@ export class ElementManagementService {
     return Math.round(value / this.GRID_SIZE) * this.GRID_SIZE;
   }
 
-  createElement(
-    type: 'rect' | 'circle',
-    elementType: 'table' | 'entrance' | 'decoration' | 'wall'
-  ): RoomElement {
+  createElement(elementType: ElementType, shapeType: ShapeType): RoomElement {
     const baseElement: RoomElement = {
       id: crypto.randomUUID(),
       x: this.snap(100),
@@ -24,12 +27,13 @@ export class ElementManagementService {
       width: this.snap(100),
       height: this.snap(60),
       color: '#' + Math.floor(Math.random() * 16777215).toString(16),
-      type,
+      elementType: elementType,
+      shapeType: shapeType,
     };
 
     // Customize based on element type
     switch (elementType) {
-      case 'table':
+      case ElementTypeEnum.TABLE:
         return {
           ...baseElement,
           width: this.snap(80),
@@ -37,7 +41,7 @@ export class ElementManagementService {
           color: '#FFD700',
           label: 'Table',
         };
-      case 'entrance':
+      case ElementTypeEnum.ENTRANCE:
         return {
           ...baseElement,
           x: this.snap(50),
@@ -47,7 +51,7 @@ export class ElementManagementService {
           color: '#808080',
           label: 'Entrance',
         };
-      case 'wall':
+      case ElementTypeEnum.WALL:
         return {
           ...baseElement,
           width: this.snap(200),
@@ -55,7 +59,7 @@ export class ElementManagementService {
           color: '#8B4513',
           label: 'Wall',
         };
-      case 'decoration':
+      case ElementTypeEnum.DECORATION:
         return {
           ...baseElement,
           width: this.snap(50),
@@ -119,14 +123,14 @@ export class ElementManagementService {
 
     return (
       allElements.find((el) => {
-        if (el.type === 'rect') {
+        if (el.shapeType === ShapeTypeEnum.RECTANGLE) {
           return (
             x >= el.x &&
             x <= el.x + el.width &&
             y >= el.y &&
             y <= el.y + el.height
           );
-        } else if (el.type === 'circle') {
+        } else if (el.shapeType === ShapeTypeEnum.CIRCLE) {
           const cx = el.x + el.width / 2;
           const cy = el.y + el.height / 2;
           const dx = (x - cx) / (el.width / 2);

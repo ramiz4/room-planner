@@ -10,8 +10,16 @@ import {
 import { JsonManagerComponent } from './components/json-manager.component';
 import { RoomControlsComponent } from './components/room-controls.component';
 import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
-import { CanvasInteractionEvent } from './interfaces/canvas-interactio-event.interface';
-import { RoomElement } from './interfaces/room-element.interface';
+import {
+  CanvasInteractionEvent,
+  CanvasInteractionEventTypeEnum,
+} from './interfaces/canvas-interactio-event.interface';
+import {
+  ElementType,
+  ElementTypeEnum,
+  RoomElement,
+  ShapeType,
+} from './interfaces/room-element.interface';
 import { Room } from './interfaces/room.interface';
 import { CanvasDrawingService } from './services/canvas-drawing.service';
 import { ElementManagementService } from './services/element-management.service';
@@ -70,26 +78,26 @@ export class RoomPlannerComponent {
 
   // Event handlers for child components
   onAddElement(event: {
-    elementType: 'table' | 'entrance' | 'decoration' | 'wall';
-    shapeType: 'rect' | 'circle';
+    elementType: ElementType;
+    shapeType: ShapeType;
   }): void {
     const element = this.elementService.createElement(
-      event.shapeType,
-      event.elementType
+      event.elementType,
+      event.shapeType
     );
 
     this.room.update((room) => {
       switch (event.elementType) {
-        case 'table':
+        case ElementTypeEnum.TABLE:
           return { ...room, tables: [...room.tables, element] };
-        case 'entrance':
+        case ElementTypeEnum.ENTRANCE:
           return { ...room, entrances: [...room.entrances, element] };
-        case 'decoration':
+        case ElementTypeEnum.DECORATION:
           return {
             ...room,
             decorations: [...(room.decorations || []), element],
           };
-        case 'wall':
+        case ElementTypeEnum.WALL:
           return { ...room, walls: [...(room.walls || []), element] };
         default:
           return room;
@@ -118,10 +126,10 @@ export class RoomPlannerComponent {
 
   onCanvasInteraction(event: CanvasInteractionEvent): void {
     switch (event.type) {
-      case 'select':
+      case CanvasInteractionEventTypeEnum.SELECT:
         this.selectedId.set(event.elementId);
         break;
-      case 'move':
+      case CanvasInteractionEventTypeEnum.MOVE:
         if (event.elementId && event.position) {
           this.updateElement(event.elementId, {
             x: event.position.x,
@@ -129,7 +137,7 @@ export class RoomPlannerComponent {
           });
         }
         break;
-      case 'resize':
+      case CanvasInteractionEventTypeEnum.RESIZE:
         if (event.elementId && event.size) {
           this.updateElement(event.elementId, {
             width: event.size.width,

@@ -6,18 +6,13 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { RoomElement } from '../room-element.interface';
-import { Room } from '../room.interface';
-import { CanvasDrawingService } from '../services/canvas-drawing.service';
-import { ElementManagementService } from '../services/element-management.service';
-
-export interface CanvasInteractionEvent {
-  type: 'select' | 'move' | 'resize';
-  elementId: string | null;
-  element?: RoomElement;
-  position?: { x: number; y: number };
-  size?: { width: number; height: number };
-}
+import {
+  CanvasInteractionEvent,
+  CanvasInteractionEventTypeEnum,
+} from '../src/app/room-planner/interfaces/canvas-interactio-event.interface';
+import { Room } from '../src/app/room-planner/interfaces/room.interface';
+import { CanvasDrawingService } from '../src/app/room-planner/services/canvas-drawing.service';
+import { ElementManagementService } from '../src/app/room-planner/services/element-management.service';
 
 @Directive({
   selector: '[appCanvasInteraction]',
@@ -44,8 +39,12 @@ export class CanvasInteractionDirective {
   private setupMouseEvents(): void {
     const canvas = this.elementRef.nativeElement;
 
-    canvas.addEventListener('mousedown', (e) => this.onMouseDown(e));
-    canvas.addEventListener('mousemove', (e) => this.onMouseMove(e));
+    canvas.addEventListener('mousedown', (e: MouseEvent) =>
+      this.onMouseDown(e)
+    );
+    canvas.addEventListener('mousemove', (e: MouseEvent) =>
+      this.onMouseMove(e)
+    );
     canvas.addEventListener('mouseup', () => this.onMouseUp());
     canvas.addEventListener('mouseleave', () => this.onMouseUp());
   }
@@ -59,7 +58,7 @@ export class CanvasInteractionDirective {
 
     if (element) {
       this.interaction.emit({
-        type: 'select',
+        type: CanvasInteractionEventTypeEnum.SELECT,
         elementId: element.id,
         element,
       });
@@ -80,7 +79,7 @@ export class CanvasInteractionDirective {
       }
     } else {
       this.interaction.emit({
-        type: 'select',
+        type: CanvasInteractionEventTypeEnum.SELECT,
         elementId: null,
       });
     }
@@ -100,7 +99,7 @@ export class CanvasInteractionDirective {
       const newHeight = this.drawingService.snap(event.offsetY - element.y);
 
       this.interaction.emit({
-        type: 'resize',
+        type: CanvasInteractionEventTypeEnum.RESIZE,
         elementId: element.id,
         element,
         size: { width: newWidth, height: newHeight },
@@ -110,7 +109,7 @@ export class CanvasInteractionDirective {
       const newY = this.drawingService.snap(event.offsetY - this.offsetY);
 
       this.interaction.emit({
-        type: 'move',
+        type: CanvasInteractionEventTypeEnum.MOVE,
         elementId: element.id,
         element,
         position: { x: newX, y: newY },

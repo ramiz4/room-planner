@@ -6,7 +6,10 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { CanvasInteractionEvent } from '../interfaces/canvas-interactio-event.interface';
+import {
+  CanvasInteractionEvent,
+  CanvasInteractionEventTypeEnum,
+} from '../interfaces/canvas-interactio-event.interface';
 import { Room } from '../interfaces/room.interface';
 import { CanvasDrawingService } from '../services/canvas-drawing.service';
 import { ElementManagementService } from '../services/element-management.service';
@@ -55,7 +58,7 @@ export class CanvasInteractionDirective {
 
     if (element) {
       this.interaction.emit({
-        type: 'select',
+        type: CanvasInteractionEventTypeEnum.SELECT,
         elementId: element.id,
         element,
       });
@@ -76,7 +79,7 @@ export class CanvasInteractionDirective {
       }
     } else {
       this.interaction.emit({
-        type: 'select',
+        type: CanvasInteractionEventTypeEnum.SELECT,
         elementId: null,
       });
     }
@@ -96,7 +99,7 @@ export class CanvasInteractionDirective {
       const newHeight = this.drawingService.snap(event.offsetY - element.y);
 
       this.interaction.emit({
-        type: 'resize',
+        type: CanvasInteractionEventTypeEnum.RESIZE,
         elementId: element.id,
         element,
         size: { width: newWidth, height: newHeight },
@@ -106,7 +109,7 @@ export class CanvasInteractionDirective {
       const newY = this.drawingService.snap(event.offsetY - this.offsetY);
 
       this.interaction.emit({
-        type: 'move',
+        type: CanvasInteractionEventTypeEnum.MOVE,
         elementId: element.id,
         element,
         position: { x: newX, y: newY },

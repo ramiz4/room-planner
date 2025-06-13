@@ -36,16 +36,18 @@
               <span>Interactive Mode</span>
             </div>
           </div>
-          <div class="flex justify-center">
-            <canvas
-              #canvas
-              appCanvasInteraction
-              [room]="room()"
-              [selectedId]="selectedId()"
-              (interaction)="onCanvasInteraction($event)"
-              class="border-2 border-gray-300 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-gray-50"
-            >
-            </canvas>
+          <div class="flex justify-center overflow-auto">
+            <div class="max-w-full max-h-[500px] overflow-auto">
+              <canvas
+                #canvas
+                appCanvasInteraction
+                [room]="room()"
+                [selectedId]="selectedId()"
+                (interaction)="onCanvasInteraction($event)"
+                class="block max-w-none border bg-white"
+              >
+              </canvas>
+            </div>
           </div>
         </div>
       </div>

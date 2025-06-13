@@ -95,7 +95,7 @@ import { ElementType, RoomElement } from '../interfaces/room-element.interface';
               type="color"
               [value]="selectedElement.color || '#6b7280'"
               (change)="onColorChange($event)"
-              class="w-16 h-10 border border-gray-300 rounded cursor-pointer appearance-none"
+              class="h-10 border border-gray-300 rounded cursor-pointer appearance-none flex-shrink-0"
               style="min-width: 48px;"
             />
             <input
@@ -105,7 +105,7 @@ import { ElementType, RoomElement } from '../interfaces/room-element.interface';
               [value]="selectedElement.color || '#6b7280'"
               (input)="onColorInputChange($event)"
               placeholder="#6b7280"
-              class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm font-mono"
+              class="min-w-0 flex-1 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs font-mono"
             />
           </div>
         </div>

@@ -3,7 +3,7 @@
  */
 export const ROOM_PLANNER_CONSTANTS = {
   // Default width of the room
-  ROOM_WIDTH: 560,
+  ROOM_WIDTH: 600,
 
   // Default height of the room
   ROOM_HEIGHT: 400,

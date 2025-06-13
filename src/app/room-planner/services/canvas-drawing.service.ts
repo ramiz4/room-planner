@@ -62,6 +62,11 @@ export class CanvasDrawingService {
     drawLabel = false
   ): void {
     ctx.fillStyle = el.color || 'gray';
+    // Apply shadow effect
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
 
     if (el.shapeType === ShapeTypeEnum.RECTANGLE) {
       this.drawRectangle(ctx, el, isSelected);

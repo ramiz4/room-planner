@@ -3,16 +3,14 @@ import {
   computed,
   effect,
   ElementRef,
-  Input,
   signal,
   ViewChild,
 } from '@angular/core';
-import { Room, RoomElement } from './models';
+import { RoomElement } from './room-element.interface';
+import { Room } from './room.interface';
 
 @Component({
   selector: 'app-room-planner',
-  standalone: true,
-  imports: [],
   templateUrl: './room-planner.component.html',
 })
 export class RoomPlannerComponent {
@@ -39,13 +37,15 @@ export class RoomPlannerComponent {
   readonly selectedElement = computed(() => {
     const selectedId = this.selectedId();
     if (!selectedId) return null;
-    
+
     const room = this.room();
     // Check in each array for the selected element
-    return room.tables.find((el) => el.id === selectedId) || 
-           room.entrances.find((el) => el.id === selectedId) ||
-           room.decorations?.find((el) => el.id === selectedId) ||
-           room.walls?.find((el) => el.id === selectedId);
+    return (
+      room.tables.find((el) => el.id === selectedId) ||
+      room.entrances.find((el) => el.id === selectedId) ||
+      room.decorations?.find((el) => el.id === selectedId) ||
+      room.walls?.find((el) => el.id === selectedId)
+    );
   });
 
   // 🧠 Redraw effect
@@ -79,12 +79,12 @@ export class RoomPlannerComponent {
   }
 
   clearElements() {
-    this.room.update((r) => ({ 
-      ...r, 
-      tables: [], 
-      entrances: [], 
-      decorations: [], 
-      walls: [] 
+    this.room.update((r) => ({
+      ...r,
+      tables: [],
+      entrances: [],
+      decorations: [],
+      walls: [],
     }));
     this.selectedId.set(null);
   }
@@ -93,43 +93,54 @@ export class RoomPlannerComponent {
     const newEntrance: RoomElement = {
       id: crypto.randomUUID(),
       x: this.snap(50),
-      y: this.snap(0),  // Place it at the top edge by default
+      y: this.snap(0), // Place it at the top edge by default
       width: this.snap(80),
       height: this.snap(30),
       color: '#808080', // Grey color
       type: 'rect',
-      label: 'Entrance'
+      label: 'Entrance',
     };
-    this.room.update((r) => ({ ...r, entrances: [...r.entrances, newEntrance] }));
+    this.room.update((r) => ({
+      ...r,
+      entrances: [...r.entrances, newEntrance],
+    }));
   }
 
   updateElement(id: string, update: Partial<RoomElement>) {
     this.room.update((r) => {
       // Find which array the element belongs to
-      const tableEl = r.tables.find(el => el.id === id);
-      const entranceEl = r.entrances.find(el => el.id === id);
-      const decorationEl = r.decorations?.find(el => el.id === id);
-      const wallEl = r.walls?.find(el => el.id === id);
-      
+      const tableEl = r.tables.find((el) => el.id === id);
+      const entranceEl = r.entrances.find((el) => el.id === id);
+      const decorationEl = r.decorations?.find((el) => el.id === id);
+      const wallEl = r.walls?.find((el) => el.id === id);
+
       if (tableEl) {
         return {
           ...r,
-          tables: r.tables.map((el) => el.id === id ? { ...el, ...update } : el),
+          tables: r.tables.map((el) =>
+            el.id === id ? { ...el, ...update } : el
+          ),
         };
       } else if (entranceEl) {
         return {
           ...r,
-          entrances: r.entrances.map((el) => el.id === id ? { ...el, ...update } : el),
+          entrances: r.entrances.map((el) =>
+            el.id === id ? { ...el, ...update } : el
+          ),
         };
       } else if (decorationEl) {
         return {
           ...r,
-          decorations: r.decorations.map((el) => el.id === id ? { ...el, ...update } : el),
+          decorations: r.decorations.map((el) =>
+            el.id === id ? { ...el, ...update } : el
+          ),
         };
       } else if (wallEl) {
         return {
           ...r,
-          walls: r.walls.map((el) => el.id === id ? { ...el, ...update } : el),
+          walls: r.walls.map((el) =>
+            el.id === id ? { ...el, ...update } : el
+          ),
         };
       }
       return r;
@@ -153,25 +164,29 @@ export class RoomPlannerComponent {
     for (const entrance of room.entrances) {
       this.drawElement(entrance, entrance.id === this.selectedId(), true);
     }
-    
+
     // Draw decorations if needed
     for (const decoration of room.decorations || []) {
       this.drawElement(decoration, decoration.id === this.selectedId());
     }
-    
+
     // Draw walls if needed
     for (const wall of room.walls || []) {
       this.drawElement(wall, wall.id === this.selectedId());
     }
   }
-  
-  drawElement(el: RoomElement, isSelected: boolean, drawLabel: boolean = false) {
+
+  drawElement(
+    el: RoomElement,
+    isSelected: boolean,
+    drawLabel: boolean = false
+  ) {
     this.ctx.fillStyle = el.color || 'gray';
-    
+
     if (el.type === 'rect') {
       // Draw rectangle
       this.ctx.fillRect(el.x, el.y, el.width, el.height);
-      
+
       // Draw selection outline if selected
       if (isSelected) {
         this.ctx.strokeStyle = 'blue';
@@ -185,7 +200,7 @@ export class RoomPlannerComponent {
           this.HANDLE_SIZE
         );
       }
-      
+
       // Draw label if needed
       if (drawLabel && el.label) {
         this.ctx.fillStyle = 'black';
@@ -199,18 +214,18 @@ export class RoomPlannerComponent {
       const radius = Math.min(el.width, el.height) / 2;
       const centerX = el.x + el.width / 2;
       const centerY = el.y + el.height / 2;
-      
+
       this.ctx.beginPath();
       this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
       this.ctx.fill();
-      
+
       if (isSelected) {
         this.ctx.strokeStyle = 'blue';
         this.ctx.lineWidth = 2;
         this.ctx.beginPath();
         this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         this.ctx.stroke();
-        
+
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(
           el.x + el.width - this.HANDLE_SIZE,
@@ -219,7 +234,7 @@ export class RoomPlannerComponent {
           this.HANDLE_SIZE
         );
       }
-      
+
       // Draw label if needed
       if (drawLabel && el.label) {
         this.ctx.fillStyle = 'black';
@@ -287,10 +302,11 @@ export class RoomPlannerComponent {
       ...(room.walls || []),
       ...(room.decorations || []),
       ...room.tables,
-      ...room.entrances
+      ...room.entrances,
     ].reverse();
-    
-    return allElements.find((el) => {
+
+    return (
+      allElements.find((el) => {
         if (el.type === 'rect') {
           return (
             x >= el.x &&
@@ -306,7 +322,8 @@ export class RoomPlannerComponent {
           return dx * dx + dy * dy <= 1;
         }
         return false;
-      }) ?? null;
+      }) ?? null
+    );
   }
 
   isOverHandle(x: number, y: number, el: RoomElement): boolean {

@@ -148,14 +148,34 @@ export class ElementManagementService {
     element: RoomElement,
     handleSize: number
   ): boolean {
-    const handleX = element.x + element.width - handleSize;
-    const handleY = element.y + element.height - handleSize;
-    return (
-      x >= handleX &&
-      x <= handleX + handleSize &&
-      y >= handleY &&
-      y <= handleY + handleSize
-    );
+    if (element.shapeType === ShapeTypeEnum.CIRCLE) {
+      // For circles, check if mouse is over the handle on the circle edge
+      const radius = Math.min(element.width, element.height) / 2;
+      const centerX = element.x + element.width / 2;
+      const centerY = element.y + element.height / 2;
+
+      // Handle position at bottom-right edge of the circle
+      const angle = Math.PI / 4; // 45 degrees
+      const handleX = centerX + Math.cos(angle) * radius - handleSize / 2;
+      const handleY = centerY + Math.sin(angle) * radius - handleSize / 2;
+
+      return (
+        x >= handleX &&
+        x <= handleX + handleSize &&
+        y >= handleY &&
+        y <= handleY + handleSize
+      );
+    } else {
+      // For rectangles, use the original logic
+      const handleX = element.x + element.width - handleSize;
+      const handleY = element.y + element.height - handleSize;
+      return (
+        x >= handleX &&
+        x <= handleX + handleSize &&
+        y >= handleY &&
+        y <= handleY + handleSize
+      );
+    }
   }
 
   getSelectedElement(

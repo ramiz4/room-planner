@@ -119,12 +119,28 @@ export class CanvasDrawingService {
     el: RoomElement
   ): void {
     ctx.fillStyle = 'black';
-    ctx.fillRect(
-      el.x + el.width - this.HANDLE_SIZE,
-      el.y + el.height - this.HANDLE_SIZE,
-      this.HANDLE_SIZE,
-      this.HANDLE_SIZE
-    );
+
+    if (el.shapeType === ShapeTypeEnum.CIRCLE) {
+      // For circles, draw the handle on the edge of the circle
+      const radius = Math.min(el.width, el.height) / 2;
+      const centerX = el.x + el.width / 2;
+      const centerY = el.y + el.height / 2;
+
+      // Position handle at bottom-right edge of the circle
+      const angle = Math.PI / 4; // 45 degrees
+      const handleX = centerX + Math.cos(angle) * radius - this.HANDLE_SIZE / 2;
+      const handleY = centerY + Math.sin(angle) * radius - this.HANDLE_SIZE / 2;
+
+      ctx.fillRect(handleX, handleY, this.HANDLE_SIZE, this.HANDLE_SIZE);
+    } else {
+      // For rectangles, use the original positioning
+      ctx.fillRect(
+        el.x + el.width - this.HANDLE_SIZE,
+        el.y + el.height - this.HANDLE_SIZE,
+        this.HANDLE_SIZE,
+        this.HANDLE_SIZE
+      );
+    }
   }
 
   private drawElementLabel(

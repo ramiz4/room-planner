@@ -10,6 +10,7 @@ import {
   CanvasInteractionEvent,
   CanvasInteractionEventTypeEnum,
 } from '../interfaces/canvas-interactio-event.interface';
+import { ShapeTypeEnum } from '../interfaces/room-element.interface';
 import { Room } from '../interfaces/room.interface';
 import { CanvasDrawingService } from '../services/canvas-drawing.service';
 import { ElementManagementService } from '../services/element-management.service';
@@ -95,15 +96,31 @@ export class CanvasInteractionDirective {
     if (!element) return;
 
     if (this.resizing) {
-      const newWidth = this.drawingService.snap(event.offsetX - element.x);
-      const newHeight = this.drawingService.snap(event.offsetY - element.y);
+      if (element.shapeType === ShapeTypeEnum.CIRCLE) {
+        // For circles, maintain aspect ratio by using the maximum dimension
+        const deltaX = event.offsetX - element.x;
+        const deltaY = event.offsetY - element.y;
+        const maxDelta = Math.max(deltaX, deltaY);
+        const newSize = this.drawingService.snap(maxDelta);
 
-      this.interaction.emit({
-        type: CanvasInteractionEventTypeEnum.RESIZE,
-        elementId: element.id,
-        element,
-        size: { width: newWidth, height: newHeight },
-      });
+        this.interaction.emit({
+          type: CanvasInteractionEventTypeEnum.RESIZE,
+          elementId: element.id,
+          element,
+          size: { width: newSize, height: newSize },
+        });
+      } else {
+        // For rectangles, allow independent width and height
+        const newWidth = this.drawingService.snap(event.offsetX - element.x);
+        const newHeight = this.drawingService.snap(event.offsetY - element.y);
+
+        this.interaction.emit({
+          type: CanvasInteractionEventTypeEnum.RESIZE,
+          elementId: element.id,
+          element,
+          size: { width: newWidth, height: newHeight },
+        });
+      }
     } else if (this.dragging) {
       const newX = this.drawingService.snap(event.offsetX - this.offsetX);
       const newY = this.drawingService.snap(event.offsetY - this.offsetY);

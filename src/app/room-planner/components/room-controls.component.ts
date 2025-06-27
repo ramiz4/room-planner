@@ -10,12 +10,14 @@ import { Room } from '../interfaces/room.interface';
 @Component({
   selector: 'app-room-controls',
   template: `
-    <div class="flex flex-wrap items-center gap-6">
+    <div
+      class="flex flex-col sm:flex-row flex-wrap items-center gap-4 sm:gap-6"
+    >
       <!-- Room Dimensions -->
       <div class="flex items-center gap-3">
         <h3 class="text-sm font-semibold text-gray-800 flex items-center gap-1">
           <svg
-            class="w-4 h-4 text-blue-600"
+            class="w-5 h-5 sm:w-4 sm:h-4 text-blue-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -61,7 +63,7 @@ import { Room } from '../interfaces/room.interface';
       <div class="flex items-center gap-3">
         <h3 class="text-sm font-semibold text-gray-800 flex items-center gap-1">
           <svg
-            class="w-4 h-4 text-green-600"
+            class="w-5 h-5 sm:w-4 sm:h-4 text-green-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -83,11 +85,11 @@ import { Room } from '../interfaces/room.interface';
             (click)="
               onAddElement(elementTypeEnum.TABLE, shapeTypeEnum.RECTANGLE)
             "
-            class="p-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 focus:ring-1 focus:ring-blue-500 transition-colors"
+            class="p-2 sm:p-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 focus:ring-1 focus:ring-blue-500 transition-colors"
             title="Add Rectangle Table"
           >
             <svg
-              class="w-3 h-3"
+              class="w-4 h-4 sm:w-3 sm:h-3"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -97,11 +99,11 @@ import { Room } from '../interfaces/room.interface';
           </button>
           <button
             (click)="onAddElement(elementTypeEnum.TABLE, shapeTypeEnum.CIRCLE)"
-            class="p-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 focus:ring-1 focus:ring-blue-500 transition-colors"
+            class="p-2 sm:p-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 focus:ring-1 focus:ring-blue-500 transition-colors"
             title="Add Round Table"
           >
             <svg
-              class="w-3 h-3"
+              class="w-4 h-4 sm:w-3 sm:h-3"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -118,11 +120,11 @@ import { Room } from '../interfaces/room.interface';
             (click)="
               onAddElement(elementTypeEnum.STATIC, shapeTypeEnum.RECTANGLE)
             "
-            class="p-1.5 bg-gray-600 text-white rounded hover:bg-gray-700 focus:ring-1 focus:ring-gray-500 transition-colors"
+            class="p-2 sm:p-1.5 bg-gray-600 text-white rounded hover:bg-gray-700 focus:ring-1 focus:ring-gray-500 transition-colors"
             title="Add Rectangle Static Element"
           >
             <svg
-              class="w-3 h-3"
+              class="w-4 h-4 sm:w-3 sm:h-3"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -132,11 +134,11 @@ import { Room } from '../interfaces/room.interface';
           </button>
           <button
             (click)="onAddElement(elementTypeEnum.STATIC, shapeTypeEnum.CIRCLE)"
-            class="p-1.5 bg-gray-600 text-white rounded hover:bg-gray-700 focus:ring-1 focus:ring-gray-500 transition-colors"
+            class="p-2 sm:p-1.5 bg-gray-600 text-white rounded hover:bg-gray-700 focus:ring-1 focus:ring-gray-500 transition-colors"
             title="Add Circle Static Element"
           >
             <svg
-              class="w-3 h-3"
+              class="w-4 h-4 sm:w-3 sm:h-3"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -151,11 +153,11 @@ import { Room } from '../interfaces/room.interface';
       <div class="flex items-center">
         <button
           (click)="onClearElements()"
-          class="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white text-sm rounded hover:bg-red-700 focus:ring-1 focus:ring-red-500 transition-colors"
+          class="flex items-center gap-1 px-4 py-2 sm:px-3 sm:py-1.5 bg-red-600 text-white text-base sm:text-sm rounded hover:bg-red-700 focus:ring-1 focus:ring-red-500 transition-colors"
           title="Clear All Elements"
         >
           <svg
-            class="w-4 h-4"
+            class="w-5 h-5 sm:w-4 sm:h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

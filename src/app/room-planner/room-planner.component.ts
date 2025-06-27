@@ -66,6 +66,7 @@ export class RoomPlannerComponent implements AfterViewInit {
   });
 
   readonly showMobileProperties = signal(false);
+  readonly showMobileControls = signal(false);
   readonly showLayoutManager = signal(false);
   readonly showElementGuide = signal(false);
 
@@ -252,6 +253,10 @@ export class RoomPlannerComponent implements AfterViewInit {
 
   toggleMobileProperties(): void {
     this.showMobileProperties.update((v) => !v);
+  }
+
+  toggleMobileControls(): void {
+    this.showMobileControls.update((v) => !v);
   }
 
   toggleLayoutManager(): void {

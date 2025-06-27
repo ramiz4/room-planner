@@ -31,4 +31,10 @@ describe('RoomPlannerComponent', () => {
     component.toggleLayoutManager();
     expect(component.showLayoutManager()).toBeTrue();
   });
+
+  it('should toggle mobile controls visibility', () => {
+    component.showMobileControls.set(false);
+    component.toggleMobileControls();
+    expect(component.showMobileControls()).toBeTrue();
+  });
 });

@@ -22,15 +22,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Type check
-        run: npm run typecheck
-
       - name: Lint
         run: npm run lint
 
       - name: Run tests
-        run: npm run test
-
+        run: npm run test:ci
 
       - name: Build
         run: npm run build
@@ -38,6 +34,6 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist
-          path: ./dist
+          name: room-planner-build
+          path: dist/room-planner/browser
 

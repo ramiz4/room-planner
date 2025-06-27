@@ -68,6 +68,8 @@ export class RoomPlannerComponent implements AfterViewInit {
   readonly showMobileProperties = signal(false);
   readonly showMobileControls = signal(false);
   readonly showLayoutManager = signal(false);
+  readonly showExportManager = signal(false);
+  readonly showImportManager = signal(false);
   readonly showElementGuide = signal(false);
 
   // 🧠 Redraw effect
@@ -261,6 +263,14 @@ export class RoomPlannerComponent implements AfterViewInit {
 
   toggleLayoutManager(): void {
     this.showLayoutManager.update((v) => !v);
+  }
+
+  toggleExportManager(): void {
+    this.showExportManager.update((v) => !v);
+  }
+
+  toggleImportManager(): void {
+    this.showImportManager.update((v) => !v);
   }
 
   showGuide(): void {

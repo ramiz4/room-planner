@@ -14,9 +14,12 @@ import { RoomElement } from '../interfaces/room-element.interface';
         </p>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div
+        class="grid grid-cols-1 gap-8"
+        [ngClass]="{ 'lg:grid-cols-2': view === 'both' }"
+      >
         <!-- Export Section -->
-        <div class="space-y-4">
+        <div class="space-y-4" *ngIf="view !== 'import'">
           <div class="flex items-center gap-2 mb-4">
             <svg
               class="w-5 h-5 text-blue-600"
@@ -73,7 +76,7 @@ import { RoomElement } from '../interfaces/room-element.interface';
         </div>
 
         <!-- Import Section -->
-        <div class="space-y-4">
+        <div class="space-y-4" *ngIf="view !== 'export'">
           <div class="flex items-center gap-2 mb-4">
             <svg
               class="w-5 h-5 text-green-600"
@@ -93,7 +96,10 @@ import { RoomElement } from '../interfaces/room-element.interface';
 
           <div class="space-y-4">
             <div>
-              <label for="json-import" class="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                for="json-import"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Paste JSON Layout
               </label>
               <textarea
@@ -156,6 +162,7 @@ import { RoomElement } from '../interfaces/room-element.interface';
 export class JsonManagerComponent {
   @Input() room!: Room;
   @Input() importedJson = '';
+  @Input() view: 'export' | 'import' | 'both' = 'both';
 
   @Output() import = new EventEmitter<Room>();
   @Output() importedJsonChange = new EventEmitter<string>();
@@ -174,7 +181,7 @@ export class JsonManagerComponent {
       const parsed = JSON.parse(this.importedJson);
       if (parsed.width && parsed.height) {
         let staticElements: RoomElement[] = [];
-        
+
         // If it's the new format with staticElements
         if (parsed.staticElements) {
           staticElements = parsed.staticElements;

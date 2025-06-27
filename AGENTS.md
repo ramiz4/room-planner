@@ -32,5 +32,4 @@ Include a summary of changes and testing steps similar to:
 
 ## Testing
 - `npm run lint`
-- `npm run test`
 ```

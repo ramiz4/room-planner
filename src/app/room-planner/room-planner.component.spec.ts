@@ -20,4 +20,10 @@ describe('RoomPlannerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should toggle mobile properties visibility', () => {
+    component.showMobileProperties.set(false);
+    component.toggleMobileProperties();
+    expect(component.showMobileProperties()).toBeTrue();
+  });
 });

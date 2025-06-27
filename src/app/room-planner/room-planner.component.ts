@@ -63,6 +63,8 @@ export class RoomPlannerComponent implements AfterViewInit {
     );
   });
 
+  readonly showMobileProperties = signal(false);
+
   // 🧠 Redraw effect
   constructor() {
     effect(() => {
@@ -230,5 +232,9 @@ export class RoomPlannerComponent implements AfterViewInit {
     const centerY = (room.height - element.height) / 2;
 
     this.onUpdateElement(elementId, { x: centerX, y: centerY });
+  }
+
+  toggleMobileProperties(): void {
+    this.showMobileProperties.update((v) => !v);
   }
 }

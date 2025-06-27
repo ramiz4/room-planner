@@ -19,6 +19,12 @@ export class ElementManagementService {
     return Math.round(value / this.GRID_SIZE) * this.GRID_SIZE;
   }
 
+  clampPosition(room: Room, element: RoomElement): { x: number; y: number } {
+    const x = Math.max(0, Math.min(element.x, room.width - element.width));
+    const y = Math.max(0, Math.min(element.y, room.height - element.height));
+    return { x, y };
+  }
+
   private nextZIndex = 1;
 
   createElement(elementType: ElementType, shapeType: ShapeType): RoomElement {
@@ -41,18 +47,25 @@ export class ElementManagementService {
     const tableEl = room.tables.find((el) => el.id === id);
     const staticEl = room.staticElements.find((el) => el.id === id);
 
+    const applyUpdate = (el: RoomElement): RoomElement => {
+      let updated = { ...el, ...update };
+      if (updated.elementType === ElementTypeEnum.TABLE) {
+        const pos = this.clampPosition(room, updated);
+        updated = { ...updated, ...pos };
+      }
+      return updated;
+    };
+
     if (tableEl) {
       return {
         ...room,
-        tables: room.tables.map((el) =>
-          el.id === id ? { ...el, ...update } : el
-        ),
+        tables: room.tables.map((el) => (el.id === id ? applyUpdate(el) : el)),
       };
     } else if (staticEl) {
       return {
         ...room,
         staticElements: room.staticElements.map((el) =>
-          el.id === id ? { ...el, ...update } : el
+          el.id === id ? applyUpdate(el) : el,
         ),
       };
     }
@@ -63,7 +76,7 @@ export class ElementManagementService {
     // Combine all element types into a single array for hit testing
     // Sort by z-index (highest first) to check elements on top first
     const allElements = [...room.staticElements, ...room.tables].sort(
-      (a, b) => (b.zIndex || 0) - (a.zIndex || 0)
+      (a, b) => (b.zIndex || 0) - (a.zIndex || 0),
     );
 
     return (
@@ -91,7 +104,7 @@ export class ElementManagementService {
     x: number,
     y: number,
     element: RoomElement,
-    handleSize: number
+    handleSize: number,
   ): boolean {
     if (element.shapeType === ShapeTypeEnum.CIRCLE) {
       // For circles, check if mouse is over the handle on the circle edge
@@ -125,7 +138,7 @@ export class ElementManagementService {
 
   getSelectedElement(
     room: Room,
-    selectedId: string | null
+    selectedId: string | null,
   ): RoomElement | null {
     if (!selectedId) return null;
 

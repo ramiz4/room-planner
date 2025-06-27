@@ -66,6 +66,8 @@ export class RoomPlannerComponent implements AfterViewInit {
   });
 
   readonly showMobileProperties = signal(false);
+  readonly showLayoutManager = signal(false);
+  readonly showElementGuide = signal(false);
 
   // 🧠 Redraw effect
   constructor() {
@@ -113,6 +115,7 @@ export class RoomPlannerComponent implements AfterViewInit {
 
     // Select the newly added element and bring it to front
     this.selectedId.set(element.id);
+    this.showGuide();
   }
 
   onClearElements(): void {
@@ -249,5 +252,14 @@ export class RoomPlannerComponent implements AfterViewInit {
 
   toggleMobileProperties(): void {
     this.showMobileProperties.update((v) => !v);
+  }
+
+  toggleLayoutManager(): void {
+    this.showLayoutManager.update((v) => !v);
+  }
+
+  showGuide(): void {
+    this.showElementGuide.set(true);
+    setTimeout(() => this.showElementGuide.set(false), 4000);
   }
 }

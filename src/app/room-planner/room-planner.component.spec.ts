@@ -8,9 +8,8 @@ describe('RoomPlannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RoomPlannerComponent]
-    })
-    .compileComponents();
+      imports: [RoomPlannerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RoomPlannerComponent);
     component = fixture.componentInstance;
@@ -25,5 +24,11 @@ describe('RoomPlannerComponent', () => {
     component.showMobileProperties.set(false);
     component.toggleMobileProperties();
     expect(component.showMobileProperties()).toBeTrue();
+  });
+
+  it('should toggle layout manager visibility', () => {
+    component.showLayoutManager.set(false);
+    component.toggleLayoutManager();
+    expect(component.showLayoutManager()).toBeTrue();
   });
 });

@@ -6,6 +6,7 @@ import {
   inject,
   signal,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core';
 import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonManagerComponent } from './components/json-manager.component';
@@ -36,7 +37,7 @@ import { ElementManagementService } from './services/element-management.service'
     CanvasInteractionDirective,
   ],
 })
-export class RoomPlannerComponent {
+export class RoomPlannerComponent implements AfterViewInit {
   @ViewChild('canvas', { static: true })
   canvasRef!: ElementRef<HTMLCanvasElement>;
 

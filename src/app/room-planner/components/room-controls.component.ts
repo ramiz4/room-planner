@@ -31,8 +31,9 @@ import { Room } from '../interfaces/room.interface';
         </h3>
         <div class="flex items-center gap-2">
           <div class="flex items-center gap-1">
-            <label class="text-xs text-gray-600">W:</label>
+            <label for="room-width" class="text-xs text-gray-600">W:</label>
             <input
+              id="room-width"
               type="number"
               [value]="room.width"
               (input)="onRoomWidthChange($event)"
@@ -42,8 +43,9 @@ import { Room } from '../interfaces/room.interface';
             />
           </div>
           <div class="flex items-center gap-1">
-            <label class="text-xs text-gray-600">H:</label>
+            <label for="room-height" class="text-xs text-gray-600">H:</label>
             <input
+              id="room-height"
               type="number"
               [value]="room.height"
               (input)="onRoomHeightChange($event)"

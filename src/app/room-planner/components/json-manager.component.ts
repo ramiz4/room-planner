@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Room } from '../interfaces/room.interface';
+import { RoomElement } from '../interfaces/room-element.interface';
 
 @Component({
   selector: 'app-json-manager',
@@ -92,10 +93,11 @@ import { Room } from '../interfaces/room.interface';
 
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label for="json-import" class="block text-sm font-medium text-gray-700 mb-2">
                 Paste JSON Layout
               </label>
               <textarea
+                id="json-import"
                 rows="8"
                 [value]="importedJson"
                 (input)="onImportChange($event)"
@@ -153,7 +155,7 @@ import { Room } from '../interfaces/room.interface';
 })
 export class JsonManagerComponent {
   @Input() room!: Room;
-  @Input() importedJson: string = '';
+  @Input() importedJson = '';
 
   @Output() import = new EventEmitter<Room>();
   @Output() importedJsonChange = new EventEmitter<string>();
@@ -171,9 +173,8 @@ export class JsonManagerComponent {
     try {
       const parsed = JSON.parse(this.importedJson);
       if (parsed.width && parsed.height) {
-        // Handle both old and new format
-        let staticElements: any[] = [];
-
+        let staticElements: RoomElement[] = [];
+        
         // If it's the new format with staticElements
         if (parsed.staticElements) {
           staticElements = parsed.staticElements;
@@ -196,7 +197,7 @@ export class JsonManagerComponent {
       } else {
         alert('Invalid format: Missing width or height');
       }
-    } catch (error) {
+    } catch {
       alert('Invalid JSON format');
     }
   }
@@ -209,7 +210,7 @@ export class JsonManagerComponent {
     try {
       await navigator.clipboard.writeText(this.exportedJson);
       // You could emit an event here to show a success message
-    } catch (error) {
+    } catch {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = this.exportedJson;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal, OnChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ROOM_PLANNER_CONSTANTS } from '../constants/room-planner.constants';
 import {
@@ -293,7 +293,7 @@ import {
     }
   `,
 })
-export class ElementPropertiesComponent {
+export class ElementPropertiesComponent implements OnChanges {
   @Input() selectedElement: RoomElement | null = null;
   @Output() updateElement = new EventEmitter<Partial<RoomElement>>();
   @Output() deleteElement = new EventEmitter<void>();

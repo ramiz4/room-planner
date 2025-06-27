@@ -5,6 +5,7 @@ import {
   inject,
   Input,
   Output,
+  AfterViewInit,
 } from '@angular/core';
 import {
   CanvasInteractionEvent,
@@ -21,7 +22,7 @@ import { ElementManagementService } from '../services/element-management.service
 @Directive({
   selector: '[appCanvasInteraction]',
 })
-export class CanvasInteractionDirective {
+export class CanvasInteractionDirective implements AfterViewInit {
   private elementRef = inject(ElementRef<HTMLCanvasElement>);
   private elementService = inject(ElementManagementService);
   private drawingService = inject(CanvasDrawingService);
@@ -84,7 +85,7 @@ export class CanvasInteractionDirective {
       'touchend',
       (e: TouchEvent) => {
         e.preventDefault();
-        this.onTouchEnd(e);
+        this.onTouchEnd();
       },
       { passive: false }
     );
@@ -93,7 +94,7 @@ export class CanvasInteractionDirective {
       'touchcancel',
       (e: TouchEvent) => {
         e.preventDefault();
-        this.onTouchEnd(e);
+        this.onTouchEnd();
       },
       { passive: false }
     );
@@ -365,7 +366,7 @@ export class CanvasInteractionDirective {
     }
   }
 
-  private onTouchEnd(event: TouchEvent): void {
+  private onTouchEnd(): void {
     this.resizing = false;
     this.dragging = false;
     this.activeTouch = null;

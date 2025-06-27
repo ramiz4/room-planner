@@ -8,6 +8,7 @@ import {
   ViewChild,
   AfterViewInit,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonManagerComponent } from './components/json-manager.component';
 import { RoomControlsComponent } from './components/room-controls.component';
@@ -31,6 +32,7 @@ import { ElementManagementService } from './services/element-management.service'
   selector: 'app-room-planner',
   templateUrl: './room-planner.component.html',
   imports: [
+    CommonModule,
     RoomControlsComponent,
     JsonManagerComponent,
     ElementPropertiesComponent,
@@ -59,9 +61,11 @@ export class RoomPlannerComponent implements AfterViewInit {
   readonly selectedElement = computed(() => {
     return this.elementService.getSelectedElement(
       this.room(),
-      this.selectedId()
+      this.selectedId(),
     );
   });
+
+  readonly showMobileProperties = signal(false);
 
   // 🧠 Redraw effect
   constructor() {
@@ -78,7 +82,7 @@ export class RoomPlannerComponent implements AfterViewInit {
 
     // Initialize z-indices for any existing elements
     const roomWithZIndices = this.elementService.initializeZIndices(
-      this.room()
+      this.room(),
     );
     this.room.set(roomWithZIndices);
 
@@ -93,7 +97,7 @@ export class RoomPlannerComponent implements AfterViewInit {
   }): void {
     const element = this.elementService.createElement(
       event.elementType,
-      event.shapeType
+      event.shapeType,
     );
 
     this.room.update((room) => {
@@ -135,7 +139,7 @@ export class RoomPlannerComponent implements AfterViewInit {
           // Bring the selected element to front
           const updatedRoom = this.elementService.bringElementToFront(
             this.room(),
-            event.elementId
+            event.elementId,
           );
           this.room.set(updatedRoom);
         }
@@ -175,7 +179,7 @@ export class RoomPlannerComponent implements AfterViewInit {
     const updatedRoom = this.elementService.updateElement(
       this.room(),
       elementId,
-      update
+      update,
     );
     this.room.set(updatedRoom);
   }
@@ -183,35 +187,43 @@ export class RoomPlannerComponent implements AfterViewInit {
   onDeleteElement(elementId: string): void {
     const updatedRoom = this.elementService.deleteElement(
       this.room(),
-      elementId
+      elementId,
     );
     this.room.set(updatedRoom);
     this.selectedId.set(null);
   }
 
   onDuplicateElement(elementId: string): void {
-    const element = this.elementService.getSelectedElement(this.room(), elementId);
+    const element = this.elementService.getSelectedElement(
+      this.room(),
+      elementId,
+    );
     if (!element) return;
 
     const duplicatedElement = this.elementService.createElement(
       element.elementType,
-      element.shapeType || 'rectangle'
+      element.shapeType || 'rectangle',
     );
-    
+
     // Position the duplicate slightly offset from the original
     duplicatedElement.x = element.x + 20;
     duplicatedElement.y = element.y + 20;
     duplicatedElement.width = element.width;
     duplicatedElement.height = element.height;
     duplicatedElement.color = element.color;
-    duplicatedElement.label = element.label ? `${element.label} Copy` : undefined;
+    duplicatedElement.label = element.label
+      ? `${element.label} Copy`
+      : undefined;
 
     this.room.update((room) => {
       switch (element.elementType) {
         case ElementTypeEnum.TABLE:
           return { ...room, tables: [...room.tables, duplicatedElement] };
         case ElementTypeEnum.STATIC:
-          return { ...room, staticElements: [...room.staticElements, duplicatedElement] };
+          return {
+            ...room,
+            staticElements: [...room.staticElements, duplicatedElement],
+          };
         default:
           return room;
       }
@@ -222,7 +234,10 @@ export class RoomPlannerComponent implements AfterViewInit {
   }
 
   onCenterElement(elementId: string): void {
-    const element = this.elementService.getSelectedElement(this.room(), elementId);
+    const element = this.elementService.getSelectedElement(
+      this.room(),
+      elementId,
+    );
     if (!element) return;
 
     const room = this.room();
@@ -230,5 +245,9 @@ export class RoomPlannerComponent implements AfterViewInit {
     const centerY = (room.height - element.height) / 2;
 
     this.onUpdateElement(elementId, { x: centerX, y: centerY });
+  }
+
+  toggleMobileProperties(): void {
+    this.showMobileProperties.update((v) => !v);
   }
 }

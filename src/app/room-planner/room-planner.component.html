@@ -80,14 +80,16 @@
             </div>
           </div>
           <div class="flex justify-center overflow-auto touch-pan-y">
-            <div class="max-w-full max-h-[500px] overflow-auto relative">
+            <div
+              class="max-w-full max-h-[500px] overflow-auto relative w-full sm:w-auto"
+            >
               <canvas
                 #canvas
                 appCanvasInteraction
                 [room]="room()"
                 [selectedId]="selectedId()"
                 (interaction)="onCanvasInteraction($event)"
-                class="block max-w-none border bg-white touch-none select-none"
+                class="block max-w-none border bg-white touch-none select-none w-full sm:w-auto h-auto"
               >
               </canvas>
               <div

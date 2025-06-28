@@ -106,6 +106,7 @@ export class RoomPlannerComponent implements AfterViewInit {
     const element = this.elementService.createElement(
       event.elementType,
       event.shapeType,
+      this.room(), // Pass the current room to enable offset positioning
     );
 
     this.room.update((room) => {
@@ -131,6 +132,8 @@ export class RoomPlannerComponent implements AfterViewInit {
       staticElements: [],
     }));
     this.selectedId.set(null);
+    // Reset element positioning to start from the beginning
+    this.elementService.resetElementPositioning();
   }
 
   onRoomWidthChange(width: number): void {
@@ -180,6 +183,8 @@ export class RoomPlannerComponent implements AfterViewInit {
     this.selectedId.set(null);
     // Clear the imported JSON after successful import
     this.importedJSON.set('');
+    // Reset element positioning to start from the beginning
+    this.elementService.resetElementPositioning();
   }
 
   onImportedJsonChange(json: string): void {
@@ -214,6 +219,7 @@ export class RoomPlannerComponent implements AfterViewInit {
     const duplicatedElement = this.elementService.createElement(
       element.elementType,
       element.shapeType || 'rectangle',
+      this.room(), // Pass the current room for offset positioning
     );
 
     // Position the duplicate slightly offset from the original

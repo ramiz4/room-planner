@@ -14,6 +14,12 @@ import { Room } from '../interfaces/room.interface';
 })
 export class ElementManagementService {
   private readonly GRID_SIZE = ROOM_PLANNER_CONSTANTS.ROOM_GRID_SIZE;
+  private readonly ELEMENT_OFFSET_X = 20; // Pixels to offset new elements horizontally
+  private readonly ELEMENT_OFFSET_Y = 20; // Pixels to offset new elements vertically
+  private lastElementPosition: { x: number; y: number } = {
+    x: ROOM_PLANNER_CONSTANTS.ELEMENT_X_POSITION,
+    y: ROOM_PLANNER_CONSTANTS.ELEMENT_Y_POSITION,
+  };
 
   snap(value: number): number {
     return Math.round(value / this.GRID_SIZE) * this.GRID_SIZE;
@@ -27,11 +33,53 @@ export class ElementManagementService {
 
   private nextZIndex = 1;
 
-  createElement(elementType: ElementType, shapeType: ShapeType): RoomElement {
+  private calculateNextElementPosition(room: Room): { x: number; y: number } {
+    // Calculate new position with offset
+    let nextX = this.lastElementPosition.x + this.ELEMENT_OFFSET_X;
+    let nextY = this.lastElementPosition.y + this.ELEMENT_OFFSET_Y;
+
+    // Check if the new position would be outside the room bounds
+    const elementWidth = ROOM_PLANNER_CONSTANTS.ELEMENT_WIDTH;
+    const elementHeight = ROOM_PLANNER_CONSTANTS.ELEMENT_HEIGHT;
+
+    // If element would go outside room bounds, wrap to next row or reset to start
+    if (nextX + elementWidth > room.width) {
+      nextX = ROOM_PLANNER_CONSTANTS.ELEMENT_X_POSITION;
+      nextY += this.ELEMENT_OFFSET_Y;
+    }
+
+    // If element would go outside room height, reset to starting position
+    if (nextY + elementHeight > room.height) {
+      nextX = ROOM_PLANNER_CONSTANTS.ELEMENT_X_POSITION;
+      nextY = ROOM_PLANNER_CONSTANTS.ELEMENT_Y_POSITION;
+    }
+
+    return { x: nextX, y: nextY };
+  }
+
+  createElement(
+    elementType: ElementType,
+    shapeType: ShapeType,
+    room?: Room,
+  ): RoomElement {
+    // Calculate position for new element
+    let position;
+    if (room) {
+      position = this.calculateNextElementPosition(room);
+      // Update last element position for next element
+      this.lastElementPosition = position;
+    } else {
+      // Fallback to default position if room is not provided
+      position = {
+        x: ROOM_PLANNER_CONSTANTS.ELEMENT_X_POSITION,
+        y: ROOM_PLANNER_CONSTANTS.ELEMENT_Y_POSITION,
+      };
+    }
+
     return {
       id: crypto.randomUUID(),
-      x: this.snap(ROOM_PLANNER_CONSTANTS.ELEMENT_X_POSITION),
-      y: this.snap(ROOM_PLANNER_CONSTANTS.ELEMENT_Y_POSITION),
+      x: this.snap(position.x),
+      y: this.snap(position.y),
       width: this.snap(ROOM_PLANNER_CONSTANTS.ELEMENT_WIDTH),
       height: this.snap(ROOM_PLANNER_CONSTANTS.ELEMENT_HEIGHT),
       color: ROOM_PLANNER_CONSTANTS.ELEMENT_COLOR,
@@ -186,6 +234,13 @@ export class ElementManagementService {
       ...room,
       tables: room.tables.filter((el) => el.id !== elementId),
       staticElements: room.staticElements.filter((el) => el.id !== elementId),
+    };
+  }
+
+  resetElementPositioning(): void {
+    this.lastElementPosition = {
+      x: ROOM_PLANNER_CONSTANTS.ELEMENT_X_POSITION,
+      y: ROOM_PLANNER_CONSTANTS.ELEMENT_Y_POSITION,
     };
   }
 }

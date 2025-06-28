@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   computed,
   effect,
@@ -6,16 +8,14 @@ import {
   inject,
   signal,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonExportComponent } from './components/json-export.component';
 import { JsonImportComponent } from './components/json-import.component';
 import { RoomControlsComponent } from './components/room-controls.component';
 import { ROOM_PLANNER_CONSTANTS } from './constants/room-planner.constants';
-import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
 import { ButtonFeedbackDirective } from './directives/button-feedback.directive';
+import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
 import {
   CanvasInteractionEvent,
   CanvasInteractionEventTypeEnum,
@@ -71,7 +71,6 @@ export class RoomPlannerComponent implements AfterViewInit {
 
   readonly showMobileProperties = signal(false);
   readonly showMobileControls = signal(false);
-  readonly showLayoutManager = signal(false);
   readonly showExportManager = signal(false);
   readonly showImportManager = signal(false);
   readonly showElementGuide = signal(false);
@@ -179,6 +178,8 @@ export class RoomPlannerComponent implements AfterViewInit {
     const roomWithZIndices = this.elementService.initializeZIndices(room);
     this.room.set(roomWithZIndices);
     this.selectedId.set(null);
+    // Clear the imported JSON after successful import
+    this.importedJSON.set('');
   }
 
   onImportedJsonChange(json: string): void {
@@ -263,10 +264,6 @@ export class RoomPlannerComponent implements AfterViewInit {
 
   toggleMobileControls(): void {
     this.showMobileControls.update((v) => !v);
-  }
-
-  toggleLayoutManager(): void {
-    this.showLayoutManager.update((v) => !v);
   }
 
   toggleExportManager(): void {

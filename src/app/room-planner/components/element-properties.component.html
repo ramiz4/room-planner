@@ -121,18 +121,18 @@
             for="element-width"
             class="block text-xs font-medium text-gray-700"
           >
-            Width
+            Width (m)
           </label>
           <div class="relative">
             <input
               id="element-width"
               name="elementWidth"
               type="number"
-              [value]="selectedElement.width"
+              [value]="getWidthInMeters()"
               (input)="onWidthChange($event)"
-              min="10"
-              max="500"
-              step="1"
+              min="0.1"
+              max="50"
+              step="0.1"
               class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
             />
           </div>
@@ -142,18 +142,18 @@
             for="element-height"
             class="block text-xs font-medium text-gray-700"
           >
-            Height
+            Height (m)
           </label>
           <div class="relative">
             <input
               id="element-height"
               name="elementHeight"
               type="number"
-              [value]="selectedElement.height"
+              [value]="getHeightInMeters()"
               (input)="onHeightChange($event)"
-              min="10"
-              max="500"
-              step="1"
+              min="0.1"
+              max="50"
+              step="0.1"
               class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
             />
           </div>
@@ -165,29 +165,31 @@
     <div class="grid grid-cols-2 gap-2">
       <div class="space-y-1">
         <label for="element-x" class="block text-xs font-medium text-gray-700">
-          X Position
+          X Position (m)
         </label>
         <input
           id="element-x"
           name="elementX"
           type="number"
-          [value]="selectedElement.x"
+          [value]="getXInMeters()"
           (input)="onXChange($event)"
           min="0"
+          step="0.1"
           class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
         />
       </div>
       <div class="space-y-1">
         <label for="element-y" class="block text-xs font-medium text-gray-700">
-          Y Position
+          Y Position (m)
         </label>
         <input
           id="element-y"
           name="elementY"
           type="number"
-          [value]="selectedElement.y"
+          [value]="getYInMeters()"
           (input)="onYChange($event)"
           min="0"
+          step="0.1"
           class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
         />
       </div>
@@ -201,7 +203,7 @@
           <button
             appButtonFeedback
             type="button"
-            (click)="setPresetSize(selectedElement, 80, 80)"
+            (click)="setPresetSize(selectedElement, 0.8, 0.8)"
             class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
           >
             Small Table
@@ -209,7 +211,7 @@
           <button
             appButtonFeedback
             type="button"
-            (click)="setPresetSize(selectedElement, 160, 80)"
+            (click)="setPresetSize(selectedElement, 1.6, 0.8)"
             class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
           >
             Large Table

@@ -74,40 +74,44 @@ export class ElementPropertiesComponent implements OnChanges {
   }
 
   onWidthChange(event: Event): void {
-    const width = +(event.target as HTMLInputElement).value;
-    if (width > 0) {
+    const widthMeters = +(event.target as HTMLInputElement).value;
+    if (widthMeters > 0) {
+      const widthPixels = this.metersToPixels(widthMeters);
       if (this.lockAspectRatio()) {
-        const height = Math.round(width / this.aspectRatio);
-        this.updateElement.emit({ width, height });
+        const heightPixels = Math.round(widthPixels / this.aspectRatio);
+        this.updateElement.emit({ width: widthPixels, height: heightPixels });
       } else {
-        this.updateElement.emit({ width });
+        this.updateElement.emit({ width: widthPixels });
       }
     }
   }
 
   onHeightChange(event: Event): void {
-    const height = +(event.target as HTMLInputElement).value;
-    if (height > 0) {
+    const heightMeters = +(event.target as HTMLInputElement).value;
+    if (heightMeters > 0) {
+      const heightPixels = this.metersToPixels(heightMeters);
       if (this.lockAspectRatio()) {
-        const width = Math.round(height * this.aspectRatio);
-        this.updateElement.emit({ width, height });
+        const widthPixels = Math.round(heightPixels * this.aspectRatio);
+        this.updateElement.emit({ width: widthPixels, height: heightPixels });
       } else {
-        this.updateElement.emit({ height });
+        this.updateElement.emit({ height: heightPixels });
       }
     }
   }
 
   onXChange(event: Event): void {
-    const x = +(event.target as HTMLInputElement).value;
-    if (x >= 0) {
-      this.updateElement.emit({ x });
+    const xMeters = +(event.target as HTMLInputElement).value;
+    if (xMeters >= 0) {
+      const xPixels = this.metersToPixels(xMeters);
+      this.updateElement.emit({ x: xPixels });
     }
   }
 
   onYChange(event: Event): void {
-    const y = +(event.target as HTMLInputElement).value;
-    if (y >= 0) {
-      this.updateElement.emit({ y });
+    const yMeters = +(event.target as HTMLInputElement).value;
+    if (yMeters >= 0) {
+      const yPixels = this.metersToPixels(yMeters);
+      this.updateElement.emit({ y: yPixels });
     }
   }
 
@@ -143,11 +147,22 @@ export class ElementPropertiesComponent implements OnChanges {
     }
   }
 
-  setPresetSize(element: RoomElement, width: number, height: number): void {
+  setPresetSize(
+    element: RoomElement,
+    widthMeters: number,
+    heightMeters: number,
+  ): void {
+    let finalHeightMeters = heightMeters;
     if (element.shapeType === ShapeTypeEnum.CIRCLE) {
-      height = width;
+      finalHeightMeters = widthMeters;
     }
-    this.updateElement.emit({ ...element, width, height });
+    const widthPixels = this.metersToPixels(widthMeters);
+    const heightPixels = this.metersToPixels(finalHeightMeters);
+    this.updateElement.emit({
+      ...element,
+      width: widthPixels,
+      height: heightPixels,
+    });
   }
 
   centerElement(): void {
@@ -161,5 +176,41 @@ export class ElementPropertiesComponent implements OnChanges {
   private isValidColor(color: string): boolean {
     const hexRegex = /^#([0-9A-F]{3}){1,2}$/i;
     return hexRegex.test(color);
+  }
+
+  // Conversion methods for pixels to meters and vice versa
+  private pixelsToMeters(pixels: number): number {
+    return (
+      Math.round((pixels / ROOM_PLANNER_CONSTANTS.PIXELS_PER_METER) * 100) / 100
+    );
+  }
+
+  private metersToPixels(meters: number): number {
+    return Math.round(meters * ROOM_PLANNER_CONSTANTS.PIXELS_PER_METER);
+  }
+
+  // Getters for meter values to display in UI
+  getWidthInMeters(): number {
+    return this.selectedElement
+      ? this.pixelsToMeters(this.selectedElement.width)
+      : 0;
+  }
+
+  getHeightInMeters(): number {
+    return this.selectedElement
+      ? this.pixelsToMeters(this.selectedElement.height)
+      : 0;
+  }
+
+  getXInMeters(): number {
+    return this.selectedElement
+      ? this.pixelsToMeters(this.selectedElement.x)
+      : 0;
+  }
+
+  getYInMeters(): number {
+    return this.selectedElement
+      ? this.pixelsToMeters(this.selectedElement.y)
+      : 0;
   }
 }

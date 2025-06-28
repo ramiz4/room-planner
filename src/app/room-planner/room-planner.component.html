@@ -1,12 +1,6 @@
 <div class="px-2 md:container mx-auto py-8">
   <!-- Header -->
-  <div
-    class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4"
-  >
-    <div class="text-center sm:text-left">
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Room Planner</h1>
-    </div>
-  </div>
+  <h1 class="text-4xl font-bold text-gray-900 mb-6">Room Planner</h1>
 
   <!-- Canvas Area -->
   <div class="bg-white rounded-md shadow-sm border border-gray-300 p-4">
@@ -69,162 +63,10 @@
         </div>
 
         <!-- Add Elements Dropdown -->
-        <div class="relative">
-          <button
-            appButtonFeedback
-            class="flex items-center gap-2 p-2 pe-4 bg-blue-600 text-white rounded hover:bg-blue-700 focus:ring-1 focus:ring-blue-500 transition-colors"
-            type="button"
-            (click)="toggleAddElementDropdown()"
-          >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-            Add Elements
-            <svg
-              class="w-4 h-4 ml-1 transform transition-transform"
-              [class.rotate-180]="showAddElementDropdown()"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          <!-- Dropdown Menu -->
-          <div
-            *ngIf="showAddElementDropdown()"
-            class="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-50"
-          >
-            <!-- Invisible backdrop to close dropdown -->
-            <div
-              class="fixed inset-0 z-40"
-              (click)="closeDropdownOnOutsideClick()"
-              (keydown.escape)="closeDropdownOnOutsideClick()"
-              tabindex="0"
-              role="button"
-              aria-label="Close dropdown"
-            ></div>
-
-            <div
-              class="relative z-50 bg-white border border-gray-300 rounded-md shadow-lg"
-            >
-              <!-- Tables Section -->
-              <div class="p-2 border-b border-gray-200">
-                <div class="text-xs font-medium text-gray-600 mb-2 px-2">
-                  Tables
-                </div>
-                <button
-                  appButtonFeedback
-                  class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
-                  type="button"
-                  (click)="
-                    addElementDirectly(
-                      ElementTypeEnum.TABLE,
-                      ShapeTypeEnum.RECTANGLE
-                    )
-                  "
-                >
-                  <div class="w-4 h-3 border border-gray-400 bg-blue-100"></div>
-                  Rectangle
-                </button>
-                <button
-                  appButtonFeedback
-                  class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
-                  type="button"
-                  (click)="
-                    addElementDirectly(
-                      ElementTypeEnum.TABLE,
-                      ShapeTypeEnum.CIRCLE
-                    )
-                  "
-                >
-                  <div
-                    class="w-4 h-4 border border-gray-400 bg-blue-100 rounded-full"
-                  ></div>
-                  Circle
-                </button>
-              </div>
-
-              <!-- Static Elements Section -->
-              <div class="p-2 border-b border-gray-200">
-                <div class="text-xs font-medium text-gray-600 mb-2 px-2">
-                  Static
-                </div>
-                <button
-                  appButtonFeedback
-                  class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
-                  type="button"
-                  (click)="
-                    addElementDirectly(
-                      ElementTypeEnum.STATIC,
-                      ShapeTypeEnum.RECTANGLE
-                    )
-                  "
-                >
-                  <div class="w-4 h-3 border border-gray-400 bg-gray-200"></div>
-                  Rectangle
-                </button>
-                <button
-                  appButtonFeedback
-                  class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
-                  type="button"
-                  (click)="
-                    addElementDirectly(
-                      ElementTypeEnum.STATIC,
-                      ShapeTypeEnum.CIRCLE
-                    )
-                  "
-                >
-                  <div
-                    class="w-4 h-4 border border-gray-400 bg-gray-200 rounded-full"
-                  ></div>
-                  Circle
-                </button>
-              </div>
-
-              <!-- Clear All Section -->
-              <div class="p-2">
-                <button
-                  appButtonFeedback
-                  class="w-full text-left px-3 py-2 text-sm hover:bg-red-50 text-red-600 rounded flex items-center gap-2"
-                  type="button"
-                  (click)="clearAllElements()"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                  Clear All
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-add-elements-dropdown
+          (addElementEvent)="onAddElement($event)"
+          (clearAllEvent)="onClearElements()"
+        ></app-add-elements-dropdown>
       </div>
     </div>
     <div class="flex justify-center overflow-auto touch-pan-y">
@@ -247,64 +89,6 @@
           Drag elements to move them. Use the properties panel to edit or
           delete.
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Room Controls Trigger -->
-  <button
-    appButtonFeedback
-    class="fixed top-6 right-6 z-40 p-4 rounded-full bg-blue-600 text-white shadow-lg"
-    type="button"
-    (click)="toggleRoomControls()"
-  >
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-      />
-    </svg>
-  </button>
-
-  <!-- Room Controls Overlay -->
-  <div *ngIf="showRoomControls()">
-    <div
-      class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
-    >
-      <div
-        class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
-      >
-        <div class="flex justify-end mb-2">
-          <button
-            appButtonFeedback
-            type="button"
-            (click)="toggleRoomControls()"
-            class="p-1 text-gray-500 hover:text-gray-700"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <app-room-controls
-          [room]="room()"
-          (roomWidthMetersChange)="onRoomWidthMetersChange($event)"
-          (roomHeightMetersChange)="onRoomHeightMetersChange($event)"
-          (addElement)="onAddElement($event)"
-          (clearElements)="onClearElements()"
-        ></app-room-controls>
       </div>
     </div>
   </div>

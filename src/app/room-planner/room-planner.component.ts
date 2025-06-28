@@ -9,6 +9,7 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
+import { AddElementsDropdownComponent } from './components/add-elements-dropdown.component';
 import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonExportComponent } from './components/json-export.component';
 import { JsonImportComponent } from './components/json-import.component';
@@ -25,7 +26,6 @@ import {
   ElementTypeEnum,
   RoomElement,
   ShapeType,
-  ShapeTypeEnum,
 } from './interfaces/room-element.interface';
 import { Room } from './interfaces/room.interface';
 import { CanvasDrawingService } from './services/canvas-drawing.service';
@@ -36,6 +36,7 @@ import { ElementManagementService } from './services/element-management.service'
   templateUrl: './room-planner.component.html',
   imports: [
     CommonModule,
+    AddElementsDropdownComponent,
     RoomControlsComponent,
     JsonExportComponent,
     JsonImportComponent,
@@ -73,15 +74,9 @@ export class RoomPlannerComponent implements AfterViewInit {
   });
 
   readonly showElementProperties = signal(false);
-  readonly showRoomControls = signal(false);
   readonly showExportManager = signal(false);
   readonly showImportManager = signal(false);
   readonly showElementGuide = signal(false);
-  readonly showAddElementDropdown = signal(false);
-
-  // Expose enums to template
-  readonly ElementTypeEnum = ElementTypeEnum;
-  readonly ShapeTypeEnum = ShapeTypeEnum;
 
   // 🧠 Redraw effect
   constructor() {
@@ -320,35 +315,12 @@ export class RoomPlannerComponent implements AfterViewInit {
     this.showElementProperties.update((v) => !v);
   }
 
-  toggleRoomControls(): void {
-    this.showRoomControls.update((v) => !v);
-  }
-
   toggleExportManager(): void {
     this.showExportManager.update((v) => !v);
   }
 
   toggleImportManager(): void {
     this.showImportManager.update((v) => !v);
-  }
-
-  toggleAddElementDropdown(): void {
-    this.showAddElementDropdown.update((v) => !v);
-  }
-
-  addElementDirectly(elementType: ElementType, shapeType: ShapeType): void {
-    this.onAddElement({ elementType, shapeType });
-    this.showAddElementDropdown.set(false);
-  }
-
-  clearAllElements(): void {
-    this.onClearElements();
-    this.showAddElementDropdown.set(false);
-  }
-
-  closeDropdownOnOutsideClick(): void {
-    // Close dropdown when clicking outside
-    this.showAddElementDropdown.set(false);
   }
 
   showGuide(): void {

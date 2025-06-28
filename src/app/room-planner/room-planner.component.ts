@@ -13,6 +13,7 @@ import { AddElementsDropdownComponent } from './components/add-elements-dropdown
 import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonExportComponent } from './components/json-export.component';
 import { JsonImportComponent } from './components/json-import.component';
+import { RoomSizeControlsComponent } from './components/room-size-controls.component';
 import { ROOM_PLANNER_CONSTANTS } from './constants/room-planner.constants';
 import { ButtonFeedbackDirective } from './directives/button-feedback.directive';
 import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
@@ -36,6 +37,7 @@ import { ElementManagementService } from './services/element-management.service'
   imports: [
     CommonModule,
     AddElementsDropdownComponent,
+    RoomSizeControlsComponent,
     JsonExportComponent,
     JsonImportComponent,
     ElementPropertiesComponent,
@@ -153,22 +155,6 @@ export class RoomPlannerComponent implements AfterViewInit {
       height: heightPixels,
       heightMeters: heightMeters,
     }));
-  }
-
-  onRoomWidthInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const value = parseFloat(target.value);
-    if (!isNaN(value)) {
-      this.onRoomWidthMetersChange(value);
-    }
-  }
-
-  onRoomHeightInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const value = parseFloat(target.value);
-    if (!isNaN(value)) {
-      this.onRoomHeightMetersChange(value);
-    }
   }
 
   private metersToPixels(meters: number): number {

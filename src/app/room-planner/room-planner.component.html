@@ -2,35 +2,11 @@
   <div class="container mx-auto px-4 py-8 max-w-7xl">
     <!-- Header -->
     <div
-      class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4"
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4"
     >
       <div class="text-center sm:text-left">
         <h1 class="text-4xl font-bold text-gray-900 mb-2">Room Planner</h1>
-        <p class="text-gray-600 text-lg">
-          Design and visualize your space with interactive elements
-        </p>
       </div>
-      <button
-        appButtonFeedback
-        class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white shadow hover:bg-blue-700 transition-colors"
-        type="button"
-        (click)="toggleLayoutManager()"
-      >
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-        <span class="hidden md:inline">Layouts</span>
-      </button>
     </div>
 
     <!-- Mobile Controls Trigger -->
@@ -226,7 +202,7 @@
     </div>
 
     <!-- Export / Import Triggers -->
-    <div class="fixed bottom-6 left-6 z-40 flex flex-col gap-3 sm:hidden">
+    <div class="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
       <button
         appButtonFeedback
         class="p-4 rounded-full bg-blue-600 text-white shadow-lg"
@@ -269,63 +245,6 @@
           />
         </svg>
       </button>
-    </div>
-
-    <!-- Layout Manager Overlay -->
-    <div
-      *ngIf="showLayoutManager()"
-      class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
-    >
-      <div
-        class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
-      >
-        <div class="flex justify-end mb-2">
-          <button
-            appButtonFeedback
-            type="button"
-            (click)="toggleLayoutManager()"
-            class="p-1 text-gray-500 hover:text-gray-700"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <div class="space-y-8">
-          <!-- Header -->
-          <div class="text-center">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">
-              Layout Manager
-            </h2>
-          </div>
-
-          <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-            <!-- Export Section -->
-            <div>
-              <app-json-export [room]="room()"></app-json-export>
-            </div>
-
-            <!-- Import Section -->
-            <div>
-              <app-json-import
-                [importedJson]="importedJSON()"
-                (import)="onImportLayout($event)"
-                (importedJsonChange)="onImportedJsonChange($event)"
-              ></app-json-import>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Export Layout Overlay -->

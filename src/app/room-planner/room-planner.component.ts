@@ -25,6 +25,7 @@ import {
   ElementTypeEnum,
   RoomElement,
   ShapeType,
+  ShapeTypeEnum,
 } from './interfaces/room-element.interface';
 import { Room } from './interfaces/room.interface';
 import { CanvasDrawingService } from './services/canvas-drawing.service';
@@ -76,6 +77,11 @@ export class RoomPlannerComponent implements AfterViewInit {
   readonly showExportManager = signal(false);
   readonly showImportManager = signal(false);
   readonly showElementGuide = signal(false);
+  readonly showAddElementDropdown = signal(false);
+
+  // Expose enums to template
+  readonly ElementTypeEnum = ElementTypeEnum;
+  readonly ShapeTypeEnum = ShapeTypeEnum;
 
   // 🧠 Redraw effect
   constructor() {
@@ -154,6 +160,22 @@ export class RoomPlannerComponent implements AfterViewInit {
       height: heightPixels,
       heightMeters: heightMeters,
     }));
+  }
+
+  onRoomWidthInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const value = parseFloat(target.value);
+    if (!isNaN(value)) {
+      this.onRoomWidthMetersChange(value);
+    }
+  }
+
+  onRoomHeightInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const value = parseFloat(target.value);
+    if (!isNaN(value)) {
+      this.onRoomHeightMetersChange(value);
+    }
   }
 
   private metersToPixels(meters: number): number {
@@ -308,6 +330,25 @@ export class RoomPlannerComponent implements AfterViewInit {
 
   toggleImportManager(): void {
     this.showImportManager.update((v) => !v);
+  }
+
+  toggleAddElementDropdown(): void {
+    this.showAddElementDropdown.update((v) => !v);
+  }
+
+  addElementDirectly(elementType: ElementType, shapeType: ShapeType): void {
+    this.onAddElement({ elementType, shapeType });
+    this.showAddElementDropdown.set(false);
+  }
+
+  clearAllElements(): void {
+    this.onClearElements();
+    this.showAddElementDropdown.set(false);
+  }
+
+  closeDropdownOnOutsideClick(): void {
+    // Close dropdown when clicking outside
+    this.showAddElementDropdown.set(false);
   }
 
   showGuide(): void {

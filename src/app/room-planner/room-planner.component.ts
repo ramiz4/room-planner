@@ -15,6 +15,7 @@ import { ElementPropertiesComponent } from './components/element-properties.comp
 import { JsonExportComponent } from './components/json-export.component';
 import { JsonImportComponent } from './components/json-import.component';
 import { RoomSizeControlsComponent } from './components/room-size-controls.component';
+import { ZoomControlsComponent } from './components/zoom-controls.component';
 import { ROOM_PLANNER_CONSTANTS } from './constants/room-planner.constants';
 import { ButtonFeedbackDirective } from './directives/button-feedback.directive';
 import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
@@ -45,6 +46,7 @@ import { ElementManagementService } from './services/element-management.service'
     ElementPropertiesTriggerComponent,
     CanvasInteractionDirective,
     ButtonFeedbackDirective,
+    ZoomControlsComponent,
   ],
 })
 export class RoomPlannerComponent implements AfterViewInit {
@@ -210,6 +212,10 @@ export class RoomPlannerComponent implements AfterViewInit {
         }
         break;
     }
+  }
+
+  onZoomChange(zoom: number): void {
+    this.zoomLevel.set(zoom);
   }
 
   onImportLayout(room: Room): void {

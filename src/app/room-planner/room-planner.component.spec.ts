@@ -61,4 +61,9 @@ describe('RoomPlannerComponent', () => {
     });
     expect(component.zoomLevel()).toBe(1.5);
   });
+
+  it('should update zoom level when onZoomChange is called', () => {
+    component.onZoomChange(1.25);
+    expect(component.zoomLevel()).toBe(1.25);
+  });
 });

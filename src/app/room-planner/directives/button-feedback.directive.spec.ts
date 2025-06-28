@@ -22,11 +22,31 @@ describe('ButtonFeedbackDirective', () => {
     fixture.detectChanges();
   });
 
-  it('should trigger navigator.vibrate when pressed', () => {
+  it('should trigger navigator.vibrate when clicked with trusted event', () => {
     const nav = navigator as Navigator & { vibrate: jasmine.Spy };
     nav.vibrate = jasmine.createSpy('vibrate');
     const button = fixture.debugElement.query(By.css('button'));
-    button.triggerEventHandler('mousedown', {});
-    expect(nav.vibrate).toHaveBeenCalled();
+    const directive = button.injector.get(ButtonFeedbackDirective);
+
+    // Spy on the isUserGesture method to return true
+    spyOn(directive, 'isUserGesture').and.returnValue(true);
+
+    const clickEvent = new Event('click');
+    button.triggerEventHandler('click', clickEvent);
+    expect(nav.vibrate).toHaveBeenCalledWith(10);
+  });
+
+  it('should not trigger navigator.vibrate when clicked with untrusted event', () => {
+    const nav = navigator as Navigator & { vibrate: jasmine.Spy };
+    nav.vibrate = jasmine.createSpy('vibrate');
+    const button = fixture.debugElement.query(By.css('button'));
+    const directive = button.injector.get(ButtonFeedbackDirective);
+
+    // Spy on the isUserGesture method to return false
+    spyOn(directive, 'isUserGesture').and.returnValue(false);
+
+    const clickEvent = new Event('click');
+    button.triggerEventHandler('click', clickEvent);
+    expect(nav.vibrate).not.toHaveBeenCalled();
   });
 });

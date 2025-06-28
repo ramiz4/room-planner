@@ -40,6 +40,10 @@ select {
   transition: all 0.2s ease-in-out;
 }
 
+button:active {
+  transform: scale(0.97);
+}
+
 /* Focus outline improvements */
 button:focus-visible,
 input:focus-visible,

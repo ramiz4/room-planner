@@ -88,6 +88,7 @@
       <div class="flex items-center justify-between">
         <span class="text-xs font-medium text-gray-700">Dimensions</span>
         <button
+          appButtonFeedback
           type="button"
           (click)="lockAspectRatio.set(!lockAspectRatio())"
           class="flex items-center gap-1 px-2 py-0.5 text-xs rounded transition-colors"
@@ -198,6 +199,7 @@
       <div class="grid grid-cols-2 gap-1">
         @if (selectedElement.elementType === ElementTypeEnum.TABLE) {
           <button
+            appButtonFeedback
             type="button"
             (click)="setPresetSize(selectedElement, 80, 80)"
             class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
@@ -205,6 +207,7 @@
             Small Table
           </button>
           <button
+            appButtonFeedback
             type="button"
             (click)="setPresetSize(selectedElement, 160, 80)"
             class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
@@ -213,6 +216,7 @@
           </button>
         }
         <button
+          appButtonFeedback
           type="button"
           (click)="centerElement()"
           class="px-2 py-1 text-xs bg-gray-50 text-gray-700 rounded hover:bg-gray-100 transition-colors"
@@ -220,6 +224,7 @@
           Center
         </button>
         <button
+          appButtonFeedback
           type="button"
           (click)="duplicateElement()"
           class="px-2 py-1 text-xs bg-green-50 text-green-700 rounded hover:bg-green-100 transition-colors"
@@ -232,6 +237,7 @@
     <!-- Delete Button -->
     <div class="mt-8">
       <button
+        appButtonFeedback
         (click)="onDeleteElement()"
         class="w-full flex items-center justify-center gap-1 px-2 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 focus:ring-1 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 text-xs font-medium"
       >

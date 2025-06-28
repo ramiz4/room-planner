@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ButtonFeedbackDirective } from '../directives/button-feedback.directive';
 import { RoomElement } from '../interfaces/room-element.interface';
 import { Room } from '../interfaces/room.interface';
 
 @Component({
   selector: 'app-json-import',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonFeedbackDirective],
   templateUrl: './json-import.component.html',
 })
 export class JsonImportComponent {

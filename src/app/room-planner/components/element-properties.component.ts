@@ -7,6 +7,7 @@ import {
   OnChanges,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ButtonFeedbackDirective } from '../directives/button-feedback.directive';
 import { ROOM_PLANNER_CONSTANTS } from '../constants/room-planner.constants';
 import {
   ElementType,
@@ -17,7 +18,7 @@ import {
 
 @Component({
   selector: 'app-element-properties',
-  imports: [FormsModule],
+  imports: [FormsModule, ButtonFeedbackDirective],
   templateUrl: './element-properties.component.html',
 })
 export class ElementPropertiesComponent implements OnChanges {

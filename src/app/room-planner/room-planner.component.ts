@@ -15,6 +15,7 @@ import { JsonImportComponent } from './components/json-import.component';
 import { RoomControlsComponent } from './components/room-controls.component';
 import { ROOM_PLANNER_CONSTANTS } from './constants/room-planner.constants';
 import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
+import { ButtonFeedbackDirective } from './directives/button-feedback.directive';
 import {
   CanvasInteractionEvent,
   CanvasInteractionEventTypeEnum,
@@ -39,6 +40,7 @@ import { ElementManagementService } from './services/element-management.service'
     JsonImportComponent,
     ElementPropertiesComponent,
     CanvasInteractionDirective,
+    ButtonFeedbackDirective,
   ],
 })
 export class RoomPlannerComponent implements AfterViewInit {

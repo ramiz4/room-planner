@@ -38,6 +38,11 @@
           Drag elements to move them. Use the properties panel to edit or
           delete.
         </div>
+        <app-zoom-controls
+          class="absolute bottom-2 right-2"
+          [zoom]="zoomLevel()"
+          (zoomChange)="onZoomChange($event)"
+        ></app-zoom-controls>
       </div>
     </div>
 

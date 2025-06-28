@@ -11,11 +11,36 @@
   <!-- Canvas Area -->
   <div class="bg-white rounded-md shadow-sm border border-gray-300 p-4">
     <div class="relative">
-      <div class="flex items-center mb-4 justify-center">
-        <span
-          class="w-3 h-3 bg-green-400 rounded-full inline-block me-3"
-        ></span>
-        <span class="text-sm text-gray-500">Interactive Mode</span>
+      <div class="flex items-center mb-4 justify-between">
+        <!-- Room Controls Trigger -->
+        <button
+          appButtonFeedback
+          class="flex items-center gap-2 ml-4 p-2 pe-4 bg-blue-600 text-white rounded hover:bg-blue-700 focus:ring-1 focus:ring-blue-500 transition-colors"
+          type="button"
+          (click)="toggleRoomControls()"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
+          Add Elements
+        </button>
+
+        <div>
+          <span
+            class="w-3 h-3 bg-green-400 rounded-full inline-block me-3"
+          ></span>
+          <span class="text-sm text-gray-500">Interactive Mode</span>
+        </div>
       </div>
     </div>
     <div class="flex justify-center overflow-auto touch-pan-y">

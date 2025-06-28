@@ -21,6 +21,8 @@
     <div class="flex justify-center overflow-auto touch-pan-y">
       <div
         class="max-w-full max-h-[500px] overflow-auto relative w-full sm:w-auto"
+        cdkDropList
+        (cdkDropListDropped)="onDragDrop($event)"
       >
         <canvas
           #canvas

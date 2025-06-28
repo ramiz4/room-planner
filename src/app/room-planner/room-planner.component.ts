@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   Component,
@@ -35,6 +36,7 @@ import { ElementManagementService } from './services/element-management.service'
   templateUrl: './room-planner.component.html',
   imports: [
     CommonModule,
+    DragDropModule,
     RoomControlsComponent,
     JsonExportComponent,
     JsonImportComponent,
@@ -174,6 +176,38 @@ export class RoomPlannerComponent implements AfterViewInit {
         }
         break;
     }
+  }
+
+  onDragDrop(
+    event: CdkDragDrop<{ elementType: ElementType; shapeType: ShapeType }>,
+  ): void {
+    const canvasRect = this.canvasRef.nativeElement.getBoundingClientRect();
+    const x = event.dropPoint?.x ?? 0;
+    const y = event.dropPoint?.y ?? 0;
+    const dropX = x - canvasRect.left;
+    const dropY = y - canvasRect.top;
+
+    const element = this.elementService.createElement(
+      event.item.data.elementType,
+      event.item.data.shapeType,
+      this.room(),
+    );
+    element.x = this.drawingService.snap(dropX);
+    element.y = this.drawingService.snap(dropY);
+
+    this.room.update((room) => {
+      switch (event.item.data.elementType) {
+        case ElementTypeEnum.TABLE:
+          return { ...room, tables: [...room.tables, element] };
+        case ElementTypeEnum.STATIC:
+          return { ...room, staticElements: [...room.staticElements, element] };
+        default:
+          return room;
+      }
+    });
+
+    this.selectedId.set(element.id);
+    this.showGuide();
   }
 
   onImportLayout(room: Room): void {

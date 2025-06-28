@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { AddElementsDropdownComponent } from './components/add-elements-dropdown.component';
 import { ElementPropertiesComponent } from './components/element-properties.component';
+import { ElementPropertiesTriggerComponent } from './components/element-properties-trigger.component';
 import { ExportTriggerComponent } from './components/export-trigger.component';
 import { ImportTriggerComponent } from './components/import-trigger.component';
 import { JsonExportComponent } from './components/json-export.component';
@@ -45,6 +46,7 @@ import { ElementManagementService } from './services/element-management.service'
     JsonExportComponent,
     JsonImportComponent,
     ElementPropertiesComponent,
+    ElementPropertiesTriggerComponent,
     CanvasInteractionDirective,
     ButtonFeedbackDirective,
   ],

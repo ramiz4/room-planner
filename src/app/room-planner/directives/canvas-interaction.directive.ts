@@ -48,10 +48,10 @@ export class CanvasInteractionDirective implements AfterViewInit {
     const canvas = this.elementRef.nativeElement;
 
     canvas.addEventListener('mousedown', (e: MouseEvent) =>
-      this.onMouseDown(e)
+      this.onMouseDown(e),
     );
     canvas.addEventListener('mousemove', (e: MouseEvent) =>
-      this.onMouseMove(e)
+      this.onMouseMove(e),
     );
     canvas.addEventListener('mouseup', () => this.onMouseUp());
     canvas.addEventListener('mouseleave', () => this.onMouseUp());
@@ -69,7 +69,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onTouchStart(e);
       },
-      { passive: false }
+      { passive: false },
     );
 
     canvas.addEventListener(
@@ -78,7 +78,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onTouchMove(e);
       },
-      { passive: false }
+      { passive: false },
     );
 
     canvas.addEventListener(
@@ -87,7 +87,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onTouchEnd();
       },
-      { passive: false }
+      { passive: false },
     );
 
     canvas.addEventListener(
@@ -96,7 +96,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onTouchEnd();
       },
-      { passive: false }
+      { passive: false },
     );
   }
 
@@ -104,7 +104,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
     const element = this.elementService.findElementAt(
       this.room,
       event.offsetX,
-      event.offsetY
+      event.offsetY,
     );
 
     if (element) {
@@ -119,7 +119,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
           event.offsetX,
           event.offsetY,
           element,
-          this.drawingService.handleSize
+          this.drawingService.handleSize,
         )
       ) {
         this.resizing = true;
@@ -141,7 +141,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
 
     const element = this.elementService.getSelectedElement(
       this.room,
-      this.selectedId
+      this.selectedId,
     );
     if (!element) return;
 
@@ -192,13 +192,12 @@ export class CanvasInteractionDirective implements AfterViewInit {
   private getTouchCoordinates(touch: Touch): { x: number; y: number } {
     const canvas = this.elementRef.nativeElement;
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
 
-    return {
-      x: (touch.clientX - rect.left) * scaleX,
-      y: (touch.clientY - rect.top) * scaleY,
-    };
+    // Calculate the actual canvas coordinate by accounting for the display scaling
+    const x = ((touch.clientX - rect.left) / rect.width) * canvas.width;
+    const y = ((touch.clientY - rect.top) / rect.height) * canvas.height;
+
+    return { x, y };
   }
 
   private getTouchDistance(touch1: Touch, touch2: Touch): number {
@@ -220,7 +219,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
       const element = this.elementService.findElementAt(
         this.room,
         coords.x,
-        coords.y
+        coords.y,
       );
 
       if (element) {
@@ -253,7 +252,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
       // Two-finger pinch for resizing
       const element = this.elementService.getSelectedElement(
         this.room,
-        this.selectedId
+        this.selectedId,
       );
 
       if (element) {
@@ -276,7 +275,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
 
       const element = this.elementService.getSelectedElement(
         this.room,
-        this.selectedId
+        this.selectedId,
       );
 
       if (!element) return;
@@ -300,7 +299,9 @@ export class CanvasInteractionDirective implements AfterViewInit {
         if (element.shapeType === ShapeTypeEnum.CIRCLE) {
           // For circles, use the maximum delta to maintain circle shape
           const maxDelta = Math.max(Math.abs(deltaX), Math.abs(deltaY));
-          const newSize = this.drawingService.snap(Math.max(20, element.width + maxDelta * 2));
+          const newSize = this.drawingService.snap(
+            Math.max(20, element.width + maxDelta * 2),
+          );
 
           this.interaction.emit({
             type: CanvasInteractionEventTypeEnum.RESIZE,
@@ -310,8 +311,12 @@ export class CanvasInteractionDirective implements AfterViewInit {
           });
         } else {
           // For rectangles, resize based on drag direction
-          const newWidth = this.drawingService.snap(Math.max(20, element.width + deltaX));
-          const newHeight = this.drawingService.snap(Math.max(20, element.height + deltaY));
+          const newWidth = this.drawingService.snap(
+            Math.max(20, element.width + deltaX),
+          );
+          const newHeight = this.drawingService.snap(
+            Math.max(20, element.height + deltaY),
+          );
 
           this.interaction.emit({
             type: CanvasInteractionEventTypeEnum.RESIZE,
@@ -329,7 +334,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
       // Two-finger pinch resize
       const element = this.elementService.getSelectedElement(
         this.room,
-        this.selectedId
+        this.selectedId,
       );
 
       if (!element) return;
@@ -351,7 +356,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         // For rectangles, scale both dimensions
         const newWidth = this.drawingService.snap(element.width * scaleFactor);
         const newHeight = this.drawingService.snap(
-          element.height * scaleFactor
+          element.height * scaleFactor,
         );
 
         this.interaction.emit({
@@ -376,7 +381,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
   private isNearResizeHandle(
     x: number,
     y: number,
-    element: RoomElement
+    element: RoomElement,
   ): boolean {
     const tolerance = 30; // Increased tolerance for touch
     const handleSize = 8;

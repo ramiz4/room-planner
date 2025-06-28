@@ -195,47 +195,6 @@
       </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="space-y-2">
-      <span class="text-xs font-medium text-gray-700">Quick Actions</span>
-      <div class="grid grid-cols-2 gap-1">
-        @if (selectedElement.elementType === ElementTypeEnum.TABLE) {
-          <button
-            appButtonFeedback
-            type="button"
-            (click)="setPresetSize(selectedElement, 0.8, 0.8)"
-            class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
-          >
-            Small Table
-          </button>
-          <button
-            appButtonFeedback
-            type="button"
-            (click)="setPresetSize(selectedElement, 1.6, 0.8)"
-            class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
-          >
-            Large Table
-          </button>
-        }
-        <button
-          appButtonFeedback
-          type="button"
-          (click)="centerElement()"
-          class="px-2 py-1 text-xs bg-gray-50 text-gray-700 rounded hover:bg-gray-100 transition-colors"
-        >
-          Center
-        </button>
-        <button
-          appButtonFeedback
-          type="button"
-          (click)="duplicateElement()"
-          class="px-2 py-1 text-xs bg-green-50 text-green-700 rounded hover:bg-green-100 transition-colors"
-        >
-          Duplicate
-        </button>
-      </div>
-    </div>
-
     <!-- Delete Button -->
     <div class="mt-8">
       <button

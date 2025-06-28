@@ -13,7 +13,6 @@ import {
   ElementType,
   ElementTypeEnum,
   RoomElement,
-  ShapeTypeEnum,
 } from '../interfaces/room-element.interface';
 
 @Component({
@@ -25,8 +24,6 @@ export class ElementPropertiesComponent implements OnChanges {
   @Input() selectedElement: RoomElement | null = null;
   @Output() updateElement = new EventEmitter<Partial<RoomElement>>();
   @Output() deleteElement = new EventEmitter<void>();
-  @Output() duplicateElementEvent = new EventEmitter<void>();
-  @Output() centerElementEvent = new EventEmitter<void>();
 
   private aspectRatio = 1;
 
@@ -34,7 +31,6 @@ export class ElementPropertiesComponent implements OnChanges {
   lockAspectRatio = signal(false);
   ROOM_PLANNER_CONSTANTS = ROOM_PLANNER_CONSTANTS;
   ElementTypeEnum = ElementTypeEnum;
-  ShapeTypeEnum = ShapeTypeEnum;
 
   ngOnChanges() {
     if (this.selectedElement) {
@@ -145,32 +141,6 @@ export class ElementPropertiesComponent implements OnChanges {
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  }
-
-  setPresetSize(
-    element: RoomElement,
-    widthMeters: number,
-    heightMeters: number,
-  ): void {
-    let finalHeightMeters = heightMeters;
-    if (element.shapeType === ShapeTypeEnum.CIRCLE) {
-      finalHeightMeters = widthMeters;
-    }
-    const widthPixels = this.metersToPixels(widthMeters);
-    const heightPixels = this.metersToPixels(finalHeightMeters);
-    this.updateElement.emit({
-      ...element,
-      width: widthPixels,
-      height: heightPixels,
-    });
-  }
-
-  centerElement(): void {
-    this.centerElementEvent.emit();
-  }
-
-  duplicateElement(): void {
-    this.duplicateElementEvent.emit();
   }
 
   private isValidColor(color: string): boolean {

@@ -10,7 +10,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ElementPropertiesComponent } from './components/element-properties.component';
-import { JsonManagerComponent } from './components/json-manager.component';
+import { JsonExportComponent } from './components/json-export.component';
+import { JsonImportComponent } from './components/json-import.component';
 import { RoomControlsComponent } from './components/room-controls.component';
 import { ROOM_PLANNER_CONSTANTS } from './constants/room-planner.constants';
 import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
@@ -34,7 +35,8 @@ import { ElementManagementService } from './services/element-management.service'
   imports: [
     CommonModule,
     RoomControlsComponent,
-    JsonManagerComponent,
+    JsonExportComponent,
+    JsonImportComponent,
     ElementPropertiesComponent,
     CanvasInteractionDirective,
   ],

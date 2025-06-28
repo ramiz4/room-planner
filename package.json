@@ -13,7 +13,8 @@
     "e2e": "ng e2e",
     "format": "prettier --check .",
     "format:fix": "npm run lint:fix && prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pre-commit": "ng lint --fix && lint-staged"
   },
   "private": true,
   "dependencies": {
@@ -52,11 +53,7 @@
     "typescript-eslint": "8.34.1"
   },
   "lint-staged": {
-    "*.{ts,js,html}": [
-      "ng lint --fix",
-      "prettier --write"
-    ],
-    "*.{css,scss,md,json}": [
+    "*.{ts,html,js,css,scss,md,json}": [
       "prettier --write"
     ]
   }

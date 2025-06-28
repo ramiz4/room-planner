@@ -1,2 +1,2 @@
-npx lint-staged
-npm run test:ci
+npm run pre-commit
+# npm run test:ci

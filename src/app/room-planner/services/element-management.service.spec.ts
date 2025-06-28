@@ -18,6 +18,8 @@ describe('ElementManagementService', () => {
     const room: Room = {
       width: 100,
       height: 100,
+      widthMeters: 10,
+      heightMeters: 10,
       tables: [
         {
           id: '1',

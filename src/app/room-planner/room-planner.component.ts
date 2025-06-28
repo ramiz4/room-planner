@@ -77,6 +77,11 @@ export class RoomPlannerComponent implements AfterViewInit {
     );
   });
 
+  readonly hasElements = computed(() => {
+    const room = this.room();
+    return room.tables.length > 0 || room.staticElements.length > 0;
+  });
+
   readonly showElementProperties = signal(false);
   readonly showExportManager = signal(false);
   readonly showImportManager = signal(false);

@@ -21,15 +21,15 @@ describe('RoomPlannerComponent', () => {
   });
 
   it('should toggle mobile properties visibility', () => {
-    component.showMobileProperties.set(false);
-    component.toggleMobileProperties();
-    expect(component.showMobileProperties()).toBeTrue();
+    component.showElementProperties.set(false);
+    component.toggleElementProperties();
+    expect(component.showElementProperties()).toBeTrue();
   });
 
   it('should toggle mobile controls visibility', () => {
-    component.showMobileControls.set(false);
-    component.toggleMobileControls();
-    expect(component.showMobileControls()).toBeTrue();
+    component.showRoomControls.set(false);
+    component.toggleRoomControls();
+    expect(component.showRoomControls()).toBeTrue();
   });
 
   it('should toggle export manager visibility', () => {

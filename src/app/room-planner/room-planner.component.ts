@@ -69,8 +69,8 @@ export class RoomPlannerComponent implements AfterViewInit {
     );
   });
 
-  readonly showMobileProperties = signal(false);
-  readonly showMobileControls = signal(false);
+  readonly showElementProperties = signal(false);
+  readonly showRoomControls = signal(false);
   readonly showExportManager = signal(false);
   readonly showImportManager = signal(false);
   readonly showElementGuide = signal(false);
@@ -258,12 +258,12 @@ export class RoomPlannerComponent implements AfterViewInit {
     this.onUpdateElement(elementId, { x: centerX, y: centerY });
   }
 
-  toggleMobileProperties(): void {
-    this.showMobileProperties.update((v) => !v);
+  toggleElementProperties(): void {
+    this.showElementProperties.update((v) => !v);
   }
 
-  toggleMobileControls(): void {
-    this.showMobileControls.update((v) => !v);
+  toggleRoomControls(): void {
+    this.showRoomControls.update((v) => !v);
   }
 
   toggleExportManager(): void {

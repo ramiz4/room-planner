@@ -1,20 +1,171 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-  <div class="container mx-auto px-4 py-8 max-w-7xl">
-    <!-- Header -->
-    <div
-      class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4"
-    >
-      <div class="text-center sm:text-left">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Room Planner</h1>
+<div class="px-2 md:container mx-auto py-8">
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4"
+  >
+    <div class="text-center sm:text-left">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Room Planner</h1>
+    </div>
+  </div>
+
+  <!-- Canvas Area -->
+  <div class="bg-white rounded-md shadow-sm border border-gray-300 p-4">
+    <div class="relative">
+      <div class="flex items-center mb-4 justify-center">
+        <span
+          class="w-3 h-3 bg-green-400 rounded-full inline-block me-3"
+        ></span>
+        <span class="text-sm text-gray-500">Interactive Mode</span>
       </div>
     </div>
+    <div class="flex justify-center overflow-auto touch-pan-y">
+      <div
+        class="max-w-full max-h-[500px] overflow-auto relative w-full sm:w-auto"
+      >
+        <canvas
+          #canvas
+          appCanvasInteraction
+          [room]="room()"
+          [selectedId]="selectedId()"
+          (interaction)="onCanvasInteraction($event)"
+          class="block max-w-none border bg-white touch-none select-none w-full sm:w-auto h-auto"
+        >
+        </canvas>
+        <div
+          class="absolute inset-x-0 bottom-0 p-2 text-center text-xs text-white bg-black/60 rounded-b"
+          *ngIf="showElementGuide()"
+        >
+          Drag elements to move them. Use the properties panel to edit or
+          delete.
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Mobile Controls Trigger -->
+  <!-- Room Controls Trigger -->
+  <button
+    appButtonFeedback
+    class="fixed top-6 right-6 z-40 p-4 rounded-full bg-blue-600 text-white shadow-lg"
+    type="button"
+    (click)="toggleRoomControls()"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+      />
+    </svg>
+  </button>
+
+  <!-- Room Controls Overlay -->
+  <div *ngIf="showRoomControls()">
+    <div
+      class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
+    >
+      <div
+        class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
+      >
+        <div class="flex justify-end mb-2">
+          <button
+            appButtonFeedback
+            type="button"
+            (click)="toggleRoomControls()"
+            class="p-1 text-gray-500 hover:text-gray-700"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <app-room-controls
+          [room]="room()"
+          (roomWidthChange)="onRoomWidthChange($event)"
+          (roomHeightChange)="onRoomHeightChange($event)"
+          (addElement)="onAddElement($event)"
+          (clearElements)="onClearElements()"
+        ></app-room-controls>
+      </div>
+    </div>
+  </div>
+
+  <!-- Element Properties Trigger -->
+  <button
+    appButtonFeedback
+    class="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-blue-600 text-white shadow-lg"
+    type="button"
+    (click)="toggleElementProperties()"
+    *ngIf="selectedElement()"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M5 12h14M12 5l7 7-7 7"
+      />
+    </svg>
+  </button>
+
+  <!-- Element Properties Overlay -->
+  <div
+    class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
+    *ngIf="showElementProperties() && selectedElement()"
+  >
+    <div
+      class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
+    >
+      <div class="flex justify-end mb-2">
+        <button
+          appButtonFeedback
+          type="button"
+          (click)="toggleElementProperties()"
+          class="p-1 text-gray-500 hover:text-gray-700"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      <app-element-properties
+        [selectedElement]="selectedElement()"
+        (updateElement)="onUpdateElement(selectedId()!, $event)"
+        (deleteElement)="onDeleteElement(selectedId()!)"
+        (duplicateElementEvent)="onDuplicateElement(selectedId()!)"
+        (centerElementEvent)="onCenterElement(selectedId()!)"
+      ></app-element-properties>
+    </div>
+  </div>
+
+  <!-- Export / Import Triggers -->
+  <div class="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
     <button
       appButtonFeedback
-      class="fixed top-6 right-6 z-40 p-4 rounded-full bg-blue-600 text-white shadow-lg lg:hidden"
+      class="p-4 rounded-full bg-blue-600 text-white shadow-lg"
       type="button"
-      (click)="toggleMobileControls()"
+      (click)="toggleExportManager()"
+      title="Export Layout"
     >
       <svg
         class="w-5 h-5"
@@ -26,297 +177,102 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
         />
       </svg>
     </button>
-
-    <!-- Room Controls Bar -->
-    <div class="mb-6 hidden lg:block">
-      <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-6">
-        <app-room-controls
-          [room]="room()"
-          (roomWidthChange)="onRoomWidthChange($event)"
-          (roomHeightChange)="onRoomHeightChange($event)"
-          (addElement)="onAddElement($event)"
-          (clearElements)="onClearElements()"
-        >
-        </app-room-controls>
-      </div>
-    </div>
-
-    <!-- Canvas and Properties Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      <!-- Canvas Area -->
-      <div class="lg:col-span-3 order-1">
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-6">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-2xl font-semibold text-gray-800">Canvas</h2>
-            <div class="flex items-center gap-2 text-sm text-gray-500">
-              <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-              <span>Interactive Mode</span>
-            </div>
-          </div>
-          <div class="flex justify-center overflow-auto touch-pan-y">
-            <div
-              class="max-w-full max-h-[500px] overflow-auto relative w-full sm:w-auto"
-            >
-              <canvas
-                #canvas
-                appCanvasInteraction
-                [room]="room()"
-                [selectedId]="selectedId()"
-                (interaction)="onCanvasInteraction($event)"
-                class="block max-w-none border bg-white touch-none select-none w-full sm:w-auto h-auto"
-              >
-              </canvas>
-              <div
-                class="absolute inset-x-0 bottom-0 p-2 text-center text-xs text-white bg-black/60 rounded-b"
-                *ngIf="showElementGuide()"
-              >
-                Drag elements to move them. Use the properties panel to edit or
-                delete.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Element Properties Panel Desktop-->
-      <div class="lg:col-span-1 order-2 hidden lg:block">
-        <div
-          class="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sticky top-8"
-        >
-          <app-element-properties
-            [selectedElement]="selectedElement()"
-            (updateElement)="onUpdateElement(selectedId()!, $event)"
-            (deleteElement)="onDeleteElement(selectedId()!)"
-            (duplicateElementEvent)="onDuplicateElement(selectedId()!)"
-            (centerElementEvent)="onCenterElement(selectedId()!)"
-          >
-          </app-element-properties>
-        </div>
-      </div>
-
-      <!-- Mobile Properties Trigger -->
-      <button
-        appButtonFeedback
-        class="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-blue-600 text-white shadow-lg lg:hidden"
-        type="button"
-        (click)="toggleMobileProperties()"
-        *ngIf="selectedElement()"
-      >
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M5 12h14M12 5l7 7-7 7"
-          />
-        </svg>
-      </button>
-
-      <!-- Mobile Properties Panel -->
-      <div
-        class="fixed inset-0 z-50 flex items-end justify-center bg-black/50 lg:hidden"
-        *ngIf="showMobileProperties() && selectedElement()"
-      >
-        <div
-          class="bg-white rounded-t-2xl w-full max-h-[90vh] overflow-y-auto p-6"
-        >
-          <div class="flex justify-end mb-2">
-            <button
-              appButtonFeedback
-              type="button"
-              (click)="toggleMobileProperties()"
-              class="p-1 text-gray-500 hover:text-gray-700"
-            >
-              <svg
-                class="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <app-element-properties
-            [selectedElement]="selectedElement()"
-            (updateElement)="onUpdateElement(selectedId()!, $event)"
-            (deleteElement)="onDeleteElement(selectedId()!)"
-            (duplicateElementEvent)="onDuplicateElement(selectedId()!)"
-            (centerElementEvent)="onCenterElement(selectedId()!)"
-          ></app-element-properties>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile Controls Panel -->
-    <div *ngIf="showMobileControls()" class="lg:hidden">
-      <div class="fixed inset-0 z-50 flex items-end justify-center bg-black/50">
-        <div
-          class="bg-white rounded-t-2xl w-full max-h-[90vh] overflow-y-auto p-6"
-        >
-          <div class="flex justify-end mb-2">
-            <button
-              appButtonFeedback
-              type="button"
-              (click)="toggleMobileControls()"
-              class="p-1 text-gray-500 hover:text-gray-700"
-            >
-              <svg
-                class="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <app-room-controls
-            [room]="room()"
-            (roomWidthChange)="onRoomWidthChange($event)"
-            (roomHeightChange)="onRoomHeightChange($event)"
-            (addElement)="onAddElement($event)"
-            (clearElements)="onClearElements()"
-          ></app-room-controls>
-        </div>
-      </div>
-    </div>
-
-    <!-- Export / Import Triggers -->
-    <div class="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
-      <button
-        appButtonFeedback
-        class="p-4 rounded-full bg-blue-600 text-white shadow-lg"
-        type="button"
-        (click)="toggleExportManager()"
-        title="Export Layout"
-      >
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          />
-        </svg>
-      </button>
-      <button
-        appButtonFeedback
-        class="p-4 rounded-full bg-green-600 text-white shadow-lg"
-        type="button"
-        (click)="toggleImportManager()"
-        title="Import Layout"
-      >
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Export Layout Overlay -->
-    <div
-      *ngIf="showExportManager()"
-      class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
+    <button
+      appButtonFeedback
+      class="p-4 rounded-full bg-green-600 text-white shadow-lg"
+      type="button"
+      (click)="toggleImportManager()"
+      title="Import Layout"
     >
-      <div
-        class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
+      <svg
+        class="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
       >
-        <div class="flex justify-end mb-2">
-          <button
-            appButtonFeedback
-            type="button"
-            (click)="toggleExportManager()"
-            class="p-1 text-gray-500 hover:text-gray-700"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <app-json-export [room]="room()"></app-json-export>
-      </div>
-    </div>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+        />
+      </svg>
+    </button>
+  </div>
 
-    <!-- Import Layout Overlay -->
+  <!-- Export Layout Overlay -->
+  <div
+    *ngIf="showExportManager()"
+    class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
+  >
     <div
-      *ngIf="showImportManager()"
-      class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
+      class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
     >
-      <div
-        class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
-      >
-        <div class="flex justify-end mb-2">
-          <button
-            appButtonFeedback
-            type="button"
-            (click)="toggleImportManager()"
-            class="p-1 text-gray-500 hover:text-gray-700"
+      <div class="flex justify-end mb-2">
+        <button
+          appButtonFeedback
+          type="button"
+          (click)="toggleExportManager()"
+          class="p-1 text-gray-500 hover:text-gray-700"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <app-json-import
-          [importedJson]="importedJSON()"
-          (import)="onImportLayout($event)"
-          (importedJsonChange)="onImportedJsonChange($event)"
-        ></app-json-import>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
       </div>
+      <app-json-export [room]="room()"></app-json-export>
+    </div>
+  </div>
+
+  <!-- Import Layout Overlay -->
+  <div
+    *ngIf="showImportManager()"
+    class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
+  >
+    <div
+      class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
+    >
+      <div class="flex justify-end mb-2">
+        <button
+          appButtonFeedback
+          type="button"
+          (click)="toggleImportManager()"
+          class="p-1 text-gray-500 hover:text-gray-700"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      <app-json-import
+        [importedJson]="importedJSON()"
+        (import)="onImportLayout($event)"
+        (importedJsonChange)="onImportedJsonChange($event)"
+      ></app-json-import>
     </div>
   </div>
 </div>

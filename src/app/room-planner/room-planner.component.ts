@@ -13,7 +13,6 @@ import { AddElementsDropdownComponent } from './components/add-elements-dropdown
 import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonExportComponent } from './components/json-export.component';
 import { JsonImportComponent } from './components/json-import.component';
-import { RoomControlsComponent } from './components/room-controls.component';
 import { ROOM_PLANNER_CONSTANTS } from './constants/room-planner.constants';
 import { ButtonFeedbackDirective } from './directives/button-feedback.directive';
 import { CanvasInteractionDirective } from './directives/canvas-interaction.directive';
@@ -37,7 +36,6 @@ import { ElementManagementService } from './services/element-management.service'
   imports: [
     CommonModule,
     AddElementsDropdownComponent,
-    RoomControlsComponent,
     JsonExportComponent,
     JsonImportComponent,
     ElementPropertiesComponent,

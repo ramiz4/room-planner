@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ButtonFeedbackDirective } from '../directives/button-feedback.directive';
 import {
   ElementType,
@@ -12,7 +13,7 @@ import { Room } from '../interfaces/room.interface';
 @Component({
   selector: 'app-room-controls',
   standalone: true,
-  imports: [CommonModule, ButtonFeedbackDirective],
+  imports: [CommonModule, DragDropModule, ButtonFeedbackDirective],
   templateUrl: './room-controls.component.html',
 })
 export class RoomControlsComponent {

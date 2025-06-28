@@ -13,6 +13,8 @@
       <app-add-elements-dropdown
         (addElementEvent)="onAddElement($event)"
         (clearAllEvent)="onClearElements()"
+        (exportLayoutEvent)="toggleExportManager()"
+        (importLayoutEvent)="toggleImportManager()"
       ></app-add-elements-dropdown>
     </div>
     <div class="flex justify-center overflow-auto touch-pan-y">
@@ -37,14 +39,6 @@
     </div>
 
     <div class="flex justify-between mt-4">
-      <div class="flex gap-3">
-        <app-export-trigger
-          (exportClick)="toggleExportManager()"
-        ></app-export-trigger>
-        <app-import-trigger
-          (importClick)="toggleImportManager()"
-        ></app-import-trigger>
-      </div>
       <app-element-properties-trigger
         [selectedElement]="selectedElement()"
         [hasElements]="hasElements()"

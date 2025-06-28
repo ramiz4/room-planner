@@ -12,9 +12,6 @@ import { RoomElement } from '../interfaces/room-element.interface';
       <!-- Header -->
       <div class="text-center">
         <h2 class="text-2xl font-bold text-gray-900 mb-2">Layout Manager</h2>
-        <p class="text-gray-600">
-          Export your current layout or import an existing one
-        </p>
       </div>
 
       <div

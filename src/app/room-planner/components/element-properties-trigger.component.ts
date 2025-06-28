@@ -54,7 +54,7 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <span>Select an element in the canvas to edit its properties</span>
+        <span>Select an element to edit its properties</span>
       </div>
     }
   `,

@@ -48,21 +48,11 @@
           (importClick)="toggleImportManager()"
         ></app-import-trigger>
       </div>
-      @if (selectedElement()) {
-        <!-- Element Properties Trigger -->
-        <app-element-properties-trigger
-          [selectedElement]="selectedElement()"
-          [hasElements]="hasElements()"
-          (toggleElementProperties)="toggleElementProperties()"
-        ></app-element-properties-trigger>
-      } @else if (hasElements()) {
-        <!-- Hint when no element is selected but elements exist -->
-        <app-element-properties-trigger
-          [selectedElement]="selectedElement()"
-          [hasElements]="hasElements()"
-          (toggleElementProperties)="toggleElementProperties()"
-        ></app-element-properties-trigger>
-      }
+      <app-element-properties-trigger
+        [selectedElement]="selectedElement()"
+        [hasElements]="hasElements()"
+        (toggleElementProperties)="toggleElementProperties()"
+      ></app-element-properties-trigger>
     </div>
   </div>
 

@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ButtonFeedbackDirective } from './button-feedback.directive';
 
 @Component({
-  template: `<button>Click</button>`,
+  template: `<button appButtonFeedback>Click</button>`,
   standalone: true,
   imports: [ButtonFeedbackDirective],
 })

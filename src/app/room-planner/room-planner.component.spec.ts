@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RoomPlannerComponent } from './room-planner.component';
+import { CanvasInteractionEventTypeEnum } from './interfaces/canvas-interactio-event.interface';
 
 describe('RoomPlannerComponent', () => {
   let component: RoomPlannerComponent;
@@ -50,5 +51,14 @@ describe('RoomPlannerComponent', () => {
     component.onRoomHeightMetersChange(5.2);
     expect(component.room().heightMeters).toBe(5.2);
     expect(component.room().heightMeters).not.toBe(initialHeight);
+  });
+
+  it('should update zoom level on canvas zoom interaction', () => {
+    component.onCanvasInteraction({
+      type: CanvasInteractionEventTypeEnum.ZOOM,
+      elementId: null,
+      zoom: 1.5,
+    });
+    expect(component.zoomLevel()).toBe(1.5);
   });
 });

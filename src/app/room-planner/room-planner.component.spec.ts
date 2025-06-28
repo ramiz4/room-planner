@@ -37,4 +37,16 @@ describe('RoomPlannerComponent', () => {
     component.toggleMobileControls();
     expect(component.showMobileControls()).toBeTrue();
   });
+
+  it('should toggle export manager visibility', () => {
+    component.showExportManager.set(false);
+    component.toggleExportManager();
+    expect(component.showExportManager()).toBeTrue();
+  });
+
+  it('should toggle import manager visibility', () => {
+    component.showImportManager.set(false);
+    component.toggleImportManager();
+    expect(component.showImportManager()).toBeTrue();
+  });
 });

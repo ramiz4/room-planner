@@ -71,6 +71,7 @@ export class RoomPlannerComponent implements AfterViewInit {
 
   readonly selectedId = signal<string | null>(null);
   readonly importedJSON = signal('');
+  readonly zoomLevel = signal(1);
 
   readonly selectedElement = computed(() => {
     return this.elementService.getSelectedElement(
@@ -205,6 +206,11 @@ export class RoomPlannerComponent implements AfterViewInit {
             width: event.size.width,
             height: event.size.height,
           });
+        }
+        break;
+      case CanvasInteractionEventTypeEnum.ZOOM:
+        if (event.zoom) {
+          this.zoomLevel.set(event.zoom);
         }
         break;
     }

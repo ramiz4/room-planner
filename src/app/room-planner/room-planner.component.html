@@ -22,8 +22,11 @@
           appCanvasInteraction
           [room]="room()"
           [selectedId]="selectedId()"
+          [zoom]="zoomLevel()"
           (interaction)="onCanvasInteraction($event)"
           class="block border bg-white touch-none select-none"
+          [style.transform]="'scale(' + zoomLevel() + ')'"
+          style="transform-origin: 0 0"
         >
         </canvas>
         <div

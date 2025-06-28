@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ButtonFeedbackDirective } from '../directives/button-feedback.directive';
 import {
   ElementType,
   ElementTypeEnum,
@@ -9,6 +11,8 @@ import { Room } from '../interfaces/room.interface';
 
 @Component({
   selector: 'app-room-controls',
+  standalone: true,
+  imports: [CommonModule, ButtonFeedbackDirective],
   templateUrl: './room-controls.component.html',
 })
 export class RoomControlsComponent {

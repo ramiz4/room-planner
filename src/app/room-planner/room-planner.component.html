@@ -218,26 +218,49 @@
       </div>
     </div>
 
-    <!-- Layout Manager Trigger -->
-    <button
-      class="fixed bottom-6 left-6 z-40 p-4 rounded-full bg-blue-600 text-white shadow-lg sm:hidden"
-      type="button"
-      (click)="toggleLayoutManager()"
-    >
-      <svg
-        class="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+    <!-- Export / Import Triggers -->
+    <div class="fixed bottom-6 left-6 z-40 flex flex-col gap-3 sm:hidden">
+      <button
+        class="p-4 rounded-full bg-blue-600 text-white shadow-lg"
+        type="button"
+        (click)="toggleExportManager()"
+        title="Export Layout"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
-      </svg>
-    </button>
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+      </button>
+      <button
+        class="p-4 rounded-full bg-green-600 text-white shadow-lg"
+        type="button"
+        (click)="toggleImportManager()"
+        title="Import Layout"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+          />
+        </svg>
+      </button>
+    </div>
 
     <!-- Layout Manager Overlay -->
     <div
@@ -273,6 +296,78 @@
           [importedJson]="importedJSON()"
           (import)="onImportLayout($event)"
           (importedJsonChange)="onImportedJsonChange($event)"
+        ></app-json-manager>
+      </div>
+    </div>
+
+    <!-- Export Layout Overlay -->
+    <div
+      *ngIf="showExportManager()"
+      class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
+    >
+      <div
+        class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
+      >
+        <div class="flex justify-end mb-2">
+          <button
+            type="button"
+            (click)="toggleExportManager()"
+            class="p-1 text-gray-500 hover:text-gray-700"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <app-json-manager [room]="room()" view="export"></app-json-manager>
+      </div>
+    </div>
+
+    <!-- Import Layout Overlay -->
+    <div
+      *ngIf="showImportManager()"
+      class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
+    >
+      <div
+        class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
+      >
+        <div class="flex justify-end mb-2">
+          <button
+            type="button"
+            (click)="toggleImportManager()"
+            class="p-1 text-gray-500 hover:text-gray-700"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <app-json-manager
+          [room]="room()"
+          [importedJson]="importedJSON()"
+          (import)="onImportLayout($event)"
+          (importedJsonChange)="onImportedJsonChange($event)"
+          view="import"
         ></app-json-manager>
       </div>
     </div>

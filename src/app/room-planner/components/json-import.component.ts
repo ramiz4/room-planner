@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonFeedbackDirective } from '../directives/button-feedback.directive';
 import { RoomElement } from '../interfaces/room-element.interface';
 import { Room } from '../interfaces/room.interface';
+import { ROOM_PLANNER_CONSTANTS } from '../constants/room-planner.constants';
 
 @Component({
   selector: 'app-json-import',
@@ -42,6 +43,9 @@ export class JsonImportComponent {
         const room: Room = {
           width: parsed.width,
           height: parsed.height,
+          widthMeters: parsed.widthMeters ?? this.pixelsToMeters(parsed.width),
+          heightMeters:
+            parsed.heightMeters ?? this.pixelsToMeters(parsed.height),
           tables: parsed.tables || [],
           staticElements: staticElements,
         };
@@ -56,5 +60,11 @@ export class JsonImportComponent {
 
   clearImport(): void {
     this.importedJsonChange.emit('');
+  }
+
+  private pixelsToMeters(pixels: number): number {
+    return (
+      Math.round((pixels / ROOM_PLANNER_CONSTANTS.PIXELS_PER_METER) * 10) / 10
+    );
   }
 }

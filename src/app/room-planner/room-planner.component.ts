@@ -55,6 +55,8 @@ export class RoomPlannerComponent implements AfterViewInit {
   readonly room = signal<Room>({
     width: ROOM_PLANNER_CONSTANTS.ROOM_WIDTH,
     height: ROOM_PLANNER_CONSTANTS.ROOM_HEIGHT,
+    widthMeters: ROOM_PLANNER_CONSTANTS.ROOM_WIDTH_METERS,
+    heightMeters: ROOM_PLANNER_CONSTANTS.ROOM_HEIGHT_METERS,
     tables: [],
     staticElements: [],
   });
@@ -136,12 +138,32 @@ export class RoomPlannerComponent implements AfterViewInit {
     this.elementService.resetElementPositioning();
   }
 
-  onRoomWidthChange(width: number): void {
-    this.room.update((r) => ({ ...r, width }));
+  onRoomWidthMetersChange(widthMeters: number): void {
+    const widthPixels = this.metersToPixels(widthMeters);
+    this.room.update((r) => ({
+      ...r,
+      width: widthPixels,
+      widthMeters: widthMeters,
+    }));
   }
 
-  onRoomHeightChange(height: number): void {
-    this.room.update((r) => ({ ...r, height }));
+  onRoomHeightMetersChange(heightMeters: number): void {
+    const heightPixels = this.metersToPixels(heightMeters);
+    this.room.update((r) => ({
+      ...r,
+      height: heightPixels,
+      heightMeters: heightMeters,
+    }));
+  }
+
+  private metersToPixels(meters: number): number {
+    return Math.round(meters * ROOM_PLANNER_CONSTANTS.PIXELS_PER_METER);
+  }
+
+  private pixelsToMeters(pixels: number): number {
+    return (
+      Math.round((pixels / ROOM_PLANNER_CONSTANTS.PIXELS_PER_METER) * 10) / 10
+    );
   }
 
   onCanvasInteraction(event: CanvasInteractionEvent): void {
@@ -177,8 +199,16 @@ export class RoomPlannerComponent implements AfterViewInit {
   }
 
   onImportLayout(room: Room): void {
+    // Ensure meter values are calculated if not present
+    const roomWithMeters = {
+      ...room,
+      widthMeters: room.widthMeters ?? this.pixelsToMeters(room.width),
+      heightMeters: room.heightMeters ?? this.pixelsToMeters(room.height),
+    };
+
     // Initialize z-indices for imported elements
-    const roomWithZIndices = this.elementService.initializeZIndices(room);
+    const roomWithZIndices =
+      this.elementService.initializeZIndices(roomWithMeters);
     this.room.set(roomWithZIndices);
     this.selectedId.set(null);
     // Clear the imported JSON after successful import

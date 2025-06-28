@@ -18,8 +18,8 @@ import { Room } from '../interfaces/room.interface';
 export class RoomControlsComponent {
   @Input() room!: Room;
 
-  @Output() roomWidthChange = new EventEmitter<number>();
-  @Output() roomHeightChange = new EventEmitter<number>();
+  @Output() roomWidthMetersChange = new EventEmitter<number>();
+  @Output() roomHeightMetersChange = new EventEmitter<number>();
   @Output() addElement = new EventEmitter<{
     elementType: ElementType;
     shapeType: ShapeType;
@@ -29,14 +29,14 @@ export class RoomControlsComponent {
   elementTypeEnum = ElementTypeEnum;
   shapeTypeEnum = ShapeTypeEnum;
 
-  onRoomWidthChange(event: Event): void {
-    const value = +(event.target as HTMLInputElement).value;
-    this.roomWidthChange.emit(value);
+  onRoomWidthMetersChange(event: Event): void {
+    const meters = +(event.target as HTMLInputElement).value;
+    this.roomWidthMetersChange.emit(meters);
   }
 
-  onRoomHeightChange(event: Event): void {
-    const value = +(event.target as HTMLInputElement).value;
-    this.roomHeightChange.emit(value);
+  onRoomHeightMetersChange(event: Event): void {
+    const meters = +(event.target as HTMLInputElement).value;
+    this.roomHeightMetersChange.emit(meters);
   }
 
   onAddElement(elementType: ElementType, shapeType: ShapeType): void {

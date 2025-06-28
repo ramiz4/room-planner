@@ -2,10 +2,19 @@
  * Shared constants for the room planner module
  */
 export const ROOM_PLANNER_CONSTANTS = {
-  // Default width of the room
+  // Pixels per meter conversion factor (100 pixels = 1 meter)
+  PIXELS_PER_METER: 100,
+
+  // Default width of the room in meters
+  ROOM_WIDTH_METERS: 6,
+
+  // Default height of the room in meters
+  ROOM_HEIGHT_METERS: 4,
+
+  // Default width of the room in pixels (calculated from meters)
   ROOM_WIDTH: 600,
 
-  // Default height of the room
+  // Default height of the room in pixels (calculated from meters)
   ROOM_HEIGHT: 400,
 
   // Default color for room borders

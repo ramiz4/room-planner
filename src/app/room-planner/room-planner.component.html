@@ -2,38 +2,29 @@
   <!-- Header -->
   <h1 class="text-4xl font-bold text-gray-900 mb-6">Room Planner</h1>
 
-  <!-- Canvas Area -->
   <div class="bg-white rounded-md shadow-sm border border-gray-300 p-4">
-    <div class="relative">
-      <div
-        class="flex flex-col sm:flex-row items-start sm:items-center mb-4 justify-between gap-4"
-      >
-        <!-- Room Size Controls -->
-        <app-room-size-controls
-          [widthMeters]="room().widthMeters"
-          [heightMeters]="room().heightMeters"
-          (widthChange)="onRoomWidthMetersChange($event)"
-          (heightChange)="onRoomHeightMetersChange($event)"
-        ></app-room-size-controls>
+    <div class="flex items-center mb-4 justify-between gap-4">
+      <app-room-size-controls
+        [widthMeters]="room().widthMeters"
+        [heightMeters]="room().heightMeters"
+        (widthChange)="onRoomWidthMetersChange($event)"
+        (heightChange)="onRoomHeightMetersChange($event)"
+      ></app-room-size-controls>
 
-        <!-- Add Elements Dropdown -->
-        <app-add-elements-dropdown
-          (addElementEvent)="onAddElement($event)"
-          (clearAllEvent)="onClearElements()"
-        ></app-add-elements-dropdown>
-      </div>
+      <app-add-elements-dropdown
+        (addElementEvent)="onAddElement($event)"
+        (clearAllEvent)="onClearElements()"
+      ></app-add-elements-dropdown>
     </div>
     <div class="flex justify-center overflow-auto touch-pan-y">
-      <div
-        class="max-w-full max-h-[500px] overflow-auto relative w-full sm:w-auto"
-      >
+      <div class="overflow-auto relative">
         <canvas
           #canvas
           appCanvasInteraction
           [room]="room()"
           [selectedId]="selectedId()"
           (interaction)="onCanvasInteraction($event)"
-          class="block max-w-none border bg-white touch-none select-none w-full sm:w-auto h-auto"
+          class="block border bg-white touch-none select-none"
         >
         </canvas>
         <div

@@ -33,7 +33,7 @@ import {
             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
           />
         </svg>
-        Add Elements
+        <span class="hidden sm:inline">Add Elements</span>
         <svg
           class="w-4 h-4 ml-1 transform transition-transform"
           [class.rotate-180]="showDropdown()"
@@ -53,7 +53,7 @@ import {
       <!-- Dropdown Menu -->
       <div
         *ngIf="showDropdown()"
-        class="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-50"
+        class="absolute top-full right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-50"
       >
         <!-- Invisible backdrop to close dropdown -->
         <div

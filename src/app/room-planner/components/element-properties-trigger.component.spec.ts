@@ -71,7 +71,9 @@ describe('ElementPropertiesTriggerComponent', () => {
 
     fixture.detectChanges();
 
-    const content = fixture.nativeElement.innerHTML.trim();
-    expect(content).toBe('');
+    const button = fixture.nativeElement.querySelector('button');
+    const hintDiv = fixture.nativeElement.querySelector('div');
+    expect(button).toBeFalsy();
+    expect(hintDiv).toBeFalsy();
   });
 });

@@ -46,50 +46,15 @@
       </div>
     </div>
 
-    <div class="flex justify-between mt-4">
-      <app-element-properties-trigger
-        [selectedElement]="selectedElement()"
-        [hasElements]="hasElements()"
-        (toggleElementProperties)="toggleElementProperties()"
-      ></app-element-properties-trigger>
-    </div>
-  </div>
-
-  <!-- Element Properties Overlay -->
-  <div
-    class="fixed inset-0 z-50 flex items-end lg:items-center justify-center bg-black/50"
-    *ngIf="showElementProperties() && selectedElement()"
-  >
-    <div
-      class="bg-white rounded-t-2xl lg:rounded-2xl w-full max-h-[90vh] overflow-y-auto lg:max-w-2xl p-6"
-    >
-      <div class="flex justify-end mb-2">
-        <button
-          appButtonFeedback
-          type="button"
-          (click)="toggleElementProperties()"
-          class="p-1 text-gray-500 hover:text-gray-700"
-        >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+    <!-- Element Properties Below Canvas -->
+    <div *ngIf="selectedElement()" class="mt-6 border-t border-gray-200 pt-6">
+      <div class="bg-gray-50 rounded-lg p-4">
+        <app-element-properties
+          [selectedElement]="selectedElement()"
+          (updateElement)="onUpdateElement(selectedId()!, $event)"
+          (deleteElement)="onDeleteElement(selectedId()!)"
+        ></app-element-properties>
       </div>
-      <app-element-properties
-        [selectedElement]="selectedElement()"
-        (updateElement)="onUpdateElement(selectedId()!, $event)"
-        (deleteElement)="onDeleteElement(selectedId()!)"
-      ></app-element-properties>
     </div>
   </div>
 

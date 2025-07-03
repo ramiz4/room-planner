@@ -10,7 +10,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { AddElementsDropdownComponent } from './components/add-elements-dropdown.component';
-import { ElementPropertiesTriggerComponent } from './components/element-properties-trigger.component';
 import { ElementPropertiesComponent } from './components/element-properties.component';
 import { JsonExportComponent } from './components/json-export.component';
 import { JsonImportComponent } from './components/json-import.component';
@@ -43,7 +42,6 @@ import { ElementManagementService } from './services/element-management.service'
     JsonExportComponent,
     JsonImportComponent,
     ElementPropertiesComponent,
-    ElementPropertiesTriggerComponent,
     CanvasInteractionDirective,
     ButtonFeedbackDirective,
     ZoomControlsComponent,
@@ -83,7 +81,6 @@ export class RoomPlannerComponent implements AfterViewInit {
     return room.tables.length > 0 || room.staticElements.length > 0;
   });
 
-  readonly showElementProperties = signal(false);
   readonly showExportManager = signal(false);
   readonly showImportManager = signal(false);
   readonly showElementGuide = signal(false);
@@ -312,10 +309,6 @@ export class RoomPlannerComponent implements AfterViewInit {
     const centerY = (room.height - element.height) / 2;
 
     this.onUpdateElement(elementId, { x: centerX, y: centerY });
-  }
-
-  toggleElementProperties(): void {
-    this.showElementProperties.update((v) => !v);
   }
 
   toggleExportManager(): void {

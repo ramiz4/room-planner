@@ -16,21 +16,19 @@ import {
     <div class="relative">
       <button
         appButtonFeedback
-        class="flex items-center gap-2 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:ring-1 focus:ring-blue-500 transition-colors"
+        class="px-2 py-1.5 text-blue border border-blue-300 bg-blue-200 rounded cursor-pointer pointer-events-auto hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         type="button"
         (click)="toggleDropdown()"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical"
+          class="w-4 h-4 lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical"
         >
           <circle cx="12" cy="12" r="1" />
           <circle cx="12" cy="5" r="1" />
@@ -63,7 +61,7 @@ import {
             </div>
             <button
               appButtonFeedback
-              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
+              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2 cursor-pointer"
               type="button"
               (click)="
                 addElement(ElementTypeEnum.TABLE, ShapeTypeEnum.RECTANGLE)
@@ -74,7 +72,7 @@ import {
             </button>
             <button
               appButtonFeedback
-              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
+              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2 cursor-pointer"
               type="button"
               (click)="addElement(ElementTypeEnum.TABLE, ShapeTypeEnum.CIRCLE)"
             >
@@ -92,7 +90,7 @@ import {
             </div>
             <button
               appButtonFeedback
-              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
+              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2 cursor-pointer"
               type="button"
               (click)="
                 addElement(ElementTypeEnum.STATIC, ShapeTypeEnum.RECTANGLE)
@@ -103,7 +101,7 @@ import {
             </button>
             <button
               appButtonFeedback
-              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2"
+              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2 cursor-pointer"
               type="button"
               (click)="addElement(ElementTypeEnum.STATIC, ShapeTypeEnum.CIRCLE)"
             >
@@ -121,7 +119,7 @@ import {
             </div>
             <button
               appButtonFeedback
-              class="w-full text-left px-3 py-2 text-sm hover:bg-blue-50 text-blue-600 rounded flex items-center gap-2"
+              class="w-full text-left px-3 py-2 text-sm hover:bg-blue-50 text-blue-600 rounded flex items-center gap-2 cursor-pointer"
               type="button"
               (click)="exportLayout()"
             >
@@ -142,7 +140,7 @@ import {
             </button>
             <button
               appButtonFeedback
-              class="w-full text-left px-3 py-2 text-sm hover:bg-green-50 text-green-600 rounded flex items-center gap-2"
+              class="w-full text-left px-3 py-2 text-sm hover:bg-green-50 text-green-600 rounded flex items-center gap-2 cursor-pointer"
               type="button"
               (click)="importLayout()"
             >
@@ -167,7 +165,7 @@ import {
           <div class="p-2">
             <button
               appButtonFeedback
-              class="w-full text-left px-3 py-2 text-sm hover:bg-red-50 text-red-600 rounded flex items-center gap-2"
+              class="w-full text-left px-3 py-2 text-sm hover:bg-red-50 text-red-600 rounded flex items-center gap-2 cursor-pointer"
               type="button"
               (click)="clearAll()"
             >

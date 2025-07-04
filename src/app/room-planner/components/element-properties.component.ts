@@ -121,7 +121,7 @@ export class ElementPropertiesComponent implements OnChanges {
     }
   }
 
-  getElementTypeLabel(type: ElementType): string {
+  getElementTypeLabel(type?: ElementType): string {
     switch (type) {
       case ElementTypeEnum.TABLE:
         return 'Table';
@@ -132,7 +132,7 @@ export class ElementPropertiesComponent implements OnChanges {
     }
   }
 
-  getElementTypeClass(type: ElementType): string {
+  getElementTypeClass(type?: ElementType): string {
     switch (type) {
       case ElementTypeEnum.TABLE:
         return 'bg-blue-100 text-blue-800';

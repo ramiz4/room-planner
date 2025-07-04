@@ -21,10 +21,10 @@ describe('RoomPlannerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should toggle mobile properties visibility', () => {
-    component.showElementProperties.set(false);
-    component.toggleElementProperties();
-    expect(component.showElementProperties()).toBeTrue();
+  it('should show element guide temporarily', () => {
+    component.showElementGuide.set(false);
+    component.showGuide();
+    expect(component.showElementGuide()).toBeTrue();
   });
 
   it('should toggle export manager visibility', () => {

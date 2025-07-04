@@ -16,7 +16,7 @@ export class CanvasDrawingService {
   drawRoom(
     ctx: CanvasRenderingContext2D,
     room: Room,
-    selectedId: string | null
+    selectedId: string | null,
   ): void {
     const canvas = ctx.canvas;
     canvas.width = room.width;
@@ -34,7 +34,7 @@ export class CanvasDrawingService {
 
     // Combine all elements and sort by z-index for proper layering
     const allElements = [...room.staticElements, ...room.tables].sort(
-      (a, b) => (a.zIndex || 0) - (b.zIndex || 0)
+      (a, b) => (a.zIndex || 0) - (b.zIndex || 0),
     );
 
     // Draw all elements in z-index order
@@ -45,7 +45,7 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     elements: RoomElement[],
     selectedId: string | null,
-    drawLabels = false
+    drawLabels = false,
   ): void {
     for (const element of elements) {
       this.drawElement(ctx, element, element.id === selectedId, drawLabels);
@@ -56,7 +56,7 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
     isSelected: boolean,
-    drawLabel = false
+    drawLabel = false,
   ): void {
     ctx.fillStyle = el.color || ROOM_PLANNER_CONSTANTS.ELEMENT_COLOR;
 
@@ -81,7 +81,7 @@ export class CanvasDrawingService {
   private drawRectangle(
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
-    isSelected: boolean
+    isSelected: boolean,
   ): void {
     ctx.fillRect(el.x, el.y, el.width, el.height);
 
@@ -94,7 +94,7 @@ export class CanvasDrawingService {
   private drawCircle(
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
-    isSelected: boolean
+    isSelected: boolean,
   ): void {
     const radius = Math.min(el.width, el.height) / 2;
     const centerX = el.x + el.width / 2;
@@ -112,7 +112,7 @@ export class CanvasDrawingService {
 
   private drawSelectionOutline(
     ctx: CanvasRenderingContext2D,
-    el: RoomElement
+    el: RoomElement,
   ): void {
     ctx.strokeStyle = 'blue';
     ctx.lineWidth = 2;
@@ -130,7 +130,7 @@ export class CanvasDrawingService {
 
   private drawResizeHandle(
     ctx: CanvasRenderingContext2D,
-    el: RoomElement
+    el: RoomElement,
   ): void {
     ctx.fillStyle = 'black';
 
@@ -152,14 +152,14 @@ export class CanvasDrawingService {
         el.x + el.width - this.HANDLE_SIZE,
         el.y + el.height - this.HANDLE_SIZE,
         this.HANDLE_SIZE,
-        this.HANDLE_SIZE
+        this.HANDLE_SIZE,
       );
     }
   }
 
   private drawElementLabel(
     ctx: CanvasRenderingContext2D,
-    el: RoomElement
+    el: RoomElement,
   ): void {
     // Reset shadow for text
     ctx.shadowColor = 'transparent';
@@ -195,7 +195,7 @@ export class CanvasDrawingService {
       centerX - textWidth / 2 - 4,
       centerY - textHeight / 2 - 2,
       textWidth + 8,
-      textHeight + 4
+      textHeight + 4,
     );
 
     // Draw border around text background
@@ -205,7 +205,7 @@ export class CanvasDrawingService {
       centerX - textWidth / 2 - 4,
       centerY - textHeight / 2 - 2,
       textWidth + 8,
-      textHeight + 4
+      textHeight + 4,
     );
 
     // Draw text
@@ -216,7 +216,7 @@ export class CanvasDrawingService {
   private drawGrid(
     ctx: CanvasRenderingContext2D,
     width: number,
-    height: number
+    height: number,
   ): void {
     ctx.strokeStyle = ROOM_PLANNER_CONSTANTS.ROOM_GRID_COLOR;
     ctx.lineWidth = ROOM_PLANNER_CONSTANTS.ROOM_GRID_WIDTH;

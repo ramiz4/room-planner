@@ -1,2 +1,2 @@
-npm run pre-commit
-# npm run test:ci
+pnpm run pre-commit
+# pnpm run test:ci

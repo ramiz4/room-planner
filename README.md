@@ -2,6 +2,14 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
 
+## Prerequisites
+
+This project uses [pnpm](https://pnpm.io/) for package management. Install pnpm globally if you haven't already:
+
+```bash
+npm install -g pnpm
+```
+
 ## Development server
 
 To start a local development server, run:
@@ -10,7 +18,21 @@ To start a local development server, run:
 ng serve
 ```
 
+or
+
+```bash
+pnpm start
+```
+
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Available Scripts
+
+- `pnpm start` - Start development server
+- `pnpm run build` - Build for production
+- `pnpm run test` - Run unit tests
+- `pnpm run lint` - Run linting
+- `pnpm run format:fix` - Fix formatting and linting issues
 
 ## Code scaffolding
 
@@ -62,3 +84,11 @@ For detailed product goals and features, see the [Product Requirements Document]
 ## Layout Management
 
 Use the Export and Import buttons in the bottom left to save or load room layouts.
+
+## Setup
+
+Install dependencies:
+
+```bash
+pnpm install
+```

@@ -9,8 +9,8 @@ This project uses Angular, TypeScript, and Tailwind CSS.
 
 ## Code Changes
 
-- Run `npm run lint` and `npm run test` before committing code.
-- Apply formatting with `npm run format:fix` when necessary.
+- Run `pnpm run lint` and `pnpm run test` before committing code.
+- Apply formatting with `pnpm run format:fix` when necessary.
 - Add or update tests when introducing new functionality.
 - Ensure best practices and the SOLID principles are applied on all code changes.
 
@@ -31,5 +31,5 @@ Include a summary of changes and testing steps similar to:
 - Key bullet points of what was changed
 
 ## Testing
-- `npm run lint`
+- `pnpm run lint`
 ```

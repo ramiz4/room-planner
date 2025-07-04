@@ -239,9 +239,13 @@ export class CanvasInteractionDirective implements AfterViewInit {
   }
 
   private onWheel(event: WheelEvent): void {
-    // Support both Ctrl+wheel for precise zoom and regular wheel for zoom
+    // Only zoom when Ctrl key is pressed (like Figma/browser behavior)
+    if (!event.ctrlKey) {
+      return;
+    }
+
     const delta = event.deltaY;
-    const zoomFactor = event.ctrlKey ? 1 - delta * 0.001 : 1 - delta * 0.0005;
+    const zoomFactor = 1 - delta * 0.001;
 
     // Get mouse position for zoom-to-cursor
     const canvas = this.elementRef.nativeElement;

@@ -9,13 +9,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     <div
       class="flex items-center gap-2 bg-black/60 text-white text-xs rounded px-2 py-1"
     >
-      <span>{{ zoom * 100 | number: '1.0-0' }}%</span>
       <select
-        class="text-black text-xs rounded px-1 py-0.5"
+        class="text-white text-xs rounded px-1 py-0.5"
         [value]="zoom"
         (change)="onZoomSelect($event)"
       >
-        <option *ngFor="let level of zoomLevels" [value]="level">
+        <option
+          *ngFor="let level of zoomLevels"
+          [value]="level"
+          [selected]="level === zoom"
+        >
           {{ level * 100 | number: '1.0-0' }}%
         </option>
       </select>

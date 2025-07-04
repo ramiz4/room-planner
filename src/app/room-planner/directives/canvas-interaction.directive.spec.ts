@@ -53,13 +53,25 @@ describe('CanvasInteractionDirective', () => {
     fixture.detectChanges();
   });
 
-  it('should emit zoom event on wheel', () => {
+  it('should emit zoom event on wheel with ctrlKey (trackpad pinch)', () => {
+    const canvas = fixture.debugElement.query(By.css('canvas'))
+      .nativeElement as HTMLCanvasElement;
+    canvas.dispatchEvent(
+      new WheelEvent('wheel', { deltaY: -100, ctrlKey: true }),
+    );
+    fixture.detectChanges();
+
+    expect(host.event?.type).toBe(CanvasInteractionEventTypeEnum.ZOOM);
+    expect(host.zoom).not.toBe(1);
+  });
+
+  it('should not emit zoom event on wheel without ctrlKey (regular mouse wheel)', () => {
     const canvas = fixture.debugElement.query(By.css('canvas'))
       .nativeElement as HTMLCanvasElement;
     canvas.dispatchEvent(new WheelEvent('wheel', { deltaY: -100 }));
     fixture.detectChanges();
 
-    expect(host.event?.type).toBe(CanvasInteractionEventTypeEnum.ZOOM);
-    expect(host.zoom).not.toBe(1);
+    expect(host.event?.type).not.toBe(CanvasInteractionEventTypeEnum.ZOOM);
+    expect(host.zoom).toBe(1);
   });
 });

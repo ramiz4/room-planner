@@ -211,6 +211,12 @@ export class CanvasInteractionDirective implements AfterViewInit {
   }
 
   private onWheel(event: WheelEvent): void {
+    // Only allow zoom on trackpad pinch gestures (detected by ctrlKey)
+    // This prevents regular mouse wheel scrolling from zooming
+    if (!event.ctrlKey) {
+      return;
+    }
+
     const delta = event.deltaY;
     const zoomFactor = 1 - delta * 0.001;
     const newZoom = Math.min(

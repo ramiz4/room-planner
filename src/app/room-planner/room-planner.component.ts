@@ -31,6 +31,7 @@ import {
 import { Room } from './interfaces/room.interface';
 import { CanvasDrawingService } from './services/canvas-drawing.service';
 import { ElementManagementService } from './services/element-management.service';
+import { RoomStorageService } from './services/room-storage.service';
 
 @Component({
   selector: 'app-room-planner',
@@ -54,16 +55,10 @@ export class RoomPlannerComponent implements AfterViewInit {
   private ctx!: CanvasRenderingContext2D;
   private drawingService = inject(CanvasDrawingService);
   private elementService = inject(ElementManagementService);
+  private storageService = inject(RoomStorageService);
 
   // 📦 Reactive state
-  readonly room = signal<Room>({
-    width: ROOM_PLANNER_CONSTANTS.ROOM_WIDTH,
-    height: ROOM_PLANNER_CONSTANTS.ROOM_HEIGHT,
-    widthMeters: ROOM_PLANNER_CONSTANTS.ROOM_WIDTH_METERS,
-    heightMeters: ROOM_PLANNER_CONSTANTS.ROOM_HEIGHT_METERS,
-    tables: [],
-    staticElements: [],
-  });
+  readonly room = signal<Room>(this.initializeRoom());
 
   readonly selectedId = signal<string | null>(null);
   readonly importedJSON = signal('');
@@ -85,6 +80,23 @@ export class RoomPlannerComponent implements AfterViewInit {
   readonly showImportManager = signal(false);
   readonly showElementGuide = signal(false);
 
+  // Initialize room from storage or defaults
+  private initializeRoom(): Room {
+    const savedRoom = this.storageService.loadRoom();
+    if (savedRoom) {
+      return savedRoom;
+    }
+
+    return {
+      width: ROOM_PLANNER_CONSTANTS.ROOM_WIDTH,
+      height: ROOM_PLANNER_CONSTANTS.ROOM_HEIGHT,
+      widthMeters: ROOM_PLANNER_CONSTANTS.ROOM_WIDTH_METERS,
+      heightMeters: ROOM_PLANNER_CONSTANTS.ROOM_HEIGHT_METERS,
+      tables: [],
+      staticElements: [],
+    };
+  }
+
   // 🧠 Redraw effect
   constructor() {
     effect(() => {
@@ -92,6 +104,12 @@ export class RoomPlannerComponent implements AfterViewInit {
       if (this.ctx) {
         this.drawingService.drawRoom(this.ctx, room, this.selectedId());
       }
+    });
+
+    // 💾 Auto-save effect
+    effect(() => {
+      const room = this.room();
+      this.storageService.saveRoom(room);
     });
   }
 
@@ -144,6 +162,8 @@ export class RoomPlannerComponent implements AfterViewInit {
     this.selectedId.set(null);
     // Reset element positioning to start from the beginning
     this.elementService.resetElementPositioning();
+    // Clear storage as well
+    this.storageService.clearRoom();
   }
 
   onRoomWidthMetersChange(widthMeters: number): void {

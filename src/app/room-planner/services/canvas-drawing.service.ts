@@ -17,20 +17,36 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     room: Room,
     selectedId: string | null,
+    cameraX = 0,
+    cameraY = 0,
+    zoom = 1,
   ): void {
     const canvas = ctx.canvas;
-    canvas.width = room.width;
-    canvas.height = room.height;
 
+    // Clear the entire canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw grid lines
-    this.drawGrid(ctx, canvas.width, canvas.height);
+    // Save the current context state
+    ctx.save();
+
+    // Apply camera transform (zoom and pan)
+    ctx.scale(zoom, zoom);
+    ctx.translate(-cameraX, -cameraY);
+
+    // Draw infinite grid
+    this.drawInfiniteGrid(
+      ctx,
+      cameraX,
+      cameraY,
+      zoom,
+      canvas.width,
+      canvas.height,
+    );
 
     // Draw room border
     ctx.strokeStyle = ROOM_PLANNER_CONSTANTS.ROOM_BORDER_COLOR;
     ctx.lineWidth = ROOM_PLANNER_CONSTANTS.ROOM_BORDER_WIDTH;
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeRect(0, 0, room.width, room.height);
 
     // Combine all elements and sort by z-index for proper layering
     const allElements = [...room.staticElements, ...room.tables].sort(
@@ -39,6 +55,48 @@ export class CanvasDrawingService {
 
     // Draw all elements in z-index order
     this.drawElements(ctx, allElements, selectedId, true);
+
+    // Restore the context state
+    ctx.restore();
+  }
+
+  private drawInfiniteGrid(
+    ctx: CanvasRenderingContext2D,
+    cameraX: number,
+    cameraY: number,
+    zoom: number,
+    canvasWidth: number,
+    canvasHeight: number,
+  ): void {
+    const gridSize = this.GRID_SIZE * zoom;
+
+    // Only draw grid if zoom level is appropriate
+    if (gridSize < 5) return; // Too zoomed out
+
+    ctx.strokeStyle = '#f0f0f0';
+    ctx.lineWidth = 0.5;
+
+    // Calculate visible area in world coordinates
+    const startX = Math.floor(cameraX / this.GRID_SIZE) * this.GRID_SIZE;
+    const startY = Math.floor(cameraY / this.GRID_SIZE) * this.GRID_SIZE;
+    const endX = cameraX + canvasWidth / zoom;
+    const endY = cameraY + canvasHeight / zoom;
+
+    // Draw vertical grid lines
+    for (let x = startX; x <= endX; x += this.GRID_SIZE) {
+      ctx.beginPath();
+      ctx.moveTo(x, cameraY);
+      ctx.lineTo(x, endY);
+      ctx.stroke();
+    }
+
+    // Draw horizontal grid lines
+    for (let y = startY; y <= endY; y += this.GRID_SIZE) {
+      ctx.beginPath();
+      ctx.moveTo(cameraX, y);
+      ctx.lineTo(endX, y);
+      ctx.stroke();
+    }
   }
 
   private drawElements(

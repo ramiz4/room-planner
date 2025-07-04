@@ -30,13 +30,19 @@ export class CanvasInteractionDirective implements AfterViewInit {
   @Input() room!: Room;
   @Input() selectedId: string | null = null;
   @Input() zoom = 1;
+  @Input() cameraX = 0;
+  @Input() cameraY = 0;
 
   @Output() interaction = new EventEmitter<CanvasInteractionEvent>();
+  @Output() cameraChange = new EventEmitter<{ x: number; y: number }>();
 
   private resizing = false;
   private dragging = false;
+  private panning = false;
   private offsetX = 0;
   private offsetY = 0;
+  private panStartX = 0;
+  private panStartY = 0;
   private lastTouchDistance = 0;
   private activeTouch: Touch | null = null;
   private pinchZooming = false;
@@ -153,10 +159,31 @@ export class CanvasInteractionDirective implements AfterViewInit {
         type: CanvasInteractionEventTypeEnum.SELECT,
         elementId: null,
       });
+
+      // Start panning when clicking on empty space
+      this.panning = true;
+      this.panStartX = event.clientX;
+      this.panStartY = event.clientY;
     }
   }
 
   private onMouseMove(event: MouseEvent): void {
+    if (this.panning) {
+      // Handle canvas panning with screen coordinates
+      const deltaX = (event.clientX - this.panStartX) / this.zoom;
+      const deltaY = (event.clientY - this.panStartY) / this.zoom;
+
+      this.cameraChange.emit({
+        x: this.cameraX - deltaX,
+        y: this.cameraY - deltaY,
+      });
+
+      // Update pan start position for next frame
+      this.panStartX = event.clientX;
+      this.panStartY = event.clientY;
+      return;
+    }
+
     if (!this.selectedId) return;
 
     const element = this.elementService.getSelectedElement(
@@ -208,46 +235,74 @@ export class CanvasInteractionDirective implements AfterViewInit {
   private onMouseUp(): void {
     this.resizing = false;
     this.dragging = false;
+    this.panning = false;
   }
 
   private onWheel(event: WheelEvent): void {
-    // Only allow zoom on trackpad pinch gestures (detected by ctrlKey)
-    // This prevents regular mouse wheel scrolling from zooming
-    if (!event.ctrlKey) {
-      return;
-    }
-
+    // Support both Ctrl+wheel for precise zoom and regular wheel for zoom
     const delta = event.deltaY;
-    const zoomFactor = 1 - delta * 0.001;
+    const zoomFactor = event.ctrlKey ? 1 - delta * 0.001 : 1 - delta * 0.0005;
+
+    // Get mouse position for zoom-to-cursor
+    const canvas = this.elementRef.nativeElement;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    // Calculate world position before zoom
+    const worldX = mouseX / this.zoom + this.cameraX;
+    const worldY = mouseY / this.zoom + this.cameraY;
+
     const newZoom = Math.min(
       this.MAX_ZOOM,
       Math.max(this.MIN_ZOOM, this.zoom * zoomFactor),
     );
-    this.zoom = newZoom;
+
+    // Calculate new camera position to keep mouse position fixed
+    const newCameraX = worldX - mouseX / newZoom;
+    const newCameraY = worldY - mouseY / newZoom;
+
+    // Emit both zoom and camera changes
     this.interaction.emit({
       type: CanvasInteractionEventTypeEnum.ZOOM,
       elementId: null,
       zoom: newZoom,
+    });
+
+    this.cameraChange.emit({
+      x: newCameraX,
+      y: newCameraY,
     });
   }
 
   private getMouseCoordinates(event: MouseEvent): { x: number; y: number } {
     const canvas = this.elementRef.nativeElement;
     const rect = canvas.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * canvas.width;
-    const y = ((event.clientY - rect.top) / rect.height) * canvas.height;
-    return { x, y };
+
+    // Get screen coordinates relative to canvas
+    const screenX = event.clientX - rect.left;
+    const screenY = event.clientY - rect.top;
+
+    // Convert screen coordinates to world coordinates
+    const worldX = screenX / this.zoom + this.cameraX;
+    const worldY = screenY / this.zoom + this.cameraY;
+
+    return { x: worldX, y: worldY };
   }
 
   private getTouchCoordinates(touch: Touch): { x: number; y: number } {
     const canvas = this.elementRef.nativeElement;
     const rect = canvas.getBoundingClientRect();
 
-    // Calculate the actual canvas coordinate by accounting for the display scaling
-    const x = ((touch.clientX - rect.left) / rect.width) * canvas.width;
-    const y = ((touch.clientY - rect.top) / rect.height) * canvas.height;
+    // Get screen coordinates relative to canvas
+    const screenX = touch.clientX - rect.left;
+    const screenY = touch.clientY - rect.top;
 
-    return { x, y };
+    // Convert screen coordinates to world coordinates
+    const worldX = screenX / this.zoom + this.cameraX;
+    const worldY = screenY / this.zoom + this.cameraY;
+
+    return { x: worldX, y: worldY };
   }
 
   private getTouchDistance(touch1: Touch, touch2: Touch): number {

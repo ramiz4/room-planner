@@ -1,13 +1,46 @@
-<div class="p-2 md:container mx-auto">
-  <div class="">
-    <div class="flex items-center mb-4 justify-between gap-4">
+<!-- Fullscreen Canvas Container -->
+<div class="fixed inset-0 bg-gray-100 overflow-hidden">
+  <!-- Canvas Container -->
+  <div class="w-full h-full relative overflow-hidden">
+    <canvas
+      #canvas
+      appCanvasInteraction
+      [room]="room()"
+      [selectedId]="selectedId()"
+      [zoom]="zoomLevel()"
+      [cameraX]="cameraX()"
+      [cameraY]="cameraY()"
+      (interaction)="onCanvasInteraction($event)"
+      (cameraChange)="onCameraChange($event)"
+      class="block w-full h-full cursor-grab active:cursor-grabbing"
+    >
+    </canvas>
+
+    <!-- Floating Help Text -->
+    <div
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 text-center text-sm text-gray-600 bg-white/80 rounded-lg backdrop-blur-sm pointer-events-none"
+      *ngIf="showElementGuide()"
+    >
+      Drag elements to move them. Use the properties panel to edit or delete.
+    </div>
+  </div>
+
+  <!-- Floating UI Controls -->
+  <!-- Top Left: Room Size Controls -->
+  <div class="absolute top-4 left-4 z-10">
+    <div class="bg-white rounded-lg shadow-lg p-3 border">
       <app-room-size-controls
         [widthMeters]="room().widthMeters"
         [heightMeters]="room().heightMeters"
         (widthChange)="onRoomWidthMetersChange($event)"
         (heightChange)="onRoomHeightMetersChange($event)"
       ></app-room-size-controls>
+    </div>
+  </div>
 
+  <!-- Top Right: Add Elements Dropdown -->
+  <div class="absolute top-4 right-4 z-10">
+    <div class="bg-white rounded-lg shadow-lg border">
       <app-add-elements-dropdown
         (addElementEvent)="onAddElement($event)"
         (clearAllEvent)="onClearElements()"
@@ -15,44 +48,27 @@
         (importLayoutEvent)="toggleImportManager()"
       ></app-add-elements-dropdown>
     </div>
-    <div class="flex justify-center overflow-auto touch-pan-y">
-      <div class="overflow-auto relative">
-        <canvas
-          #canvas
-          appCanvasInteraction
-          [room]="room()"
-          [selectedId]="selectedId()"
-          [zoom]="zoomLevel()"
-          (interaction)="onCanvasInteraction($event)"
-          class="block border bg-white touch-none select-none"
-          [style.transform]="'scale(' + zoomLevel() + ')'"
-          style="transform-origin: 0 0"
-        >
-        </canvas>
-        <div
-          class="absolute inset-x-0 bottom-0 p-2 text-center text-xs text-white bg-black/60 rounded-b"
-          *ngIf="showElementGuide()"
-        >
-          Drag elements to move them. Use the properties panel to edit or
-          delete.
-        </div>
-        <app-zoom-controls
-          class="absolute bottom-2 right-2"
-          [zoom]="zoomLevel()"
-          (zoomChange)="onZoomChange($event)"
-        ></app-zoom-controls>
-      </div>
-    </div>
+  </div>
 
-    <!-- Element Properties Below Canvas -->
-    <div *ngIf="selectedElement()" class="mt-4">
-      <div class="bg-gray-50 rounded-lg p-4">
-        <app-element-properties
-          [selectedElement]="selectedElement()"
-          (updateElement)="onUpdateElement(selectedId()!, $event)"
-          (deleteElement)="onDeleteElement(selectedId()!)"
-        ></app-element-properties>
-      </div>
+  <!-- Bottom Right: Zoom Controls -->
+  <div class="absolute bottom-4 right-4 z-10">
+    <app-zoom-controls
+      [zoom]="zoomLevel()"
+      (zoomChange)="onZoomChange($event)"
+    ></app-zoom-controls>
+  </div>
+
+  <!-- Bottom Panel: Element Properties (when selected) -->
+  <div
+    *ngIf="selectedElement()"
+    class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 max-w-md w-full mx-4"
+  >
+    <div class="bg-white rounded-lg shadow-lg p-4 border">
+      <app-element-properties
+        [selectedElement]="selectedElement()"
+        (updateElement)="onUpdateElement(selectedId()!, $event)"
+        (deleteElement)="onDeleteElement(selectedId()!)"
+      ></app-element-properties>
     </div>
   </div>
 

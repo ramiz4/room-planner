@@ -6,6 +6,7 @@ import {
   effect,
   ElementRef,
   inject,
+  OnDestroy,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -48,7 +49,7 @@ import { RoomStorageService } from './services/room-storage.service';
     ZoomControlsComponent,
   ],
 })
-export class RoomPlannerComponent implements AfterViewInit {
+export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true })
   canvasRef!: ElementRef<HTMLCanvasElement>;
 
@@ -63,6 +64,8 @@ export class RoomPlannerComponent implements AfterViewInit {
   readonly selectedId = signal<string | null>(null);
   readonly importedJSON = signal('');
   readonly zoomLevel = signal(1);
+  readonly cameraX = signal(0);
+  readonly cameraY = signal(0);
 
   readonly selectedElement = computed(() => {
     return this.elementService.getSelectedElement(
@@ -79,6 +82,8 @@ export class RoomPlannerComponent implements AfterViewInit {
   readonly showExportManager = signal(false);
   readonly showImportManager = signal(false);
   readonly showElementGuide = signal(false);
+
+  private resizeListener = () => this.updateCanvasSize();
 
   // Initialize room from storage or defaults
   private initializeRoom(): Room {
@@ -101,8 +106,19 @@ export class RoomPlannerComponent implements AfterViewInit {
   constructor() {
     effect(() => {
       const room = this.room();
+      const cameraX = this.cameraX();
+      const cameraY = this.cameraY();
+      const zoom = this.zoomLevel();
+
       if (this.ctx) {
-        this.drawingService.drawRoom(this.ctx, room, this.selectedId());
+        this.drawingService.drawRoom(
+          this.ctx,
+          room,
+          this.selectedId(),
+          cameraX,
+          cameraY,
+          zoom,
+        );
       }
     });
 
@@ -116,14 +132,72 @@ export class RoomPlannerComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
 
+    // Set canvas size to viewport size
+    this.updateCanvasSize();
+
+    // Listen for window resize
+    window.addEventListener('resize', this.resizeListener);
+
     // Initialize z-indices for any existing elements
     const roomWithZIndices = this.elementService.initializeZIndices(
       this.room(),
     );
     this.room.set(roomWithZIndices);
 
-    // Trigger initial drawing now that canvas context is available
-    this.drawingService.drawRoom(this.ctx, this.room(), this.selectedId());
+    // Center the room in the viewport initially
+    this.centerRoomInViewport();
+
+    // Trigger initial drawing
+    this.drawingService.drawRoom(
+      this.ctx,
+      this.room(),
+      this.selectedId(),
+      this.cameraX(),
+      this.cameraY(),
+      this.zoomLevel(),
+    );
+  }
+
+  private updateCanvasSize(): void {
+    const canvas = this.canvasRef.nativeElement;
+    const dpr = window.devicePixelRatio || 1;
+
+    // Set canvas to viewport size
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+
+    // Scale context for high DPI displays
+    this.ctx.scale(dpr, dpr);
+
+    // Redraw after resize
+    if (this.room()) {
+      this.drawingService.drawRoom(
+        this.ctx,
+        this.room(),
+        this.selectedId(),
+        this.cameraX(),
+        this.cameraY(),
+        this.zoomLevel(),
+      );
+    }
+  }
+
+  private centerRoomInViewport(): void {
+    const room = this.room();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Center the room in the viewport
+    const centerX = (viewportWidth - room.width) / 2;
+    const centerY = (viewportHeight - room.height) / 2;
+
+    this.cameraX.set(-centerX);
+    this.cameraY.set(-centerY);
   }
 
   // Event handlers for child components
@@ -235,6 +309,16 @@ export class RoomPlannerComponent implements AfterViewInit {
     this.zoomLevel.set(zoom);
   }
 
+  onPanChange(pan: { x: number; y: number }): void {
+    this.cameraX.set(pan.x);
+    this.cameraY.set(pan.y);
+  }
+
+  onCameraChange(camera: { x: number; y: number }): void {
+    this.cameraX.set(camera.x);
+    this.cameraY.set(camera.y);
+  }
+
   onImportLayout(room: Room): void {
     // Ensure meter values are calculated if not present
     const roomWithMeters = {
@@ -342,5 +426,10 @@ export class RoomPlannerComponent implements AfterViewInit {
   showGuide(): void {
     this.showElementGuide.set(true);
     setTimeout(() => this.showElementGuide.set(false), 4000);
+  }
+
+  ngOnDestroy() {
+    // Cleanup if necessary
+    window.removeEventListener('resize', this.resizeListener);
   }
 }

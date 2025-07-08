@@ -379,28 +379,39 @@ export class CanvasInteractionDirective implements AfterViewInit {
       this.activeTouch = null; // Clear single touch
       this.panning = false; // Stop single-finger panning
 
+      const touch1Coords = this.getTouchCoordinates(touches[0]);
+      const touch2Coords = this.getTouchCoordinates(touches[1]);
+
       if (this.selectedId) {
-        // Two-finger pinch for resizing selected element
         const element = this.elementService.getSelectedElement(
           this.room,
           this.selectedId,
         );
 
-        if (element) {
+        const touchesOnElement =
+          element &&
+          this.isTouchRelatedToElement(touch1Coords, element) &&
+          this.isTouchRelatedToElement(touch2Coords, element);
+
+        if (touchesOnElement) {
+          // Two-finger pinch to resize when touches start on element
           this.resizing = true;
           this.dragging = false;
           this.lastTouchDistance = this.getTouchDistance(
             touches[0],
             touches[1],
           );
+          return;
         }
-      } else {
-        // Two-finger pan and zoom when nothing is selected
-        this.touchPanning = true;
-        this.pinchZooming = true;
-        this.lastTouchDistance = this.getTouchDistance(touches[0], touches[1]);
-        this.lastTouchCenter = this.getTouchCenter(touches[0], touches[1]);
       }
+
+      // Default to canvas pan/zoom
+      this.resizing = false;
+      this.dragging = false;
+      this.touchPanning = true;
+      this.pinchZooming = true;
+      this.lastTouchDistance = this.getTouchDistance(touches[0], touches[1]);
+      this.lastTouchCenter = this.getTouchCenter(touches[0], touches[1]);
     }
   }
 
@@ -530,7 +541,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         }
 
         this.lastTouchDistance = currentDistance;
-      } else if (!this.selectedId && (this.touchPanning || this.pinchZooming)) {
+      } else if (this.touchPanning || this.pinchZooming) {
         // Two-finger pan and zoom when nothing is selected
         const currentDistance = this.getTouchDistance(touches[0], touches[1]);
         const currentCenter = this.getTouchCenter(touches[0], touches[1]);
@@ -606,5 +617,33 @@ export class CanvasInteractionDirective implements AfterViewInit {
         Math.abs(x - handleX) < tolerance && Math.abs(y - handleY) < tolerance
       );
     }
+  }
+
+  private isInsideElement(x: number, y: number, element: RoomElement): boolean {
+    if (element.shapeType === ShapeTypeEnum.RECTANGLE) {
+      return (
+        x >= element.x &&
+        x <= element.x + element.width &&
+        y >= element.y &&
+        y <= element.y + element.height
+      );
+    }
+
+    const cx = element.x + element.width / 2;
+    const cy = element.y + element.height / 2;
+    const radius = Math.min(element.width, element.height) / 2;
+    const dx = x - cx;
+    const dy = y - cy;
+    return dx * dx + dy * dy <= radius * radius;
+  }
+
+  private isTouchRelatedToElement(
+    coords: { x: number; y: number },
+    element: RoomElement,
+  ): boolean {
+    return (
+      this.isInsideElement(coords.x, coords.y, element) ||
+      this.isNearResizeHandle(coords.x, coords.y, element)
+    );
   }
 }

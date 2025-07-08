@@ -16,7 +16,7 @@ import {
     <div class="relative">
       <button
         appButtonFeedback
-        class="flex items-center gap-2 px-2 py-1 rounded bg-blue-600 text-white shadow-sm hover:bg-blue-700 transition-colors"
+        class="flex items-center gap-2 px-2 py-1 text-sm rounded bg-blue-600 text-white shadow-sm hover:bg-blue-700 transition-colors"
         type="button"
         (click)="toggleDropdown()"
         title="Add Elements"

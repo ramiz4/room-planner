@@ -2,7 +2,7 @@
   "name": "room-planner",
   "version": "0.0.0",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
+    "preinstall": "npx --yes only-allow pnpm",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

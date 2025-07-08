@@ -46,6 +46,8 @@ export class CanvasInteractionDirective implements AfterViewInit {
   private lastTouchDistance = 0;
   private activeTouch: Touch | null = null;
   private pinchZooming = false;
+  private touchPanning = false;
+  private lastTouchCenter = { x: 0, y: 0 };
 
   private readonly MIN_ZOOM = 0.5;
   private readonly MAX_ZOOM = 3;
@@ -315,6 +317,16 @@ export class CanvasInteractionDirective implements AfterViewInit {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
+  private getTouchCenter(
+    touch1: Touch,
+    touch2: Touch,
+  ): { x: number; y: number } {
+    return {
+      x: (touch1.clientX + touch2.clientX) / 2,
+      y: (touch1.clientY + touch2.clientY) / 2,
+    };
+  }
+
   private onTouchStart(event: TouchEvent): void {
     event.preventDefault(); // Prevent scrolling and other default behaviors
     const touches = event.touches;
@@ -356,33 +368,66 @@ export class CanvasInteractionDirective implements AfterViewInit {
           type: CanvasInteractionEventTypeEnum.SELECT,
           elementId: null,
         });
-      }
-    } else if (touches.length === 2 && this.selectedId) {
-      // Two-finger pinch for resizing
-      const element = this.elementService.getSelectedElement(
-        this.room,
-        this.selectedId,
-      );
 
-      if (element) {
-        this.resizing = true;
-        this.dragging = false;
-        this.lastTouchDistance = this.getTouchDistance(touches[0], touches[1]);
+        // Start single-touch panning on empty space
+        this.panning = true;
+        this.panStartX = touch.clientX;
+        this.panStartY = touch.clientY;
       }
-    } else if (touches.length === 2 && !this.selectedId) {
-      // Pinch zoom when nothing selected
-      this.pinchZooming = true;
-      this.lastTouchDistance = this.getTouchDistance(touches[0], touches[1]);
+    } else if (touches.length === 2) {
+      // Two-finger gestures
+      this.activeTouch = null; // Clear single touch
+      this.panning = false; // Stop single-finger panning
+
+      if (this.selectedId) {
+        // Two-finger pinch for resizing selected element
+        const element = this.elementService.getSelectedElement(
+          this.room,
+          this.selectedId,
+        );
+
+        if (element) {
+          this.resizing = true;
+          this.dragging = false;
+          this.lastTouchDistance = this.getTouchDistance(
+            touches[0],
+            touches[1],
+          );
+        }
+      } else {
+        // Two-finger pan and zoom when nothing is selected
+        this.touchPanning = true;
+        this.pinchZooming = true;
+        this.lastTouchDistance = this.getTouchDistance(touches[0], touches[1]);
+        this.lastTouchCenter = this.getTouchCenter(touches[0], touches[1]);
+      }
     }
   }
 
   private onTouchMove(event: TouchEvent): void {
     event.preventDefault(); // Prevent scrolling during drag/resize
-    if (!this.activeTouch && !this.resizing && !this.pinchZooming) return;
-
     const touches = event.touches;
 
-    if (touches.length === 1 && this.selectedId) {
+    if (touches.length === 1) {
+      // Single touch handling
+      if (this.panning) {
+        // Single-finger panning
+        const touch = touches[0];
+        const deltaX = (touch.clientX - this.panStartX) / this.zoom;
+        const deltaY = (touch.clientY - this.panStartY) / this.zoom;
+
+        this.cameraChange.emit({
+          x: this.cameraX - deltaX,
+          y: this.cameraY - deltaY,
+        });
+
+        this.panStartX = touch.clientX;
+        this.panStartY = touch.clientY;
+        return;
+      }
+
+      if (!this.activeTouch || !this.selectedId) return;
+
       const touch = touches[0];
       const coords = this.getTouchCoordinates(touch);
 
@@ -443,64 +488,91 @@ export class CanvasInteractionDirective implements AfterViewInit {
         this.offsetX = coords.x;
         this.offsetY = coords.y;
       }
-    } else if (touches.length === 2 && this.resizing && this.selectedId) {
-      // Two-finger pinch resize
-      const element = this.elementService.getSelectedElement(
-        this.room,
-        this.selectedId,
-      );
-
-      if (!element) return;
-
-      const currentDistance = this.getTouchDistance(touches[0], touches[1]);
-      const scaleFactor = currentDistance / this.lastTouchDistance;
-
-      if (element.shapeType === ShapeTypeEnum.CIRCLE) {
-        // For circles, maintain aspect ratio
-        const newSize = this.drawingService.snap(element.width * scaleFactor);
-
-        this.interaction.emit({
-          type: CanvasInteractionEventTypeEnum.RESIZE,
-          elementId: element.id,
-          element,
-          size: { width: newSize, height: newSize },
-        });
-      } else {
-        // For rectangles, scale both dimensions
-        const newWidth = this.drawingService.snap(element.width * scaleFactor);
-        const newHeight = this.drawingService.snap(
-          element.height * scaleFactor,
+    } else if (touches.length === 2) {
+      // Two-finger gestures
+      if (this.selectedId && this.resizing) {
+        // Two-finger pinch resize for selected element
+        const element = this.elementService.getSelectedElement(
+          this.room,
+          this.selectedId,
         );
 
-        this.interaction.emit({
-          type: CanvasInteractionEventTypeEnum.RESIZE,
-          elementId: element.id,
-          element,
-          size: { width: newWidth, height: newHeight },
-        });
-      }
+        if (!element) return;
 
-      this.lastTouchDistance = currentDistance;
-    } else if (touches.length === 2 && this.pinchZooming) {
-      const currentDistance = this.getTouchDistance(touches[0], touches[1]);
-      const scaleFactor = currentDistance / this.lastTouchDistance;
-      const newZoom = Math.min(
-        this.MAX_ZOOM,
-        Math.max(this.MIN_ZOOM, this.zoom * scaleFactor),
-      );
-      this.zoom = newZoom;
-      this.lastTouchDistance = currentDistance;
-      this.interaction.emit({
-        type: CanvasInteractionEventTypeEnum.ZOOM,
-        elementId: null,
-        zoom: newZoom,
-      });
+        const currentDistance = this.getTouchDistance(touches[0], touches[1]);
+        const scaleFactor = currentDistance / this.lastTouchDistance;
+
+        if (element.shapeType === ShapeTypeEnum.CIRCLE) {
+          // For circles, maintain aspect ratio
+          const newSize = this.drawingService.snap(element.width * scaleFactor);
+
+          this.interaction.emit({
+            type: CanvasInteractionEventTypeEnum.RESIZE,
+            elementId: element.id,
+            element,
+            size: { width: newSize, height: newSize },
+          });
+        } else {
+          // For rectangles, scale both dimensions
+          const newWidth = this.drawingService.snap(
+            element.width * scaleFactor,
+          );
+          const newHeight = this.drawingService.snap(
+            element.height * scaleFactor,
+          );
+
+          this.interaction.emit({
+            type: CanvasInteractionEventTypeEnum.RESIZE,
+            elementId: element.id,
+            element,
+            size: { width: newWidth, height: newHeight },
+          });
+        }
+
+        this.lastTouchDistance = currentDistance;
+      } else if (!this.selectedId && (this.touchPanning || this.pinchZooming)) {
+        // Two-finger pan and zoom when nothing is selected
+        const currentDistance = this.getTouchDistance(touches[0], touches[1]);
+        const currentCenter = this.getTouchCenter(touches[0], touches[1]);
+
+        // Handle panning
+        if (this.touchPanning) {
+          const deltaX = (currentCenter.x - this.lastTouchCenter.x) / this.zoom;
+          const deltaY = (currentCenter.y - this.lastTouchCenter.y) / this.zoom;
+
+          this.cameraChange.emit({
+            x: this.cameraX - deltaX,
+            y: this.cameraY - deltaY,
+          });
+        }
+
+        // Handle zooming
+        if (this.pinchZooming && this.lastTouchDistance > 0) {
+          const scaleFactor = currentDistance / this.lastTouchDistance;
+          const newZoom = Math.min(
+            this.MAX_ZOOM,
+            Math.max(this.MIN_ZOOM, this.zoom * scaleFactor),
+          );
+
+          this.interaction.emit({
+            type: CanvasInteractionEventTypeEnum.ZOOM,
+            elementId: null,
+            zoom: newZoom,
+          });
+        }
+
+        // Update for next frame
+        this.lastTouchDistance = currentDistance;
+        this.lastTouchCenter = currentCenter;
+      }
     }
   }
 
   private onTouchEnd(): void {
     this.resizing = false;
     this.dragging = false;
+    this.panning = false;
+    this.touchPanning = false;
     this.pinchZooming = false;
     this.activeTouch = null;
     this.lastTouchDistance = 0;

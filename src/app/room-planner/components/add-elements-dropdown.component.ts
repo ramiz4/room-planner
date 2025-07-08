@@ -16,7 +16,7 @@ import {
     <div class="relative">
       <button
         appButtonFeedback
-        class="flex items-center gap-2 px-4 py-3 rounded-lg bg-blue-600 text-white shadow-sm hover:bg-blue-700 transition-colors"
+        class="flex items-center gap-2 px-2 py-1 rounded bg-blue-600 text-white shadow-sm hover:bg-blue-700 transition-colors"
         type="button"
         (click)="toggleDropdown()"
         title="Add Elements"
@@ -29,7 +29,7 @@ import {
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="w-5 h-5"
+          class="w-4 h-4"
         >
           <path d="M12 5v14" />
           <path d="M5 12h14" />

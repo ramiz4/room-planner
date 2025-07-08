@@ -16,9 +16,10 @@ import {
     <div class="relative">
       <button
         appButtonFeedback
-        class="px-2 py-1.5 text-blue border border-blue-300 bg-blue-200 rounded cursor-pointer pointer-events-auto hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        class="flex items-center justify-center w-10 h-10 rounded-full text-white bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         type="button"
         (click)="toggleDropdown()"
+        title="Add Elements"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -28,11 +29,10 @@ import {
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="w-4 h-4 lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical"
+          class="w-5 h-5"
         >
-          <circle cx="12" cy="12" r="1" />
-          <circle cx="12" cy="5" r="1" />
-          <circle cx="12" cy="19" r="1" />
+          <path d="M12 5v14" />
+          <path d="M5 12h14" />
         </svg>
       </button>
 

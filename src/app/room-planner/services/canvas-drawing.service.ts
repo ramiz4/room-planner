@@ -172,7 +172,7 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
   ): void {
-    ctx.strokeStyle = 'blue';
+    ctx.strokeStyle = '#999';
     ctx.lineWidth = 2;
     if (el.shapeType === ShapeTypeEnum.CIRCLE) {
       const radius = Math.min(el.width, el.height) / 2;
@@ -190,7 +190,7 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
   ): void {
-    ctx.fillStyle = 'black';
+    let handleX: number, handleY: number;
 
     if (el.shapeType === ShapeTypeEnum.CIRCLE) {
       // For circles, draw the handle on the edge of the circle
@@ -200,19 +200,53 @@ export class CanvasDrawingService {
 
       // Position handle at bottom-right edge of the circle
       const angle = Math.PI / 4; // 45 degrees
-      const handleX = centerX + Math.cos(angle) * radius - this.HANDLE_SIZE / 2;
-      const handleY = centerY + Math.sin(angle) * radius - this.HANDLE_SIZE / 2;
-
-      ctx.fillRect(handleX, handleY, this.HANDLE_SIZE, this.HANDLE_SIZE);
+      handleX = centerX + Math.cos(angle) * radius - this.HANDLE_SIZE / 2;
+      handleY = centerY + Math.sin(angle) * radius - this.HANDLE_SIZE / 2;
     } else {
       // For rectangles, use the original positioning
-      ctx.fillRect(
-        el.x + el.width - this.HANDLE_SIZE,
-        el.y + el.height - this.HANDLE_SIZE,
-        this.HANDLE_SIZE,
-        this.HANDLE_SIZE,
-      );
+      handleX = el.x + el.width - this.HANDLE_SIZE;
+      handleY = el.y + el.height - this.HANDLE_SIZE;
     }
+
+    // Draw resize icon
+    this.drawResizeIcon(ctx, handleX, handleY, this.HANDLE_SIZE);
+  }
+
+  private drawResizeIcon(
+    ctx: CanvasRenderingContext2D,
+    handleX: number,
+    handleY: number,
+    handleSize: number,
+  ): void {
+    ctx.save();
+    ctx.strokeStyle = '#888';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+
+    // Calculate positions for the diagonal lines
+    const padding = 3;
+    const spacing = 4;
+    const startX = handleX + handleSize - padding;
+    const startY = handleY + handleSize - padding;
+
+    // Draw three diagonal lines (bottom-right corner pattern)
+    for (let i = 0; i < 3; i++) {
+      const offset = i * spacing;
+
+      ctx.beginPath();
+      // First line of each set
+      ctx.moveTo(startX - offset, startY);
+      ctx.lineTo(startX, startY - offset);
+      ctx.stroke();
+
+      // Second line of each set (creates the double-line effect)
+      ctx.beginPath();
+      ctx.moveTo(startX - offset - 1, startY);
+      ctx.lineTo(startX, startY - offset - 1);
+      ctx.stroke();
+    }
+
+    ctx.restore();
   }
 
   private drawElementLabel(

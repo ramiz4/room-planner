@@ -51,7 +51,7 @@ export const ROOM_PLANNER_CONSTANTS = {
   ELEMENT_Y_POSITION: 100,
 
   // Size of resize handles for room elements
-  ELEMENT_HANDLE_SIZE: 16,
+  ELEMENT_HANDLE_SIZE: 24,
 
   // Element shadow visibility
   ELEMENT_SHADOW_VISIBLE: false,

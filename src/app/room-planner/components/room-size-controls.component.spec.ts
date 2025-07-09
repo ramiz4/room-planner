@@ -27,7 +27,7 @@ describe('RoomSizeControlsComponent', () => {
   it('should emit widthChange when width input changes', () => {
     spyOn(component.widthChange, 'emit');
 
-    const widthInput = fixture.nativeElement.querySelector('#room-width');
+    const widthInput = fixture.nativeElement.querySelector('#width-input');
     widthInput.value = '8.5';
     widthInput.dispatchEvent(new Event('input'));
 
@@ -37,7 +37,7 @@ describe('RoomSizeControlsComponent', () => {
   it('should emit heightChange when height input changes', () => {
     spyOn(component.heightChange, 'emit');
 
-    const heightInput = fixture.nativeElement.querySelector('#room-height');
+    const heightInput = fixture.nativeElement.querySelector('#height-input');
     heightInput.value = '5.2';
     heightInput.dispatchEvent(new Event('input'));
 
@@ -48,8 +48,8 @@ describe('RoomSizeControlsComponent', () => {
     spyOn(component.widthChange, 'emit');
     spyOn(component.heightChange, 'emit');
 
-    const widthInput = fixture.nativeElement.querySelector('#room-width');
-    const heightInput = fixture.nativeElement.querySelector('#room-height');
+    const widthInput = fixture.nativeElement.querySelector('#width-input');
+    const heightInput = fixture.nativeElement.querySelector('#height-input');
 
     widthInput.value = 'invalid';
     widthInput.dispatchEvent(new Event('input'));
@@ -63,10 +63,10 @@ describe('RoomSizeControlsComponent', () => {
 
   it('should display current width and height values', () => {
     const widthInput = fixture.nativeElement.querySelector(
-      '#room-width',
+      '#width-input',
     ) as HTMLInputElement;
     const heightInput = fixture.nativeElement.querySelector(
-      '#room-height',
+      '#height-input',
     ) as HTMLInputElement;
 
     expect(widthInput.value).toBe('6');

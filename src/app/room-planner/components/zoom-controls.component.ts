@@ -7,21 +7,67 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   imports: [CommonModule],
   template: `
     <div
-      class="flex items-center gap-2 bg-black/60 text-white text-xs rounded px-2 py-1"
+      class="flex items-center gap-6  px-2 py-1 text-sm text-gray-800 dark:text-gray-200"
     >
-      <select
-        class="text-white text-xs rounded px-1 py-0.5"
-        [value]="zoom"
-        (change)="onZoomSelect($event)"
-      >
-        <option
-          *ngFor="let level of allZoomLevels"
-          [value]="level"
-          [selected]="level === zoom"
+      <button (click)="zoomChange.emit(zoom / 1.2)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-zoom-out-icon lucide-zoom-out"
         >
-          {{ level * 100 | number: '1.0-0' }}%
-        </option>
-      </select>
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" x2="16.65" y1="21" y2="16.65" />
+          <line x1="8" x2="14" y1="11" y2="11" />
+        </svg>
+      </button>
+      <span class="flex-1 w-8 text-center">
+        {{ zoom * 100 | number: '1.0-0' }}%
+      </span>
+      <button (click)="zoomChange.emit(zoom * 1.2)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-zoom-in-icon lucide-zoom-in"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" x2="16.65" y1="21" y2="16.65" />
+          <line x1="11" x2="11" y1="8" y2="14" />
+          <line x1="8" x2="14" y1="11" y2="11" />
+        </svg>
+      </button>
+      <button (click)="zoomChange.emit(1)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-maximize-icon lucide-maximize"
+        >
+          <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+          <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+          <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+          <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+        </svg>
+      </button>
     </div>
   `,
 })

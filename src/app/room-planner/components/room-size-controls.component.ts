@@ -16,17 +16,37 @@ export class RoomSizeControlsComponent {
 
   onWidthInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    const value = parseFloat(target.value);
+    const value = +parseFloat(target.value).toFixed(1);
     if (!isNaN(value)) {
       this.widthChange.emit(value);
     }
   }
 
+  incrementWidth(): void {
+    const newWidth = +(this.widthMeters() + 0.1).toFixed(1);
+    this.widthChange.emit(newWidth);
+  }
+
+  decrementWidth(): void {
+    const newWidth = +(this.widthMeters() - 0.1).toFixed(1);
+    this.widthChange.emit(newWidth);
+  }
+
   onHeightInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    const value = parseFloat(target.value);
+    const value = +parseFloat(target.value).toFixed(1);
     if (!isNaN(value)) {
       this.heightChange.emit(value);
     }
+  }
+
+  incrementHeight(): void {
+    const newHeight = +(this.heightMeters() + 0.1).toFixed(1);
+    this.heightChange.emit(newHeight);
+  }
+
+  decrementHeight(): void {
+    const newHeight = +(this.heightMeters() - 0.1).toFixed(1);
+    this.heightChange.emit(newHeight);
   }
 }

@@ -25,17 +25,28 @@
     </div>
   </div>
 
-  <!-- Floating UI Controls -->
-  <div class="absolute top-4 left-0 right-0 px-4 z-10">
-    <div
-      class="flex items-center justify-between bg-white rounded-lg shadow-xs border border-gray-200 p-2"
-    >
+  <div
+    class="absolute z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full top-4 left-1/2 dark:bg-gray-700 dark:border-gray-600"
+  >
+    <div class="flex items-center justify-center px-12 py-2 space-x-4">
       <app-room-size-controls
         [widthMeters]="room().widthMeters"
         [heightMeters]="room().heightMeters"
         (widthChange)="onRoomWidthMetersChange($event)"
         (heightChange)="onRoomHeightMetersChange($event)"
       ></app-room-size-controls>
+    </div>
+  </div>
+
+  <div
+    class="absolute z-50 w-full p-4 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600"
+  >
+    <div class="flex items-center justify-between">
+      <app-zoom-controls
+        [zoom]="zoomLevel()"
+        (zoomChange)="onZoomChange($event)"
+      ></app-zoom-controls>
+
       <app-add-elements-dropdown
         (addElementEvent)="onAddElement($event)"
         (clearAllEvent)="onClearElements()"
@@ -45,18 +56,10 @@
     </div>
   </div>
 
-  <!-- Bottom Right: Zoom Controls -->
-  <div class="absolute bottom-4 right-4 z-10">
-    <app-zoom-controls
-      [zoom]="zoomLevel()"
-      (zoomChange)="onZoomChange($event)"
-    ></app-zoom-controls>
-  </div>
-
-  <!-- Bottom Panel: Element Properties (when selected) -->
+  <!-- Element Properties (when selected) -->
   <div
     *ngIf="selectedElement()"
-    class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-xs sm:max-w-md mx-4"
+    class="absolute bottom-26 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-lg"
   >
     <div class="bg-white rounded-lg shadow-lg p-4 border border-gray-300">
       <app-element-properties

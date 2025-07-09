@@ -20,11 +20,24 @@ describe('ZoomControlsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit zoomChange when select value changes', () => {
+  it('should emit zoomChange when zoom in button is clicked', () => {
     spyOn(component.zoomChange, 'emit');
-    const select = fixture.nativeElement.querySelector('select');
-    select.value = '1.5';
-    select.dispatchEvent(new Event('change'));
-    expect(component.zoomChange.emit).toHaveBeenCalledWith(1.5);
+    const zoomInButton = fixture.nativeElement.querySelectorAll('button')[1]; // Second button is zoom in
+    zoomInButton.click();
+    expect(component.zoomChange.emit).toHaveBeenCalledWith(1.2); // zoom * 1.2
+  });
+
+  it('should emit zoomChange when zoom out button is clicked', () => {
+    spyOn(component.zoomChange, 'emit');
+    const zoomOutButton = fixture.nativeElement.querySelectorAll('button')[0]; // First button is zoom out
+    zoomOutButton.click();
+    expect(component.zoomChange.emit).toHaveBeenCalledWith(1 / 1.2); // zoom / 1.2
+  });
+
+  it('should emit zoomChange when reset button is clicked', () => {
+    spyOn(component.zoomChange, 'emit');
+    const resetButton = fixture.nativeElement.querySelectorAll('button')[2]; // Third button is reset
+    resetButton.click();
+    expect(component.zoomChange.emit).toHaveBeenCalledWith(1);
   });
 });

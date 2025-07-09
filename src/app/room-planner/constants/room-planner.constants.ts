@@ -18,7 +18,7 @@ export const ROOM_PLANNER_CONSTANTS = {
   ROOM_HEIGHT: 400,
 
   // Default color for room borders
-  ROOM_BORDER_COLOR: '#000000',
+  ROOM_BORDER_COLOR: '#999',
 
   // Default width of room borders
   ROOM_BORDER_WIDTH: 2,
@@ -36,7 +36,7 @@ export const ROOM_PLANNER_CONSTANTS = {
   ELEMENT_COLOR: '#cccccc',
 
   // Default color for selected room elements
-  ELEMENT_COLOR_SELECTED: '#ffcc00',
+  ELEMENT_COLOR_SELECTED: '#aaa',
 
   // Default width of room elements
   ELEMENT_WIDTH: 100,

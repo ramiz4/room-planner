@@ -73,7 +73,7 @@ export class CanvasDrawingService {
     // Only draw grid if zoom level is appropriate
     if (gridSize < 5) return; // Too zoomed out
 
-    ctx.strokeStyle = '#f0f0f0';
+    ctx.strokeStyle = '#dedede'; // Light gray color for grid lines
     ctx.lineWidth = 0.5;
 
     // Calculate visible area in world coordinates

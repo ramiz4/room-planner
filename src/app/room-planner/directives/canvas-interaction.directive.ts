@@ -49,7 +49,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
   private touchPanning = false;
   private lastTouchCenter = { x: 0, y: 0 };
 
-  private readonly MIN_ZOOM = 0.5;
+  private readonly MIN_ZOOM = 0.25;
   private readonly MAX_ZOOM = 3;
 
   ngAfterViewInit(): void {

@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   imports: [CommonModule],
   template: `
     <div
-      class="flex items-center gap-2 text-sm text-gray-800 dark:text-gray-200"
+      class="flex items-center gap-4 text-sm text-gray-800 dark:text-gray-200"
     >
       <button
         (click)="zoomChange.emit(zoom / 1.2)"
@@ -30,7 +30,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
           <line x1="8" x2="14" y1="11" y2="11" />
         </svg>
       </button>
-      <span class="flex-1 w-8 text-center">
+      <span class="flex-1 w-10 text-center">
         {{ zoom * 100 | number: '1.0-0' }}%
       </span>
       <button

@@ -63,9 +63,9 @@
   <!-- Element Properties (when selected) -->
   <div
     *ngIf="selectedElement()"
-    class="absolute bottom-26 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-lg"
+    class="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-lg rounded-lg shadow-lg p-4 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
   >
-    <div class="bg-white rounded-lg shadow-lg p-4 border border-gray-300">
+    <div class="">
       <app-element-properties
         [selectedElement]="selectedElement()"
         (updateElement)="onUpdateElement(selectedId()!, $event)"

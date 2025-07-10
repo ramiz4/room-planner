@@ -2,7 +2,7 @@
   <!-- Element Type Display -->
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-2">
-      <span class="text-xs font-medium text-gray-600">Type:</span>
+      <span class="text-xs font-medium">Type:</span>
       <span
         class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
         [class]="getElementTypeClass(selectedElement?.elementType)"
@@ -10,9 +10,7 @@
         {{ getElementTypeLabel(selectedElement?.elementType) }}
       </span>
     </div>
-    <div class="text-xs text-gray-500">
-      ID: {{ selectedElement?.id?.slice(-8) }}
-    </div>
+    <div class="text-xs">ID: {{ selectedElement?.id?.slice(-8) }}</div>
   </div>
 
   <!-- Label Input and Color Picker -->
@@ -52,18 +50,15 @@
         class="h-8 w-8 border border-gray-300 rounded cursor-pointer flex-shrink-0"
       />
     </div>
-    <div class="text-xs text-gray-500">↵ Save • Esc Cancel</div>
+    <div class="text-xs">↵ Save • Esc Cancel</div>
   </div>
 
   <!-- Dimensions -->
   <div class="space-y-2">
-    <span class="text-xs font-medium text-gray-700 sr-only">Dimensions</span>
+    <span class="text-xs font-medium sr-only">Dimensions</span>
     <div class="grid grid-cols-3 gap-2">
       <div class="space-y-1">
-        <label
-          for="element-width"
-          class="block text-xs font-medium text-gray-700"
-        >
+        <label for="element-width" class="block text-xs font-medium">
           Width (m)
         </label>
         <input
@@ -79,10 +74,7 @@
         />
       </div>
       <div class="space-y-1">
-        <label
-          for="element-height"
-          class="block text-xs font-medium text-gray-700"
-        >
+        <label for="element-height" class="block text-xs font-medium">
           Height (m)
         </label>
         <input
@@ -98,7 +90,7 @@
         />
       </div>
       <div class="space-y-1">
-        <div class="text-xs font-medium text-gray-700 mb-1">Aspect Ratio</div>
+        <div class="text-xs font-medium mb-1">Aspect Ratio</div>
         <button
           appButtonFeedback
           type="button"
@@ -132,10 +124,10 @@
 
   <!-- Position -->
   <div class="space-y-2">
-    <span class="text-xs font-medium text-gray-700 sr-only">Position</span>
+    <span class="text-xs font-medium sr-only">Position</span>
     <div class="grid grid-cols-2 gap-2">
       <div class="space-y-1">
-        <label for="element-x" class="block text-xs font-medium text-gray-700">
+        <label for="element-x" class="block text-xs font-medium">
           X Position (m)
         </label>
         <input
@@ -150,7 +142,7 @@
         />
       </div>
       <div class="space-y-1">
-        <label for="element-y" class="block text-xs font-medium text-gray-700">
+        <label for="element-y" class="block text-xs font-medium">
           Y Position (m)
         </label>
         <input

@@ -27,7 +27,8 @@
   <!-- Dropdown Menu -->
   <div
     *ngIf="showDropdown()"
-    class="absolute bottom-full right-0 mb-6 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-50"
+    class="absolute bottom-full right-0 mb-6 w-48 rounded-md shadow-lg z-50 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+    [@fadeInOut]="showDropdown() ? 'visible' : 'hidden'"
   >
     <!-- Invisible backdrop to close dropdown -->
     <div
@@ -40,14 +41,14 @@
     ></div>
 
     <div
-      class="relative z-50 bg-white border border-gray-300 rounded-md shadow-lg"
+      class="relative z-50 rounded-md shadow-lg bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
     >
       <!-- Tables Section -->
       <div class="p-2 border-b border-gray-200">
-        <div class="text-xs font-medium text-gray-600 mb-2 px-2">Tables</div>
+        <div class="text-xs font-medium mb-2 px-2">Tables</div>
         <button
           appButtonFeedback
-          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2 cursor-pointer"
+          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2 cursor-pointer"
           type="button"
           (click)="addElement(ElementTypeEnum.TABLE, ShapeTypeEnum.RECTANGLE)"
         >
@@ -56,7 +57,7 @@
         </button>
         <button
           appButtonFeedback
-          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2 cursor-pointer"
+          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2 cursor-pointer"
           type="button"
           (click)="addElement(ElementTypeEnum.TABLE, ShapeTypeEnum.CIRCLE)"
         >
@@ -69,10 +70,10 @@
 
       <!-- Static Elements Section -->
       <div class="p-2 border-b border-gray-200">
-        <div class="text-xs font-medium text-gray-600 mb-2 px-2">Static</div>
+        <div class="text-xs font-medium mb-2 px-2">Static</div>
         <button
           appButtonFeedback
-          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2 cursor-pointer"
+          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2 cursor-pointer"
           type="button"
           (click)="addElement(ElementTypeEnum.STATIC, ShapeTypeEnum.RECTANGLE)"
         >
@@ -81,7 +82,7 @@
         </button>
         <button
           appButtonFeedback
-          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded flex items-center gap-2 cursor-pointer"
+          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2 cursor-pointer"
           type="button"
           (click)="addElement(ElementTypeEnum.STATIC, ShapeTypeEnum.CIRCLE)"
         >
@@ -94,7 +95,7 @@
 
       <!-- Layout Section -->
       <div class="p-2 border-b border-gray-200">
-        <div class="text-xs font-medium text-gray-600 mb-2 px-2">Layout</div>
+        <div class="text-xs font-medium mb-2 px-2">Layout</div>
         <button
           appButtonFeedback
           class="w-full text-left px-3 py-2 text-sm hover:bg-blue-50 text-blue-600 rounded flex items-center gap-2 cursor-pointer"

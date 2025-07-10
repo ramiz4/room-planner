@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ROOM_PLANNER_CONSTANTS } from '../constants/room-planner.constants';
 import {
   RoomElement,
   ShapeTypeEnum,
 } from '../interfaces/room-element.interface';
 import { Room } from '../interfaces/room.interface';
+import { ThemeService } from './theme.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ import { Room } from '../interfaces/room.interface';
 export class CanvasDrawingService {
   private readonly HANDLE_SIZE = ROOM_PLANNER_CONSTANTS.ELEMENT_HANDLE_SIZE;
   private readonly GRID_SIZE = ROOM_PLANNER_CONSTANTS.ROOM_GRID_SIZE;
+  private themeService = inject(ThemeService);
 
   drawRoom(
     ctx: CanvasRenderingContext2D,
@@ -44,7 +46,8 @@ export class CanvasDrawingService {
     );
 
     // Draw room border
-    ctx.strokeStyle = ROOM_PLANNER_CONSTANTS.ROOM_BORDER_COLOR;
+    const isDark = this.themeService.theme() === 'dark';
+    ctx.strokeStyle = isDark ? '#6b7280' : '#999999'; // Lighter gray for dark mode, default gray for light mode
     ctx.lineWidth = ROOM_PLANNER_CONSTANTS.ROOM_BORDER_WIDTH;
     ctx.strokeRect(0, 0, room.width, room.height);
 
@@ -73,7 +76,9 @@ export class CanvasDrawingService {
     // Only draw grid if zoom level is appropriate
     if (gridSize < 5) return; // Too zoomed out
 
-    ctx.strokeStyle = '#dedede'; // Light gray color for grid lines
+    // Use different grid colors based on theme
+    const isDark = this.themeService.theme() === 'dark';
+    ctx.strokeStyle = isDark ? '#374151' : '#e5e7eb'; // Dark gray for dark mode, light gray for light mode
     ctx.lineWidth = 0.5;
 
     // Calculate visible area in world coordinates
@@ -172,7 +177,8 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
   ): void {
-    ctx.strokeStyle = '#999';
+    const isDark = this.themeService.theme() === 'dark';
+    ctx.strokeStyle = isDark ? '#94a3b8' : '#999'; // Lighter gray for dark mode
     ctx.lineWidth = 2;
     if (el.shapeType === ShapeTypeEnum.CIRCLE) {
       const radius = Math.min(el.width, el.height) / 2;
@@ -219,7 +225,8 @@ export class CanvasDrawingService {
     handleSize: number,
   ): void {
     ctx.save();
-    ctx.strokeStyle = '#888';
+    const isDark = this.themeService.theme() === 'dark';
+    ctx.strokeStyle = isDark ? '#94a3b8' : '#888'; // Lighter color for dark mode
     ctx.lineWidth = 1;
     ctx.lineCap = 'round';
 

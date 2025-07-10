@@ -178,7 +178,7 @@ export class CanvasDrawingService {
     el: RoomElement,
   ): void {
     const isDark = this.themeService.theme() === 'dark';
-    ctx.strokeStyle = isDark ? '#94a3b8' : '#999'; // Lighter gray for dark mode
+    ctx.strokeStyle = isDark ? '#60a5fa' : '#3b82f6'; // Blue selection outline - lighter blue for dark mode, regular blue for light mode
     ctx.lineWidth = 2;
     if (el.shapeType === ShapeTypeEnum.CIRCLE) {
       const radius = Math.min(el.width, el.height) / 2;
@@ -226,7 +226,7 @@ export class CanvasDrawingService {
   ): void {
     ctx.save();
     const isDark = this.themeService.theme() === 'dark';
-    ctx.strokeStyle = isDark ? '#94a3b8' : '#888'; // Lighter color for dark mode
+    ctx.strokeStyle = isDark ? '#60a5fa' : '#3b82f6'; // Match selection outline color - blue theme-aware color
     ctx.lineWidth = 1;
     ctx.lineCap = 'round';
 
@@ -289,7 +289,10 @@ export class CanvasDrawingService {
     }
 
     // Draw background rectangle for text
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    const isDark = this.themeService.theme() === 'dark';
+    ctx.fillStyle = isDark
+      ? 'rgba(31, 41, 55, 0.95)'
+      : 'rgba(255, 255, 255, 0.95)'; // Dark background for dark mode, light for light mode
     ctx.fillRect(
       centerX - textWidth / 2 - 4,
       centerY - textHeight / 2 - 2,
@@ -298,7 +301,9 @@ export class CanvasDrawingService {
     );
 
     // Draw border around text background
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.strokeStyle = isDark
+      ? 'rgba(156, 163, 175, 0.3)'
+      : 'rgba(0, 0, 0, 0.2)'; // Light border for dark mode, dark for light mode
     ctx.lineWidth = 1;
     ctx.strokeRect(
       centerX - textWidth / 2 - 4,
@@ -308,7 +313,7 @@ export class CanvasDrawingService {
     );
 
     // Draw text
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = isDark ? '#f9fafb' : '#111827'; // Light text for dark mode, dark text for light mode
     ctx.fillText(text, centerX, centerY);
   }
 

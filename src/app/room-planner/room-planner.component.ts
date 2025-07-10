@@ -15,6 +15,7 @@ import { ElementPropertiesComponent } from './components/element-properties.comp
 import { JsonExportComponent } from './components/json-export.component';
 import { JsonImportComponent } from './components/json-import.component';
 import { RoomSizeControlsComponent } from './components/room-size-controls.component';
+import { ThemeToggleComponent } from './components/theme-toggle.component';
 import { ZoomControlsComponent } from './components/zoom-controls.component';
 import { ROOM_PLANNER_CONSTANTS } from './constants/room-planner.constants';
 import { ButtonFeedbackDirective } from './directives/button-feedback.directive';
@@ -47,6 +48,7 @@ import { RoomStorageService } from './services/room-storage.service';
     CanvasInteractionDirective,
     ButtonFeedbackDirective,
     ZoomControlsComponent,
+    ThemeToggleComponent,
   ],
 })
 export class RoomPlannerComponent implements AfterViewInit, OnDestroy {

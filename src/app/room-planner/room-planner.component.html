@@ -1,5 +1,5 @@
 <!-- Fullscreen Canvas Container -->
-<div class="fixed inset-0 bg-gray-100 overflow-hidden">
+<div class="fixed inset-0 bg-gray-100 dark:bg-gray-900 overflow-hidden">
   <!-- Canvas Container -->
   <div class="w-full h-full relative overflow-hidden">
     <canvas
@@ -42,10 +42,14 @@
     class="absolute bottom-0 p-2 z-10 w-full bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600"
   >
     <div class="flex items-center justify-between">
-      <app-zoom-controls
-        [zoom]="zoomLevel()"
-        (zoomChange)="onZoomChange($event)"
-      ></app-zoom-controls>
+      <div class="flex items-center gap-2">
+        <app-zoom-controls
+          [zoom]="zoomLevel()"
+          (zoomChange)="onZoomChange($event)"
+        ></app-zoom-controls>
+
+        <app-theme-toggle></app-theme-toggle>
+      </div>
 
       <app-add-elements-dropdown
         (addElementEvent)="onAddElement($event)"

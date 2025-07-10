@@ -26,12 +26,12 @@
           data-copy-to-clipboard-target="code-block"
           data-copy-to-clipboard-content-type="innerHTML"
           data-copy-to-clipboard-html-entities="true"
-          class="text-gray-900 dark:text-gray-400 m-0.5 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 rounded-lg py-2 px-2.5 inline-flex items-center justify-center bg-white border-gray-200 border h-8"
+          class="text-gray-900 dark:text-gray-400 m-0.5 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 rounded-lg py-2 px-2.5 inline-flex items-center justify-center bg-white border-gray-200 border h-8 cursor-pointer"
+          (click)="copyToClipboard()"
         >
-          <button
+          <div
             id="default-message"
-            class="cursor-pointer inline-flex items-center"
-            (click)="copyToClipboard()"
+            class="inline-flex items-center"
             *ngIf="!copied"
           >
             <svg
@@ -46,8 +46,8 @@
               />
             </svg>
             <span class="text-xs font-semibold">Copy code</span>
-          </button>
-          <span id="success-message" *ngIf="copied">
+          </div>
+          <div id="success-message" *ngIf="copied">
             <span class="inline-flex items-center">
               <svg
                 class="w-3 h-3 text-blue-700 dark:text-blue-500 me-1.5"
@@ -69,7 +69,7 @@
                 >Copied</span
               >
             </span>
-          </span>
+          </div>
         </button>
       </div>
     </div>

@@ -10,7 +10,7 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
       <!-- Element Properties Trigger -->
       <button
         appButtonFeedback
-        class="flex items-center gap-2 px-4 py-3 rounded-lg bg-blue-600 text-white shadow-sm hover:bg-blue-700 transition-colors"
+        class="flex items-center gap-2 px-4 py-3 rounded-lg bg-blue-600 text-white shadow-sm hover:bg-blue-700 transition-colors cursor-pointer"
         type="button"
         (click)="onToggleElementProperties()"
       >

@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     <div
       class="flex items-center gap-6  px-2 py-1 text-sm text-gray-800 dark:text-gray-200"
     >
-      <button (click)="zoomChange.emit(zoom / 1.2)">
+      <button (click)="zoomChange.emit(zoom / 1.2)" class="cursor-pointer">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"
@@ -30,7 +30,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       <span class="flex-1 w-8 text-center">
         {{ zoom * 100 | number: '1.0-0' }}%
       </span>
-      <button (click)="zoomChange.emit(zoom * 1.2)">
+      <button (click)="zoomChange.emit(zoom * 1.2)" class="cursor-pointer">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"
@@ -49,7 +49,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
           <line x1="8" x2="14" y1="11" y2="11" />
         </svg>
       </button>
-      <button (click)="zoomChange.emit(1)">
+      <button (click)="zoomChange.emit(1)" class="cursor-pointer">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"

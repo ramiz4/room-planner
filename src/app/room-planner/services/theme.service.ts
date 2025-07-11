@@ -13,8 +13,6 @@ export class ThemeService {
   readonly theme = signal<Theme>(this.initialTheme);
 
   constructor() {
-    console.log('ThemeService constructor - Initial theme:', this.initialTheme);
-
     // Apply theme to document when theme changes
     effect(() => {
       const currentTheme = this.theme();
@@ -27,11 +25,8 @@ export class ThemeService {
   }
 
   private getInitialTheme(): Theme {
-    console.log('Getting initial theme...');
-
     // Check localStorage first
     const savedTheme = localStorage.getItem(this.storageKey) as Theme;
-    console.log('Saved theme from localStorage:', savedTheme);
 
     if (savedTheme === 'light' || savedTheme === 'dark') {
       return savedTheme;
@@ -41,26 +36,16 @@ export class ThemeService {
     const systemPrefersDark = window.matchMedia(
       '(prefers-color-scheme: dark)',
     ).matches;
-    console.log('System prefers dark mode:', systemPrefersDark);
 
     return systemPrefersDark ? 'dark' : 'light';
   }
 
   private applyTheme(theme: Theme): void {
-    console.log('Applying theme:', theme);
     const htmlElement = document.documentElement;
     if (theme === 'dark') {
       htmlElement.classList.add('dark');
-      console.log(
-        'Added dark class, classes:',
-        htmlElement.classList.toString(),
-      );
     } else {
       htmlElement.classList.remove('dark');
-      console.log(
-        'Removed dark class, classes:',
-        htmlElement.classList.toString(),
-      );
     }
   }
 
@@ -69,9 +54,7 @@ export class ThemeService {
   }
 
   toggleTheme(): void {
-    console.log('Toggle theme called, current theme:', this.theme());
     this.theme.update((current) => (current === 'light' ? 'dark' : 'light'));
-    console.log('New theme after toggle:', this.theme());
   }
 
   setTheme(theme: Theme): void {

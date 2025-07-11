@@ -2,8 +2,8 @@ packages:
   - "."
 
 ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - '@tailwindcss/oxide'
+  - "@parcel/watcher"
+  - "@tailwindcss/oxide"
   - esbuild
   - lmdb
   - msgpackr-extract

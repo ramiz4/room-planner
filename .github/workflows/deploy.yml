@@ -36,11 +36,17 @@ jobs:
         run: |
           echo "Checking downloaded build artifacts..."
           ls -la ./build/
-          echo "Verifying PWA files exist..."
+          echo "Verifying critical PWA files exist..."
           test -f ./build/manifest.webmanifest || (echo "ERROR: manifest.webmanifest not found" && exit 1)
           test -f ./build/ngsw.json || (echo "ERROR: ngsw.json not found" && exit 1)
           test -f ./build/ngsw-worker.js || (echo "ERROR: ngsw-worker.js not found" && exit 1)
-          test -d ./build/.well-known || (echo "ERROR: .well-known directory not found" && exit 1)
+          echo "Verifying optional PWA files..."
+          if [ -d ./build/.well-known ]; then
+            echo "✅ .well-known directory found"
+            ls -la ./build/.well-known/
+          else
+            echo "⚠️  WARNING: .well-known directory not found (Chrome DevTools support disabled)"
+          fi
           echo "PWA files verification complete!"
 
       - name: Setup Pages

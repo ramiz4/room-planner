@@ -65,9 +65,12 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
 
   readonly selectedId = signal<string | null>(null);
   readonly importedJSON = signal('');
-  readonly zoomLevel = signal(1);
-  readonly cameraX = signal(0);
-  readonly cameraY = signal(0);
+  readonly zoomLevel = signal(this.initializeZoomLevel());
+
+  // Initialize camera position once to avoid multiple calls
+  private readonly initialCameraPosition = this.initializeCameraPosition();
+  readonly cameraX = signal(this.initialCameraPosition.x);
+  readonly cameraY = signal(this.initialCameraPosition.y);
 
   readonly selectedElement = computed(() => {
     return this.elementService.getSelectedElement(
@@ -104,6 +107,18 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
     };
   }
 
+  // Initialize zoom level from storage or default
+  private initializeZoomLevel(): number {
+    const savedZoom = this.storageService.loadZoomLevel();
+    return savedZoom ?? 1; // Default to 1 if no saved zoom level
+  }
+
+  // Initialize camera position from storage or default
+  private initializeCameraPosition(): { x: number; y: number } {
+    const savedPosition = this.storageService.loadCameraPosition();
+    return savedPosition ?? { x: 0, y: 0 }; // Default to center if no saved position
+  }
+
   // 🧠 Redraw effect
   constructor() {
     effect(() => {
@@ -129,6 +144,19 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
       const room = this.room();
       this.storageService.saveRoom(room);
     });
+
+    // 🔍 Auto-save zoom level effect
+    effect(() => {
+      const zoomLevel = this.zoomLevel();
+      this.storageService.saveZoomLevel(zoomLevel);
+    });
+
+    // 📷 Auto-save camera position effect
+    effect(() => {
+      const cameraX = this.cameraX();
+      const cameraY = this.cameraY();
+      this.storageService.saveCameraPosition(cameraX, cameraY);
+    });
   }
 
   ngAfterViewInit() {
@@ -146,8 +174,11 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
     );
     this.room.set(roomWithZIndices);
 
-    // Center the room in the viewport initially
-    this.centerRoomInViewport();
+    // Center the room in the viewport initially only if no saved position exists
+    const savedPosition = this.storageService.loadCameraPosition();
+    if (!savedPosition) {
+      this.centerRoomInViewport();
+    }
 
     // Trigger initial drawing
     this.drawingService.drawRoom(

@@ -1,0 +1,5 @@
+{
+  "chrome-devtools": {
+    "webSocketDebuggerUrl": "ws://localhost:8080/debug"
+  }
+}

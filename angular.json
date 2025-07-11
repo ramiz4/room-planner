@@ -27,6 +27,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/.well-known",
+                "output": "/.well-known"
               }
             ],
             "styles": ["src/styles.scss"],
@@ -84,6 +89,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/.well-known",
+                "output": "/.well-known"
               }
             ],
             "styles": ["src/styles.scss"],

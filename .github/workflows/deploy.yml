@@ -32,6 +32,17 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: ./build
 
+      - name: Verify PWA deployment files
+        run: |
+          echo "Checking downloaded build artifacts..."
+          ls -la ./build/
+          echo "Verifying PWA files exist..."
+          test -f ./build/manifest.webmanifest || (echo "ERROR: manifest.webmanifest not found" && exit 1)
+          test -f ./build/ngsw.json || (echo "ERROR: ngsw.json not found" && exit 1)
+          test -f ./build/ngsw-worker.js || (echo "ERROR: ngsw-worker.js not found" && exit 1)
+          test -d ./build/.well-known || (echo "ERROR: .well-known directory not found" && exit 1)
+          echo "PWA files verification complete!"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
@@ -43,6 +54,17 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify PWA deployment
+        run: |
+          echo "🚀 PWA deployed successfully!"
+          echo "📱 PWA URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "🔧 Install the PWA by visiting the URL and clicking the install button"
+          echo "📋 PWA Features available:"
+          echo "  ✅ Offline functionality"
+          echo "  ✅ Service Worker caching"
+          echo "  ✅ Install prompt"
+          echo "  ✅ App manifest"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

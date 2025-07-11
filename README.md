@@ -7,6 +7,8 @@
 ![PWA](https://img.shields.io/badge/PWA-Ready-purple?style=flat-square)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1-blue?style=flat-square&logo=tailwindcss)
 ![PNPM](https://img.shields.io/badge/PNPM-8.15-orange?style=flat-square&logo=pnpm)
+![CI](https://github.com/your-username/room-planner/workflows/CI/badge.svg)
+![PWA Validation](https://github.com/your-username/room-planner/workflows/PWA%20Validation/badge.svg)
 
 A modern, responsive Progressive Web App for designing and planning room layouts with an intuitive drag-and-drop interface. Perfect for homeowners, interior designers, and real estate professionals.
 
@@ -472,18 +474,42 @@ ng generate --help
 
 ## 🚀 Deployment
 
-### Build for Production
+### Automated Deployment (GitHub Pages)
+
+This project includes automated CI/CD pipelines:
+
+**🔄 Continuous Integration:**
+
+- ✅ Automated testing on pull requests and main branch
+- ✅ PWA build validation with service worker checks
+- ✅ Lighthouse PWA auditing
+- ✅ Code quality checks (linting, formatting)
+
+**🚀 Continuous Deployment:**
+
+- ✅ Automatic deployment to GitHub Pages on main branch
+- ✅ PWA artifacts validation before deployment
+- ✅ Service worker and manifest verification
+- ✅ `.well-known` endpoints configuration
+
+**Workflows:**
+
+- `ci.yml` - Main CI pipeline with PWA build
+- `deploy.yml` - GitHub Pages deployment
+- `pwa-validation.yml` - PWA-specific testing on PRs
+
+### Manual Build for Production
 
 ```bash
-# Standard production build
+# PWA production build
 pnpm run build:pwa
 
-# Build artifacts will be in dist/room-planner/
+# Build artifacts will be in dist/room-planner/browser/
 ```
 
-### Deployment Options
+### Manual Deployment Options
 
-#### **Netlify** (Recommended)
+#### **Netlify**
 
 ```bash
 # Install Netlify CLI

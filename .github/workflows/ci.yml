@@ -33,8 +33,21 @@ jobs:
       - name: Run tests
         run: pnpm run test:ci
 
-      - name: Build
-        run: pnpm run build
+      - name: Build PWA for GitHub Pages
+        run: pnpm run build:pwa
+
+      - name: Verify PWA build
+        run: |
+          echo "Checking PWA build artifacts..."
+          ls -la dist/room-planner/browser/
+          echo "Verifying manifest file..."
+          test -f dist/room-planner/browser/manifest.webmanifest
+          echo "Verifying service worker files..."
+          test -f dist/room-planner/browser/ngsw.json
+          test -f dist/room-planner/browser/ngsw-worker.js
+          echo "Verifying .well-known directory..."
+          test -d dist/room-planner/browser/.well-known
+          echo "PWA build verification complete!"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

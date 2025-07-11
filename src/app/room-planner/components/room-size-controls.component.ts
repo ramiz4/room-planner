@@ -1,9 +1,11 @@
 import { Component, input, output } from '@angular/core';
+import { ButtonFeedbackDirective } from '../directives/button-feedback.directive';
 
 @Component({
   selector: 'app-room-size-controls',
   templateUrl: './room-size-controls.component.html',
   standalone: true,
+  imports: [ButtonFeedbackDirective],
 })
 export class RoomSizeControlsComponent {
   // Inputs

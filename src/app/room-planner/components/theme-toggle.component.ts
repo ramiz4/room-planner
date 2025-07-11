@@ -1,13 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../services/theme.service';
+import { ButtonFeedbackDirective } from '../directives/button-feedback.directive';
 
 @Component({
   selector: 'app-theme-toggle',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonFeedbackDirective],
   template: `
     <button
+      appButtonFeedback
       type="button"
       (click)="toggleTheme()"
       class="flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200 cursor-pointer"

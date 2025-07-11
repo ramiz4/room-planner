@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ButtonFeedbackDirective } from '../directives/button-feedback.directive';
 
 @Component({
   selector: 'app-zoom-controls',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonFeedbackDirective],
   template: `
     <div
       class="flex items-center gap-4 text-sm text-gray-800 dark:text-gray-200"
     >
       <button
+        appButtonFeedback
         (click)="zoomChange.emit(zoom / 1.2)"
         class="flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200 cursor-pointer"
       >
@@ -34,6 +36,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         {{ zoom * 100 | number: '1.0-0' }}%
       </span>
       <button
+        appButtonFeedback
         (click)="zoomChange.emit(zoom * 1.2)"
         class="flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200 cursor-pointer"
       >
@@ -56,6 +59,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         </svg>
       </button>
       <button
+        appButtonFeedback
         (click)="zoomChange.emit(1)"
         class="flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200 cursor-pointer"
       >

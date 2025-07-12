@@ -7,8 +7,8 @@
 ![PWA](https://img.shields.io/badge/PWA-Ready-purple?style=flat-square)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1-blue?style=flat-square&logo=tailwindcss)
 ![PNPM](https://img.shields.io/badge/PNPM-8.15-orange?style=flat-square&logo=pnpm)
-![CI](https://github.com/your-username/room-planner/workflows/CI/badge.svg)
-![PWA Validation](https://github.com/your-username/room-planner/workflows/PWA%20Validation/badge.svg)
+![CI](https://github.com/ramiz4/room-planner/workflows/CI/badge.svg)
+![PWA Validation](https://github.com/ramiz/room-planner/workflows/PWA%20Validation/badge.svg)
 
 A modern, responsive Progressive Web App for designing and planning room layouts with an intuitive drag-and-drop interface. Perfect for homeowners, interior designers, and real estate professionals.
 
@@ -109,7 +109,7 @@ pnpm --version
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-username/room-planner.git
+   git clone https://github.com/ramiz4/room-planner.git
    cd room-planner
    ```
 
@@ -569,7 +569,7 @@ We welcome contributions! Here's how to get started:
 1. **Fork & Clone**
 
    ```bash
-   git clone https://github.com/your-username/room-planner.git
+   git clone https://github.com/ramiz4/room-planner.git
    cd room-planner
    pnpm install
    ```

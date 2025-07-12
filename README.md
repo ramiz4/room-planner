@@ -8,7 +8,7 @@
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1-blue?style=flat-square&logo=tailwindcss)
 ![PNPM](https://img.shields.io/badge/PNPM-8.15-orange?style=flat-square&logo=pnpm)
 ![CI](https://github.com/ramiz4/room-planner/workflows/CI/badge.svg)
-![PWA Validation](https://github.com/ramiz/room-planner/workflows/PWA%20Validation/badge.svg)
+![PWA Validation](https://github.com/ramiz4/room-planner/workflows/PWA%20Validation/badge.svg)
 
 A modern, responsive Progressive Web App for designing and planning room layouts with an intuitive drag-and-drop interface. Perfect for homeowners, interior designers, and real estate professionals.
 

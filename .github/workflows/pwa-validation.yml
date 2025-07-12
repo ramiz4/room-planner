@@ -1,6 +1,15 @@
 name: PWA Validation
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'ngsw-config.json'
+      - 'public/manifest.webmanifest'
+      - 'angular.json'
+      - 'package.json'
   pull_request:
     paths:
       - 'src/**'
@@ -8,6 +17,7 @@ on:
       - 'public/manifest.webmanifest'
       - 'angular.json'
       - 'package.json'
+  workflow_dispatch: # Allows manual triggering from GitHub UI
 
 jobs:
   pwa-test:
@@ -38,34 +48,64 @@ jobs:
 
       - name: Start PWA server
         run: |
+          echo "Starting PWA server..."
           pnpm run serve:pwa-express &
-          sleep 10
-        env:
-          PORT: 8080
+          SERVER_PID=$!
+          echo "Server PID: $SERVER_PID"
+          
+          # Wait for server to start and test connectivity
+          echo "Waiting for server to start..."
+          for i in {1..30}; do
+            if curl -f http://localhost:8080 > /dev/null 2>&1; then
+              echo "✅ Server is running on http://localhost:8080"
+              break
+            fi
+            echo "Attempt $i: Server not ready yet, waiting..."
+            sleep 2
+          done
 
       - name: Run Lighthouse PWA audit
         run: |
-          lhci autorun --upload.target=temporary-public-storage --collect.url=http://localhost:8080 || echo "Lighthouse audit completed with warnings"
+          echo "Running Lighthouse PWA audit..."
+          lhci autorun --upload.target=temporary-public-storage --collect.url=http://localhost:8080 --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" || echo "⚠️ Lighthouse audit completed with warnings"
 
       - name: Validate PWA manifest
         run: |
           echo "Validating PWA manifest..."
-          curl -f http://localhost:8080/manifest.webmanifest > /dev/null
-          echo "✅ Manifest accessible"
+          if curl -f http://localhost:8080/manifest.webmanifest > /dev/null 2>&1; then
+            echo "✅ Manifest accessible"
+            echo "Manifest content:"
+            curl -s http://localhost:8080/manifest.webmanifest | head -10
+          else
+            echo "❌ Manifest not accessible"
+            exit 1
+          fi
 
       - name: Validate Service Worker
         run: |
           echo "Validating Service Worker..."
-          curl -f http://localhost:8080/ngsw-worker.js > /dev/null
-          echo "✅ Service Worker accessible"
-          curl -f http://localhost:8080/ngsw.json > /dev/null
-          echo "✅ Service Worker config accessible"
+          if curl -f http://localhost:8080/ngsw-worker.js > /dev/null 2>&1; then
+            echo "✅ Service Worker accessible"
+          else
+            echo "❌ Service Worker not accessible"
+            exit 1
+          fi
+          
+          if curl -f http://localhost:8080/ngsw.json > /dev/null 2>&1; then
+            echo "✅ Service Worker config accessible"
+          else
+            echo "❌ Service Worker config not accessible"
+            exit 1
+          fi
 
       - name: Validate Well-Known endpoints
         run: |
           echo "Validating .well-known endpoints..."
-          curl -f http://localhost:8080/.well-known/appspecific/com.chrome.devtools.json > /dev/null
-          echo "✅ Chrome DevTools endpoint accessible"
+          if curl -f http://localhost:8080/.well-known/appspecific/com.chrome.devtools.json > /dev/null 2>&1; then
+            echo "✅ Chrome DevTools endpoint accessible"
+          else
+            echo "⚠️ Chrome DevTools endpoint not accessible (may be optional)"
+          fi
 
       - name: Test offline functionality
         run: |

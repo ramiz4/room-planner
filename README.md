@@ -1,4 +1,4 @@
-# Restaurant Layout Planner PWA �️✨
+# Restaurant Layout Planner PWA ✨
 
 <div align="center">
 
@@ -13,7 +13,7 @@
 
 A modern, responsive Progressive Web App for designing and managing restaurant floor layouts with an intuitive drag-and-drop interface. Perfect for restaurant owners, managers, and POS system administrators.
 
-[🚀 Live Demo](#) | [📖 Documentation](docs/PRD.md) | [🐛 Report Bug](#) | [💡 Feature Request](#)
+[🚀 Live Demo](https://ramiz4.github.io/room-planner/) | [📖 Documentation](docs/PRD.md) | [🐛 Report Bug](https://github.com/ramiz4/room-planner/issues) | [💡 Feature Request](https://github.com/ramiz4/room-planner/issues)
 
 </div>
 

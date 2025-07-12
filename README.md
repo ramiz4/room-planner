@@ -1,4 +1,4 @@
-# Room Planner PWA 🏠✨
+# Restaurant Layout Planner PWA �️✨
 
 <div align="center">
 
@@ -11,7 +11,7 @@
 ![Deploy](https://github.com/ramiz4/room-planner/workflows/Deploy%20to%20GitHub%20Pages/badge.svg)
 ![PWA Validation](https://github.com/ramiz4/room-planner/workflows/PWA%20Validation/badge.svg)
 
-A modern, responsive Progressive Web App for designing and planning room layouts with an intuitive drag-and-drop interface. Perfect for homeowners, interior designers, and real estate professionals.
+A modern, responsive Progressive Web App for designing and managing restaurant floor layouts with an intuitive drag-and-drop interface. Perfect for restaurant owners, managers, and POS system administrators.
 
 [🚀 Live Demo](#) | [📖 Documentation](docs/PRD.md) | [🐛 Report Bug](#) | [💡 Feature Request](#)
 
@@ -19,55 +19,70 @@ A modern, responsive Progressive Web App for designing and planning room layouts
 
 ## 🌟 Overview
 
-Room Planner is a cutting-edge PWA built with Angular 19 that empowers users to create stunning room layouts through an intuitive drag-and-drop interface. Whether you're a homeowner planning a renovation, an interior designer working with clients, or a real estate professional showcasing potential layouts, this tool provides everything you need to visualize and plan your perfect space.
+Restaurant Layout Planner is a cutting-edge PWA built with Angular 19 that empowers restaurant owners and managers to create optimized floor layouts through an intuitive drag-and-drop interface. Whether you're planning a new restaurant, optimizing an existing layout, or configuring your POS system, this tool provides everything you need to visualize and plan your perfect dining space.
 
 **🎯 Target Audience:**
 
-- Homeowners planning renovations or redecorating
-- Interior designers collaborating with clients
-- Real estate professionals showcasing potential layouts
-- Anyone looking to optimize their living or working space
+- Restaurant owners planning new establishments or renovations
+- Restaurant managers optimizing seating arrangements and operational flow
+- POS system administrators configuring table layouts for order management
+- Hospitality consultants designing efficient restaurant spaces
 
 ## ✨ Key Features
 
-### 🎨 **Room Design & Layout**
+### �️ **Restaurant Floor Design & Layout**
 
-- **Drag & Drop Interface**: Intuitive placement of furniture and room elements
-- **Custom Room Dimensions**: Define exact room sizes for accurate planning
-- **Multiple Room Support**: Create layouts for entire homes or office spaces
-- **Element Library**: Comprehensive catalog of furniture and room elements
-- **Real-time Editing**: Instant visual feedback as you design
+- **Drag & Drop Interface**: Intuitive placement of tables, chairs, and restaurant elements
+- **Custom Dining Room Dimensions**: Define exact floor sizes for accurate capacity planning
+- **Multiple Floor Support**: Create layouts for different dining areas, private rooms, and outdoor seating
+- **Restaurant Element Library**: Comprehensive catalog of tables, booths, bars, and static elements
+- **Real-time Capacity Calculation**: Instant feedback on seating capacity as you design
+
+### 🪑 **Table and Furniture Management**
+
+- **Table Variety**: 2-top, 4-top, 6-top, 8-top tables, booths, and bar seating
+- **Table Numbering**: Automatic or manual table numbering for POS integration
+- **Rotation and Sizing**: Adjust table orientation and size for optimal space utilization
+- **Seating Arrangements**: Flexible chair placement and booth configurations
+
+### 🏢 **Static Elements Library**
+
+- **Kitchen Elements**: Kitchen bars, service stations, prep areas
+- **Infrastructure**: Entrance/exit doors, restrooms, host stands
+- **Operational Elements**: Server stations, POS terminals, storage areas
+- **Safety Features**: Emergency exits, fire extinguisher locations
 
 ### 📱 **Progressive Web App**
 
-- **Install Anywhere**: One-click installation on any device
-- **Offline Functionality**: Full design capabilities without internet
-- **Cross-Platform**: Works seamlessly on desktop, tablet, and mobile
-- **Auto-Updates**: Automatic background updates for latest features
-- **App-like Experience**: Native app feel with web convenience
+- **Install Anywhere**: One-click installation on any device for restaurant management
+- **Offline Functionality**: Full design capabilities without internet connection
+- **Cross-Platform**: Works seamlessly on tablets, desktop, and mobile for on-the-go planning
+- **Auto-Updates**: Automatic background updates for latest restaurant management features
+- **App-like Experience**: Native app feel optimized for restaurant operations
 
-### 💾 **Data Management**
+### 💾 **Data Management & POS Integration**
 
-- **Import/Export**: Save and share your designs as JSON files
-- **Local Storage**: Designs persist between sessions
-- **Project Management**: Organize multiple room projects
-- **Backup & Restore**: Never lose your creative work
+- **Import/Export**: Save and share your restaurant layouts as JSON files
+- **Local Storage**: Layouts persist between sessions for continuous planning
+- **Project Management**: Organize multiple restaurant locations or floor configurations
+- **POS System Ready**: Export table configurations for seamless POS system integration
+- **Backup & Restore**: Never lose your restaurant layout designs
 
 ### 🎯 **User Experience**
 
-- **Responsive Design**: Optimized for all screen sizes
-- **Theme Support**: Light and dark mode options
-- **Zoom Controls**: Detailed editing with pan and zoom
-- **Touch Friendly**: Optimized for touch devices
-- **Accessibility**: WCAG compliant design
+- **Responsive Design**: Optimized for tablets and desktop devices used in restaurant management
+- **Theme Support**: Light and dark mode options for different lighting conditions
+- **Zoom Controls**: Detailed editing with pan and zoom for precise table placement
+- **Touch Friendly**: Optimized for tablet devices commonly used in restaurants
+- **Accessibility**: WCAG compliant design for inclusive restaurant management
 
 ### 🔧 **Developer Features**
 
-- **Modern Angular**: Built with Angular 19 and latest practices
-- **TypeScript**: Fully typed codebase for reliability
-- **TailwindCSS**: Utility-first styling for rapid development
-- **Service Workers**: Advanced caching and offline strategies
-- **Test Coverage**: Comprehensive unit and integration tests
+- **Modern Angular**: Built with Angular 19 and latest practices for restaurant management
+- **TypeScript**: Fully typed codebase for reliable restaurant operations
+- **TailwindCSS**: Utility-first styling for rapid restaurant interface development
+- **Service Workers**: Advanced caching and offline strategies for uninterrupted service
+- **Test Coverage**: Comprehensive unit and integration tests for restaurant-critical reliability
 
 ## 📱 PWA Features
 
@@ -79,10 +94,11 @@ Room Planner is a cutting-edge PWA built with Angular 19 that empowers users to 
 
 ### Offline Capabilities
 
-- View and edit saved room designs
-- Create new room layouts
+- View and edit saved restaurant layouts
+- Create new floor plans and table arrangements
 - All data stored locally using browser storage
 - Automatic sync when back online
+- Continue restaurant planning without internet interruption
 
 ### Service Worker Features
 

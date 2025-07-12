@@ -60,7 +60,7 @@ export class ElementManagementService {
   createElement(
     elementType: ElementType,
     shapeType: ShapeType,
-    room?: Room,
+    room?: Room
   ): RoomElement {
     // Calculate position for new element
     let position;
@@ -113,7 +113,7 @@ export class ElementManagementService {
       return {
         ...room,
         staticElements: room.staticElements.map((el) =>
-          el.id === id ? applyUpdate(el) : el,
+          el.id === id ? applyUpdate(el) : el
         ),
       };
     }
@@ -124,7 +124,7 @@ export class ElementManagementService {
     // Combine all element types into a single array for hit testing
     // Sort by z-index (highest first) to check elements on top first
     const allElements = [...room.staticElements, ...room.tables].sort(
-      (a, b) => (b.zIndex || 0) - (a.zIndex || 0),
+      (a, b) => (b.zIndex || 0) - (a.zIndex || 0)
     );
 
     return (
@@ -152,7 +152,7 @@ export class ElementManagementService {
     x: number,
     y: number,
     element: RoomElement,
-    handleSize: number,
+    handleSize: number
   ): boolean {
     if (element.shapeType === ShapeTypeEnum.CIRCLE) {
       // For circles, check if mouse is over the handle on the circle edge
@@ -186,7 +186,7 @@ export class ElementManagementService {
 
   getSelectedElement(
     room: Room,
-    selectedId: string | null,
+    selectedId: string | null
   ): RoomElement | null {
     if (!selectedId) return null;
 

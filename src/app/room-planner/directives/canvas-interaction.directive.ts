@@ -62,10 +62,10 @@ export class CanvasInteractionDirective implements AfterViewInit {
     const canvas = this.elementRef.nativeElement;
 
     canvas.addEventListener('mousedown', (e: MouseEvent) =>
-      this.onMouseDown(e),
+      this.onMouseDown(e)
     );
     canvas.addEventListener('mousemove', (e: MouseEvent) =>
-      this.onMouseMove(e),
+      this.onMouseMove(e)
     );
     canvas.addEventListener('mouseup', () => this.onMouseUp());
     canvas.addEventListener('mouseleave', () => this.onMouseUp());
@@ -80,7 +80,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onWheel(e);
       },
-      { passive: false },
+      { passive: false }
     );
   }
 
@@ -96,7 +96,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onTouchStart(e);
       },
-      { passive: false },
+      { passive: false }
     );
 
     canvas.addEventListener(
@@ -105,7 +105,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onTouchMove(e);
       },
-      { passive: false },
+      { passive: false }
     );
 
     canvas.addEventListener(
@@ -114,7 +114,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onTouchEnd();
       },
-      { passive: false },
+      { passive: false }
     );
 
     canvas.addEventListener(
@@ -123,7 +123,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         e.preventDefault();
         this.onTouchEnd();
       },
-      { passive: false },
+      { passive: false }
     );
   }
 
@@ -132,7 +132,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
     const element = this.elementService.findElementAt(
       this.room,
       coords.x,
-      coords.y,
+      coords.y
     );
 
     if (element) {
@@ -147,7 +147,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
           coords.x,
           coords.y,
           element,
-          this.drawingService.handleSize,
+          this.drawingService.handleSize
         )
       ) {
         this.resizing = true;
@@ -190,7 +190,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
 
     const element = this.elementService.getSelectedElement(
       this.room,
-      this.selectedId,
+      this.selectedId
     );
     if (!element) return;
 
@@ -261,7 +261,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
 
     const newZoom = Math.min(
       this.MAX_ZOOM,
-      Math.max(this.MIN_ZOOM, this.zoom * zoomFactor),
+      Math.max(this.MIN_ZOOM, this.zoom * zoomFactor)
     );
 
     // Calculate new camera position to keep mouse position fixed
@@ -319,7 +319,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
 
   private getTouchCenter(
     touch1: Touch,
-    touch2: Touch,
+    touch2: Touch
   ): { x: number; y: number } {
     return {
       x: (touch1.clientX + touch2.clientX) / 2,
@@ -340,7 +340,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
       const element = this.elementService.findElementAt(
         this.room,
         coords.x,
-        coords.y,
+        coords.y
       );
 
       if (element) {
@@ -385,7 +385,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
       if (this.selectedId) {
         const element = this.elementService.getSelectedElement(
           this.room,
-          this.selectedId,
+          this.selectedId
         );
 
         const touchesOnElement =
@@ -399,7 +399,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
           this.dragging = false;
           this.lastTouchDistance = this.getTouchDistance(
             touches[0],
-            touches[1],
+            touches[1]
           );
           return;
         }
@@ -444,7 +444,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
 
       const element = this.elementService.getSelectedElement(
         this.room,
-        this.selectedId,
+        this.selectedId
       );
 
       if (!element) return;
@@ -469,7 +469,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
           // For circles, use the maximum delta to maintain circle shape
           const maxDelta = Math.max(Math.abs(deltaX), Math.abs(deltaY));
           const newSize = this.drawingService.snap(
-            Math.max(20, element.width + maxDelta * 2),
+            Math.max(20, element.width + maxDelta * 2)
           );
 
           this.interaction.emit({
@@ -481,10 +481,10 @@ export class CanvasInteractionDirective implements AfterViewInit {
         } else {
           // For rectangles, resize based on drag direction
           const newWidth = this.drawingService.snap(
-            Math.max(20, element.width + deltaX),
+            Math.max(20, element.width + deltaX)
           );
           const newHeight = this.drawingService.snap(
-            Math.max(20, element.height + deltaY),
+            Math.max(20, element.height + deltaY)
           );
 
           this.interaction.emit({
@@ -505,7 +505,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
         // Two-finger pinch resize for selected element
         const element = this.elementService.getSelectedElement(
           this.room,
-          this.selectedId,
+          this.selectedId
         );
 
         if (!element) return;
@@ -526,10 +526,10 @@ export class CanvasInteractionDirective implements AfterViewInit {
         } else {
           // For rectangles, scale both dimensions
           const newWidth = this.drawingService.snap(
-            element.width * scaleFactor,
+            element.width * scaleFactor
           );
           const newHeight = this.drawingService.snap(
-            element.height * scaleFactor,
+            element.height * scaleFactor
           );
 
           this.interaction.emit({
@@ -562,7 +562,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
           const scaleFactor = currentDistance / this.lastTouchDistance;
           const newZoom = Math.min(
             this.MAX_ZOOM,
-            Math.max(this.MIN_ZOOM, this.zoom * scaleFactor),
+            Math.max(this.MIN_ZOOM, this.zoom * scaleFactor)
           );
 
           this.interaction.emit({
@@ -592,7 +592,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
   private isNearResizeHandle(
     x: number,
     y: number,
-    element: RoomElement,
+    element: RoomElement
   ): boolean {
     const tolerance = 30; // Increased tolerance for touch
     const handleSize = 8;
@@ -639,7 +639,7 @@ export class CanvasInteractionDirective implements AfterViewInit {
 
   private isTouchRelatedToElement(
     coords: { x: number; y: number },
-    element: RoomElement,
+    element: RoomElement
   ): boolean {
     return (
       this.isInsideElement(coords.x, coords.y, element) ||

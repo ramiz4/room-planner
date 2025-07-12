@@ -6,11 +6,11 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="flex items-center justify-center min-h-screen bg-gray-100">
-      <div class="text-center p-8 bg-white rounded-lg shadow-lg max-w-md mx-4">
+    <div class="flex min-h-screen items-center justify-center bg-gray-100">
+      <div class="mx-4 max-w-md rounded-lg bg-white p-8 text-center shadow-lg">
         <div class="mb-6">
           <svg
-            class="w-16 h-16 mx-auto text-gray-400"
+            class="mx-auto h-16 w-16 text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -23,14 +23,14 @@ import { CommonModule } from '@angular/common';
             ></path>
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">You're Offline</h2>
-        <p class="text-gray-600 mb-6">
+        <h2 class="mb-4 text-2xl font-bold text-gray-800">You're Offline</h2>
+        <p class="mb-6 text-gray-600">
           It looks like you've lost your internet connection. Don't worry - your
           room designs are saved locally and will sync when you're back online.
         </p>
         <button
           (click)="checkConnection()"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+          class="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
         >
           Try Again
         </button>
@@ -53,7 +53,7 @@ export class OfflineComponent {
     } else {
       // Show a toast or alert that connection is still not available
       alert(
-        'Still no internet connection. Please check your network settings.',
+        'Still no internet connection. Please check your network settings.'
       );
     }
   }

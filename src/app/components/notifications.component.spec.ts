@@ -22,7 +22,7 @@ describe('NotificationsComponent', () => {
       ['removeNotification'],
       {
         notifications$: notificationsSubject.asObservable(),
-      },
+      }
     );
 
     mockPwaService = jasmine.createSpyObj('PwaService', [
@@ -52,7 +52,7 @@ describe('NotificationsComponent', () => {
     const notificationId = 'test-id';
     component.dismiss(notificationId);
     expect(mockNotificationService.removeNotification).toHaveBeenCalledWith(
-      notificationId,
+      notificationId
     );
   });
 
@@ -79,7 +79,7 @@ describe('NotificationsComponent', () => {
 
     expect(mockPwaService.checkForUpdate).toHaveBeenCalled();
     expect(mockNotificationService.removeNotification).toHaveBeenCalledWith(
-      '1',
+      '1'
     );
   });
 

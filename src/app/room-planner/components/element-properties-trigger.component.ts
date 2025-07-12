@@ -10,12 +10,12 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
       <!-- Element Properties Trigger -->
       <button
         appButtonFeedback
-        class="flex items-center gap-2 px-4 py-3 rounded-lg bg-blue-600 text-white shadow-sm hover:bg-blue-700 transition-colors cursor-pointer"
+        class="flex cursor-pointer items-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-white shadow-sm transition-colors hover:bg-blue-700"
         type="button"
         (click)="onToggleElementProperties()"
       >
         <svg
-          class="w-4 h-4"
+          class="h-4 w-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -33,16 +33,16 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
           />
         </svg>
-        <span class="text-sm font-medium max-w-[120px] truncate">
+        <span class="max-w-[120px] truncate text-sm font-medium">
           Edit
           {{ selectedElement ? selectedElement.label || 'Element' : 'Element' }}
         </span>
       </button>
     } @else if (hasElements) {
       <!-- Hint when no element is selected but elements exist -->
-      <div class="flex items-center gap-2 px-4 py-3 text-gray-500 text-sm">
+      <div class="flex items-center gap-2 px-4 py-3 text-sm text-gray-500">
         <svg
-          class="w-4 h-4"
+          class="h-4 w-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

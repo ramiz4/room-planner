@@ -12,7 +12,7 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
       appButtonFeedback
       type="button"
       (click)="toggleTheme()"
-      class="flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200 cursor-pointer"
+      class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-gray-700 transition-colors duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
       [title]="
         theme() === 'light' ? 'Switch to dark mode' : 'Switch to light mode'
       "
@@ -20,7 +20,7 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
       <!-- Sun icon for light mode -->
       <svg
         *ngIf="theme() === 'light'"
-        class="w-5 h-5"
+        class="h-5 w-5"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -37,7 +37,7 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
       <!-- Moon icon for dark mode -->
       <svg
         *ngIf="theme() === 'dark'"
-        class="w-5 h-5"
+        class="h-5 w-5"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

@@ -7,14 +7,14 @@ import { PwaService } from '../services/pwa.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div *ngIf="showInstallButton" class="fixed bottom-4 right-4 z-50">
+    <div *ngIf="showInstallButton" class="fixed right-4 bottom-4 z-50">
       <button
         (click)="installPwa()"
-        class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200"
+        class="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white shadow-lg transition-colors duration-200 hover:bg-blue-700"
         title="Install Room Planner"
       >
         <svg
-          class="w-5 h-5"
+          class="h-5 w-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -33,11 +33,11 @@ import { PwaService } from '../services/pwa.service';
     <div *ngIf="showUpdateButton" class="fixed top-4 right-4 z-50">
       <button
         (click)="updatePwa()"
-        class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200"
+        class="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white shadow-lg transition-colors duration-200 hover:bg-green-700"
         title="Update Room Planner"
       >
         <svg
-          class="w-5 h-5"
+          class="h-5 w-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

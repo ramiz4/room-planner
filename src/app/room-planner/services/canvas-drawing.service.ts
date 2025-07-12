@@ -21,7 +21,7 @@ export class CanvasDrawingService {
     selectedId: string | null,
     cameraX = 0,
     cameraY = 0,
-    zoom = 1,
+    zoom = 1
   ): void {
     const canvas = ctx.canvas;
 
@@ -42,7 +42,7 @@ export class CanvasDrawingService {
       cameraY,
       zoom,
       canvas.width,
-      canvas.height,
+      canvas.height
     );
 
     // Draw room border
@@ -53,7 +53,7 @@ export class CanvasDrawingService {
 
     // Combine all elements and sort by z-index for proper layering
     const allElements = [...room.staticElements, ...room.tables].sort(
-      (a, b) => (a.zIndex || 0) - (b.zIndex || 0),
+      (a, b) => (a.zIndex || 0) - (b.zIndex || 0)
     );
 
     // Draw all elements in z-index order
@@ -69,7 +69,7 @@ export class CanvasDrawingService {
     cameraY: number,
     zoom: number,
     canvasWidth: number,
-    canvasHeight: number,
+    canvasHeight: number
   ): void {
     const gridSize = this.GRID_SIZE * zoom;
 
@@ -108,7 +108,7 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     elements: RoomElement[],
     selectedId: string | null,
-    drawLabels = false,
+    drawLabels = false
   ): void {
     for (const element of elements) {
       this.drawElement(ctx, element, element.id === selectedId, drawLabels);
@@ -119,7 +119,7 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
     isSelected: boolean,
-    drawLabel = false,
+    drawLabel = false
   ): void {
     ctx.fillStyle = el.color || ROOM_PLANNER_CONSTANTS.ELEMENT_COLOR;
 
@@ -144,7 +144,7 @@ export class CanvasDrawingService {
   private drawRectangle(
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
-    isSelected: boolean,
+    isSelected: boolean
   ): void {
     ctx.fillRect(el.x, el.y, el.width, el.height);
 
@@ -157,7 +157,7 @@ export class CanvasDrawingService {
   private drawCircle(
     ctx: CanvasRenderingContext2D,
     el: RoomElement,
-    isSelected: boolean,
+    isSelected: boolean
   ): void {
     const radius = Math.min(el.width, el.height) / 2;
     const centerX = el.x + el.width / 2;
@@ -175,7 +175,7 @@ export class CanvasDrawingService {
 
   private drawSelectionOutline(
     ctx: CanvasRenderingContext2D,
-    el: RoomElement,
+    el: RoomElement
   ): void {
     const isDark = this.themeService.theme() === 'dark';
     ctx.strokeStyle = isDark ? '#60a5fa' : '#3b82f6'; // Blue selection outline - lighter blue for dark mode, regular blue for light mode
@@ -194,7 +194,7 @@ export class CanvasDrawingService {
 
   private drawResizeHandle(
     ctx: CanvasRenderingContext2D,
-    el: RoomElement,
+    el: RoomElement
   ): void {
     let handleX: number, handleY: number;
 
@@ -222,7 +222,7 @@ export class CanvasDrawingService {
     ctx: CanvasRenderingContext2D,
     handleX: number,
     handleY: number,
-    handleSize: number,
+    handleSize: number
   ): void {
     ctx.save();
     const isDark = this.themeService.theme() === 'dark';
@@ -258,7 +258,7 @@ export class CanvasDrawingService {
 
   private drawElementLabel(
     ctx: CanvasRenderingContext2D,
-    el: RoomElement,
+    el: RoomElement
   ): void {
     // Reset shadow for text
     ctx.shadowColor = 'transparent';
@@ -297,7 +297,7 @@ export class CanvasDrawingService {
       centerX - textWidth / 2 - 4,
       centerY - textHeight / 2 - 2,
       textWidth + 8,
-      textHeight + 4,
+      textHeight + 4
     );
 
     // Draw border around text background
@@ -309,7 +309,7 @@ export class CanvasDrawingService {
       centerX - textWidth / 2 - 4,
       centerY - textHeight / 2 - 2,
       textWidth + 8,
-      textHeight + 4,
+      textHeight + 4
     );
 
     // Draw text
@@ -320,7 +320,7 @@ export class CanvasDrawingService {
   private drawGrid(
     ctx: CanvasRenderingContext2D,
     width: number,
-    height: number,
+    height: number
   ): void {
     ctx.strokeStyle = ROOM_PLANNER_CONSTANTS.ROOM_GRID_COLOR;
     ctx.lineWidth = ROOM_PLANNER_CONSTANTS.ROOM_GRID_WIDTH;

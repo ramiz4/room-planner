@@ -25,23 +25,23 @@ export class PwaService {
     if (this.swUpdate.isEnabled) {
       // Allow the app to stabilize first, before starting polling for updates with `interval()`.
       const appIsStable$ = this.appRef.isStable.pipe(
-        first((isStable) => isStable === true),
+        first((isStable) => isStable === true)
       );
       const everySixHours$ = interval(6 * 60 * 60 * 1000);
       const everySixHoursOnceAppIsStable$ = concat(
         appIsStable$,
-        everySixHours$,
+        everySixHours$
       );
 
       everySixHoursOnceAppIsStable$.subscribe(() =>
-        this.swUpdate.checkForUpdate(),
+        this.swUpdate.checkForUpdate()
       );
 
       this.swUpdate.versionUpdates
         .pipe(
           filter(
-            (evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY',
-          ),
+            (evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'
+          )
         )
         .subscribe(() => {
           if (confirm('New version available. Load New Version?')) {

@@ -96,7 +96,7 @@ export class RoomStorageService {
       const cameraPosition = { x, y };
       localStorage.setItem(
         this.CAMERA_POSITION_STORAGE_KEY,
-        JSON.stringify(cameraPosition),
+        JSON.stringify(cameraPosition)
       );
     } catch (error) {
       console.warn('Failed to save camera position to localStorage:', error);
@@ -109,7 +109,7 @@ export class RoomStorageService {
   loadCameraPosition(): { x: number; y: number } | null {
     try {
       const savedPosition = localStorage.getItem(
-        this.CAMERA_POSITION_STORAGE_KEY,
+        this.CAMERA_POSITION_STORAGE_KEY
       );
       if (savedPosition) {
         const position = JSON.parse(savedPosition);

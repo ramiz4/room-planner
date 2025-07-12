@@ -61,7 +61,7 @@ describe('ElementPropertiesTriggerComponent', () => {
     const hintDiv = fixture.nativeElement.querySelector('div');
     expect(hintDiv).toBeTruthy();
     expect(hintDiv.textContent).toContain(
-      'Select an element to edit its properties',
+      'Select an element to edit its properties'
     );
   });
 

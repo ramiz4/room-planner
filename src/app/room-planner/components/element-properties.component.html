@@ -4,7 +4,7 @@
     <div class="flex items-center gap-2">
       <span class="text-xs font-medium">Type:</span>
       <span
-        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+        class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium"
         [class]="getElementTypeClass(selectedElement?.elementType)"
       >
         {{ getElementTypeLabel(selectedElement?.elementType) }}
@@ -27,12 +27,12 @@
           (keydown.enter)="onLabelSave($event)"
           (keydown.escape)="onLabelCancel($event)"
           placeholder="Enter label..."
-          class="w-full px-2 py-1.5 pr-8 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
+          class="w-full rounded border border-gray-300 px-2 py-1.5 pr-8 text-xs transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         />
-        @if (labelInput() !== (selectedElement?.label || "")) {
+        @if (labelInput() !== (selectedElement?.label || '')) {
           <div class="absolute inset-y-0 right-0 flex items-center pr-2">
             <div
-              class="w-2 h-2 bg-orange-400 rounded-full"
+              class="h-2 w-2 rounded-full bg-orange-400"
               title="Unsaved changes"
             ></div>
           </div>
@@ -47,7 +47,7 @@
           ROOM_PLANNER_CONSTANTS.ELEMENT_COLOR_SELECTED
         "
         (change)="onColorChange($event)"
-        class="h-8 w-8 border border-gray-300 rounded cursor-pointer flex-shrink-0"
+        class="h-8 w-8 flex-shrink-0 cursor-pointer rounded border border-gray-300"
       />
     </div>
     <div class="text-xs">↵ Save • Esc Cancel</div>
@@ -55,7 +55,7 @@
 
   <!-- Dimensions -->
   <div class="space-y-2">
-    <span class="text-xs font-medium sr-only">Dimensions</span>
+    <span class="sr-only text-xs font-medium">Dimensions</span>
     <div class="grid grid-cols-3 gap-2">
       <div class="space-y-1">
         <label for="element-width" class="block text-xs font-medium">
@@ -70,7 +70,7 @@
           min="0.1"
           max="50"
           step="0.1"
-          class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
+          class="w-full rounded border border-gray-300 px-2 py-1.5 text-xs transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         />
       </div>
       <div class="space-y-1">
@@ -86,24 +86,24 @@
           min="0.1"
           max="50"
           step="0.1"
-          class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
+          class="w-full rounded border border-gray-300 px-2 py-1.5 text-xs transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         />
       </div>
       <div class="space-y-1">
-        <div class="text-xs font-medium mb-1">Aspect Ratio</div>
+        <div class="mb-1 text-xs font-medium">Aspect Ratio</div>
         <button
           appButtonFeedback
           type="button"
           (click)="lockAspectRatio.set(!lockAspectRatio())"
-          class="w-full flex items-center justify-center gap-1 px-2 py-1.5 text-xs rounded transition-colors border cursor-pointer"
+          class="flex w-full cursor-pointer items-center justify-center gap-1 rounded border px-2 py-1.5 text-xs transition-colors"
           [class]="
             lockAspectRatio()
-              ? 'bg-blue-100 text-blue-700 border-blue-300'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-300'
+              ? 'border-blue-300 bg-blue-100 text-blue-700'
+              : 'border-gray-300 bg-gray-100 text-gray-600 hover:bg-gray-200'
           "
           title="Lock aspect ratio"
         >
-          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
             @if (lockAspectRatio()) {
               <path
                 d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
@@ -116,7 +116,7 @@
               ></path>
             }
           </svg>
-          {{ lockAspectRatio() ? "Locked" : "Free" }}
+          {{ lockAspectRatio() ? 'Locked' : 'Free' }}
         </button>
       </div>
     </div>
@@ -124,7 +124,7 @@
 
   <!-- Position -->
   <div class="space-y-2">
-    <span class="text-xs font-medium sr-only">Position</span>
+    <span class="sr-only text-xs font-medium">Position</span>
     <div class="grid grid-cols-2 gap-2">
       <div class="space-y-1">
         <label for="element-x" class="block text-xs font-medium">
@@ -138,7 +138,7 @@
           (input)="onXChange($event)"
           min="0"
           step="0.1"
-          class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
+          class="w-full rounded border border-gray-300 px-2 py-1.5 text-xs transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         />
       </div>
       <div class="space-y-1">
@@ -153,7 +153,7 @@
           (input)="onYChange($event)"
           min="0"
           step="0.1"
-          class="w-full px-2 py-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs"
+          class="w-full rounded border border-gray-300 px-2 py-1.5 text-xs transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         />
       </div>
     </div>
@@ -164,10 +164,10 @@
     <button
       appButtonFeedback
       (click)="onDeleteElement()"
-      class="w-full flex items-center justify-center gap-1 px-2 py-3 bg-red-600 text-white rounded hover:bg-red-700 focus:ring-1 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 text-xs font-medium cursor-pointer"
+      class="flex w-full cursor-pointer items-center justify-center gap-1 rounded bg-red-600 px-2 py-3 text-xs font-medium text-white transition-all duration-200 hover:bg-red-700 focus:ring-1 focus:ring-red-500 focus:ring-offset-1"
     >
       <svg
-        class="w-3 h-3"
+        class="h-3 w-3"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

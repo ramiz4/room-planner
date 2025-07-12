@@ -63,10 +63,10 @@ describe('RoomSizeControlsComponent', () => {
 
   it('should display current width and height values', () => {
     const widthInput = fixture.nativeElement.querySelector(
-      '#width-input',
+      '#width-input'
     ) as HTMLInputElement;
     const heightInput = fixture.nativeElement.querySelector(
-      '#height-input',
+      '#height-input'
     ) as HTMLInputElement;
 
     expect(widthInput.value).toBe('6');

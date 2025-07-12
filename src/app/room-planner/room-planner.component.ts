@@ -75,7 +75,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
   readonly selectedElement = computed(() => {
     return this.elementService.getSelectedElement(
       this.room(),
-      this.selectedId(),
+      this.selectedId()
     );
   });
 
@@ -134,7 +134,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
           this.selectedId(),
           cameraX,
           cameraY,
-          zoom,
+          zoom
         );
       }
     });
@@ -170,7 +170,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
 
     // Initialize z-indices for any existing elements
     const roomWithZIndices = this.elementService.initializeZIndices(
-      this.room(),
+      this.room()
     );
     this.room.set(roomWithZIndices);
 
@@ -187,7 +187,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
       this.selectedId(),
       this.cameraX(),
       this.cameraY(),
-      this.zoomLevel(),
+      this.zoomLevel()
     );
   }
 
@@ -215,7 +215,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
         this.selectedId(),
         this.cameraX(),
         this.cameraY(),
-        this.zoomLevel(),
+        this.zoomLevel()
       );
     }
   }
@@ -241,7 +241,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
     const element = this.elementService.createElement(
       event.elementType,
       event.shapeType,
-      this.room(), // Pass the current room to enable offset positioning
+      this.room() // Pass the current room to enable offset positioning
     );
 
     this.room.update((room) => {
@@ -308,7 +308,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
           // Bring the selected element to front
           const updatedRoom = this.elementService.bringElementToFront(
             this.room(),
-            event.elementId,
+            event.elementId
           );
           this.room.set(updatedRoom);
         }
@@ -379,7 +379,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
     const updatedRoom = this.elementService.updateElement(
       this.room(),
       elementId,
-      update,
+      update
     );
     this.room.set(updatedRoom);
   }
@@ -387,7 +387,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
   onDeleteElement(elementId: string): void {
     const updatedRoom = this.elementService.deleteElement(
       this.room(),
-      elementId,
+      elementId
     );
     this.room.set(updatedRoom);
     this.selectedId.set(null);
@@ -396,14 +396,14 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
   onDuplicateElement(elementId: string): void {
     const element = this.elementService.getSelectedElement(
       this.room(),
-      elementId,
+      elementId
     );
     if (!element) return;
 
     const duplicatedElement = this.elementService.createElement(
       element.elementType,
       element.shapeType || 'rectangle',
-      this.room(), // Pass the current room for offset positioning
+      this.room() // Pass the current room for offset positioning
     );
 
     // Position the duplicate slightly offset from the original
@@ -437,7 +437,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
   onCenterElement(elementId: string): void {
     const element = this.elementService.getSelectedElement(
       this.room(),
-      elementId,
+      elementId
     );
     if (!element) return;
 

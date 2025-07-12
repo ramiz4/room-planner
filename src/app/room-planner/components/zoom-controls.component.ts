@@ -13,7 +13,7 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
       <button
         appButtonFeedback
         (click)="zoomChange.emit(zoom / 1.2)"
-        class="flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200 cursor-pointer"
+        class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-gray-700 transition-colors duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -32,13 +32,13 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
           <line x1="8" x2="14" y1="11" y2="11" />
         </svg>
       </button>
-      <span class="flex-1 w-10 text-center">
+      <span class="w-10 flex-1 text-center">
         {{ zoom * 100 | number: '1.0-0' }}%
       </span>
       <button
         appButtonFeedback
         (click)="zoomChange.emit(zoom * 1.2)"
-        class="flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200 cursor-pointer"
+        class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-gray-700 transition-colors duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ import { ButtonFeedbackDirective } from '../directives/button-feedback.directive
       <button
         appButtonFeedback
         (click)="zoomChange.emit(1)"
-        class="flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200 cursor-pointer"
+        class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-gray-700 transition-colors duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

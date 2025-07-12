@@ -62,7 +62,7 @@ describe('CanvasInteractionDirective', () => {
     const canvas = fixture.debugElement.query(By.css('canvas'))
       .nativeElement as HTMLCanvasElement;
     canvas.dispatchEvent(
-      new WheelEvent('wheel', { deltaY: -100, ctrlKey: true }),
+      new WheelEvent('wheel', { deltaY: -100, ctrlKey: true })
     );
     fixture.detectChanges();
 
@@ -116,7 +116,7 @@ describe('CanvasInteractionDirective', () => {
         touches: [t1Start, t2Start],
         targetTouches: [t1Start, t2Start],
         changedTouches: [t1Start, t2Start],
-      }),
+      })
     );
 
     const t1Move = new Touch({
@@ -136,7 +136,7 @@ describe('CanvasInteractionDirective', () => {
         touches: [t1Move, t2Move],
         targetTouches: [t1Move, t2Move],
         changedTouches: [t1Move, t2Move],
-      }),
+      })
     );
     fixture.detectChanges();
 

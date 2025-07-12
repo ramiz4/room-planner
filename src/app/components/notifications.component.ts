@@ -13,18 +13,18 @@ import { PwaService } from '../services/pwa.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="fixed top-4 left-4 z-50 space-y-2 max-w-md">
+    <div class="fixed top-4 left-4 z-50 max-w-md space-y-2">
       <div
         *ngFor="let notification of notifications"
-        class="flex items-center p-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform"
+        class="flex transform items-center rounded-lg p-4 shadow-lg transition-all duration-300 ease-in-out"
         [ngClass]="{
-          'bg-blue-50 border-l-4 border-blue-500 text-blue-700':
+          'border-l-4 border-blue-500 bg-blue-50 text-blue-700':
             notification.type === 'info',
-          'bg-green-50 border-l-4 border-green-500 text-green-700':
+          'border-l-4 border-green-500 bg-green-50 text-green-700':
             notification.type === 'success',
-          'bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700':
+          'border-l-4 border-yellow-500 bg-yellow-50 text-yellow-700':
             notification.type === 'warning',
-          'bg-red-50 border-l-4 border-red-500 text-red-700':
+          'border-l-4 border-red-500 bg-red-50 text-red-700':
             notification.type === 'error',
         }"
       >
@@ -46,7 +46,7 @@ import { PwaService } from '../services/pwa.service';
             class="text-sm font-medium opacity-70 hover:opacity-100"
           >
             <svg
-              class="w-4 h-4"
+              class="h-4 w-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

@@ -30,7 +30,7 @@ Restaurant Layout Planner is a cutting-edge PWA built with Angular 19 that empow
 
 ## ✨ Key Features
 
-### �️ **Restaurant Floor Design & Layout**
+### **Restaurant Floor Design & Layout**
 
 - **Drag & Drop Interface**: Intuitive placement of tables, chairs, and restaurant elements
 - **Custom Dining Room Dimensions**: Define exact floor sizes for accurate capacity planning

@@ -52,7 +52,7 @@ jobs:
           pnpm run serve:pwa-express &
           SERVER_PID=$!
           echo "Server PID: $SERVER_PID"
-          
+
           # Wait for server to start and test connectivity
           echo "Waiting for server to start..."
           for i in {1..30}; do
@@ -90,7 +90,7 @@ jobs:
             echo "❌ Service Worker not accessible"
             exit 1
           fi
-          
+
           if curl -f http://localhost:8080/ngsw.json > /dev/null 2>&1; then
             echo "✅ Service Worker config accessible"
           else

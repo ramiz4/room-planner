@@ -1,0 +1,25 @@
+{
+  "name": "@ramiz4/room-planner",
+  "version": "1.0.0",
+  "description": "Angular room planner component for restaurant layout design",
+  "keywords": [
+    "angular",
+    "room-planner",
+    "restaurant",
+    "layout",
+    "floor-plan",
+    "drag-drop"
+  ],
+  "author": "Ramiz <me@ramizloki.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ramiz4/room-planner.git"
+  },
+  "homepage": "https://github.com/ramiz4/room-planner#readme",
+  "peerDependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0"
+  },
+  "sideEffects": false
+}

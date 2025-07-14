@@ -1,0 +1,78 @@
+<div class="mx-auto max-w-7xl p-8">
+  <div class="mb-8 text-center">
+    <h2 class="mb-2 text-3xl font-bold text-gray-800">Room Planner Sample</h2>
+    <p class="text-lg text-gray-600">
+      This shows how to use the room-planner library with different layouts and
+      elements.
+    </p>
+  </div>
+
+  <div class="mb-8 grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr]">
+    <div class="h-fit rounded-lg bg-white p-6 shadow-md">
+      <div class="space-y-4">
+        <h3
+          class="mb-4 border-b-2 border-blue-500 pb-2 text-xl font-semibold text-gray-800"
+        >
+          Layout Management
+        </h3>
+        <button
+          (click)="loadSampleTemplate()"
+          class="w-full rounded bg-blue-500 px-4 py-3 font-medium text-white transition-colors duration-300 hover:bg-blue-600"
+        >
+          Load Sample Template
+        </button>
+        <button
+          (click)="saveLayout()"
+          class="w-full rounded bg-green-500 px-4 py-3 font-medium text-white transition-colors duration-300 hover:bg-green-600"
+        >
+          Save Layout
+        </button>
+        <button
+          (click)="clearLayout()"
+          class="w-full rounded bg-orange-500 px-4 py-3 font-medium text-white transition-colors duration-300 hover:bg-orange-600"
+        >
+          Clear Layout
+        </button>
+      </div>
+
+      <div *ngIf="roomStats()" class="mt-8 rounded bg-gray-50 p-4">
+        <h4 class="mb-3 text-lg font-semibold text-gray-800">Layout Stats</h4>
+        <div class="space-y-2">
+          <div
+            class="flex items-center justify-between border-b border-gray-200 py-1 last:border-b-0"
+          >
+            <span class="font-medium text-gray-600">Total Tables:</span>
+            <span class="font-semibold text-gray-800">{{
+              roomStats()?.tableCount
+            }}</span>
+          </div>
+          <div
+            class="flex items-center justify-between border-b border-gray-200 py-1 last:border-b-0"
+          >
+            <span class="font-medium text-gray-600">Room Size:</span>
+            <span class="font-semibold text-gray-800">{{
+              roomStats()?.roomSize
+            }}</span>
+          </div>
+          <div
+            class="flex items-center justify-between border-b border-gray-200 py-1 last:border-b-0"
+          >
+            <span class="font-medium text-gray-600">Selected:</span>
+            <span class="font-semibold text-gray-800">{{
+              selectedElement() || 'None'
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg bg-white shadow-md">
+      <room-planner
+        [initialRoom]="templateData()"
+        (roomChange)="onRoomChange($event)"
+        (elementSelected)="onElementSelected($event)"
+      >
+      </room-planner>
+    </div>
+  </div>
+</div>

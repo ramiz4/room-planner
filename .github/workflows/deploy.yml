@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Sample App to GitHub Pages
 
 on:
   workflow_run:
@@ -23,31 +23,27 @@ jobs:
       contents: read
       actions: read
     steps:
-      - name: Download build artifact
+      - name: Download sample app artifact
         uses: actions/download-artifact@v4
         with:
-          name: room-planner-build
+          name: room-planner-sample-app
           run-id: ${{ github.event.workflow_run.id }}
           repository: ${{ github.repository }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: ./build
+          path: ./build-artifact
 
-      - name: Verify PWA deployment files
+      - name: Verify sample app deployment files
         run: |
-          echo "Checking downloaded build artifacts..."
+          echo "Checking downloaded sample app artifacts..."
+          ls -la ./build-artifact/
+          echo "Moving browser files to build directory..."
+          mv ./build-artifact/browser ./build
           ls -la ./build/
-          echo "Verifying critical PWA files exist..."
-          test -f ./build/manifest.webmanifest || (echo "ERROR: manifest.webmanifest not found" && exit 1)
-          test -f ./build/ngsw.json || (echo "ERROR: ngsw.json not found" && exit 1)
-          test -f ./build/ngsw-worker.js || (echo "ERROR: ngsw-worker.js not found" && exit 1)
-          echo "Verifying optional PWA files..."
-          if [ -d ./build/.well-known ]; then
-            echo "✅ .well-known directory found"
-            ls -la ./build/.well-known/
-          else
-            echo "⚠️  WARNING: .well-known directory not found (Chrome DevTools support disabled)"
-          fi
-          echo "PWA files verification complete!"
+          echo "Verifying critical files exist..."
+          test -f ./build/index.html || (echo "ERROR: index.html not found" && exit 1)
+          echo "Checking for main bundle files..."
+          ls -la ./build/*.js | head -5
+          echo "Sample app files verification complete!"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -61,16 +57,16 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Verify PWA deployment
+      - name: Verify sample app deployment
         run: |
-          echo "🚀 PWA deployed successfully!"
-          echo "📱 PWA URL: ${{ steps.deployment.outputs.page_url }}"
-          echo "🔧 Install the PWA by visiting the URL and clicking the install button"
-          echo "📋 PWA Features available:"
-          echo "  ✅ Offline functionality"
-          echo "  ✅ Service Worker caching"
-          echo "  ✅ Install prompt"
-          echo "  ✅ App manifest"
+          echo "🚀 Sample app deployed successfully!"
+          echo "📱 Sample App URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "🔧 Visit the URL to see the room-planner library in action"
+          echo "📋 Features available:"
+          echo "  ✅ Interactive room planning demo"
+          echo "  ✅ Library usage examples"
+          echo "  ✅ Restaurant layout samples"
+          echo "  ✅ Real-time drag & drop functionality"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -1,5 +1,6 @@
 packages:
   - '.'
+  - 'projects/*'
 
 ignoredBuiltDependencies:
   - '@parcel/watcher'

@@ -1,0 +1,117 @@
+name: Publish Library to NPM
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run tests
+        run: pnpm run test:ci
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Build library
+        run: pnpm run build:lib
+
+      - name: Version bump (if manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          cd projects/room-planner-lib
+          npm version ${{ github.event.inputs.version_type }} --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          cd ../..
+          npm version ${{ github.event.inputs.version_type }} --no-git-tag-version
+
+      - name: Commit version changes
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "chore: bump version to ${{ env.NEW_VERSION }}"
+          git push
+
+      - name: Create Git tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git tag -a "v${{ env.NEW_VERSION }}" -m "Release v${{ env.NEW_VERSION }}"
+          git push origin "v${{ env.NEW_VERSION }}"
+
+      - name: Verify library package
+        run: |
+          echo "Checking library package contents..."
+          ls -la dist/room-planner-lib/
+          cat dist/room-planner-lib/package.json
+          echo "Library package verification complete!"
+
+      - name: Publish to NPM
+        run: |
+          cd dist/room-planner-lib
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        if: github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.NEW_VERSION }}
+          name: Release v${{ env.NEW_VERSION }}
+          body: |
+            ## Changes in v${{ env.NEW_VERSION }}
+
+            This is an automated release of the room-planner Angular library.
+
+            ### Installation
+            ```bash
+            npm install @ramiz4/room-planner@${{ env.NEW_VERSION }}
+            ```
+
+            ### Documentation
+            - [Library Documentation](https://github.com/ramiz4/room-planner/tree/main/projects/room-planner-lib)
+            - [Sample App](https://ramiz4.github.io/room-planner/)
+
+            For full changelog, see the commits since the last release.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

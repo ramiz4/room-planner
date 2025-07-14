@@ -1,0 +1,14 @@
+{
+  "name": "room-planner-app",
+  "version": "1.0.0",
+  "description": "Sample application demonstrating room-planner library usage",
+  "dependencies": {
+    "@ramiz4/room-planner": "file:../../dist/room-planner-lib"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
+  }
+}

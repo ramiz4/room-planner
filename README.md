@@ -82,19 +82,34 @@ room-planner/
 
 - **Modern Angular**: Built with Angular 19 and latest practices for restaurant management
 - **TypeScript**: Fully typed codebase for reliable restaurant operations
-- **TailwindCSS**: Utility-first styling for rapid restaurant interface development
-- **Service Workers**: Advanced caching and offline strategies for uninterrupted service
-- **Test Coverage**: Comprehensive unit and integration tests for restaurant-critical reliability
+- **TailwindCSS**: Utility-first styling for modern, responsive UI components
+- **Comprehensive Testing**: Full unit and integration test coverage for production reliability
+- **TypeScript**: Full type safety and excellent developer experience
 
-## 📱 PWA Features
+## 🎯 Library Usage
 
-### Installation
+### Integration in Your App
 
-- **Install Button**: Automatic install prompt on supported browsers
-- **Offline Access**: Full functionality without internet connection
-- **App-like Experience**: Standalone app behavior when installed
+```typescript
+import { RoomPlannerComponent } from '@ramiz4/room-planner';
 
-### Offline Capabilities
+@Component({
+  template: `<room-planner [initialRoom]="roomData"></room-planner>`,
+  imports: [RoomPlannerComponent],
+})
+export class MyComponent {
+  roomData = createRoom({
+    widthMeters: 10,
+    heightMeters: 8,
+    tables: [],
+    staticElements: [],
+  });
+}
+```
+
+### Sample Application Features
+
+The included sample app demonstrates:
 
 - View and edit saved restaurant layouts
 - Create new floor plans and table arrangements
@@ -313,9 +328,9 @@ room-planner-lib/
     └── room-planner.constants.ts
 ```
 
-1. **Open the App**
-   - Visit the web app or launch the installed PWA
-   - The app will load with a default room layout
+1. **Try the Sample App**
+   - Visit the [live demo](https://ramiz4.github.io/room-planner/v2/)
+   - Explore different layouts and features
 
 2. **Create Your Room**
    - Use **Room Size Controls** to set custom dimensions

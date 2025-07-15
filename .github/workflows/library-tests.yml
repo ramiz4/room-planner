@@ -78,7 +78,9 @@ jobs:
           echo "✅ Checking public API exports..."
           test -f dist/room-planner-lib/public-api.d.ts
           echo "✅ Checking compiled bundles..."
-          test -f dist/room-planner-lib/fesm2022/room-planner.mjs
+          echo "Contents of fesm2022 directory:"
+          ls -la dist/room-planner-lib/fesm2022/
+          test -f dist/room-planner-lib/fesm2022/ramiz4-room-planner.mjs
           echo "📋 Library verification complete!"
 
       - name: Test library installation

@@ -1,0 +1,61 @@
+name: Library Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/room-planner-lib/**'
+      - '.github/workflows/library-tests.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'projects/room-planner-lib/**'
+      - '.github/workflows/library-tests.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          pnpm install --no-frozen-lockfile
+          echo "Dependencies installed successfully"
+
+      - name: Lint library
+        run: pnpm run lint
+
+      - name: Test library
+        run: pnpm run test:ci
+
+      - name: Build library
+        run: |
+          echo "Building library..."
+          pnpm run build:lib
+          echo "Library build complete"
+
+      - name: Verify library build
+        run: |
+          echo "Checking library build artifacts..."
+          ls -la dist/room-planner-lib/
+          echo "Verifying essential files exist..."
+          test -f dist/room-planner-lib/package.json
+          test -f dist/room-planner-lib/index.d.ts
+          test -f dist/room-planner-lib/public-api.d.ts
+          test -d dist/room-planner-lib/fesm2022
+          test -d dist/room-planner-lib/lib
+          echo "✅ Library build verification complete!"

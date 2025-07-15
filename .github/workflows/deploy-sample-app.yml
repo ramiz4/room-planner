@@ -51,67 +51,87 @@ jobs:
       - name: Download existing GitHub Pages content
         continue-on-error: true
         run: |
-          echo "Downloading existing GitHub Pages content..."
-          # Try to download the current Pages content to preserve main app
-          curl -s -L "https://ramiz4.github.io/room-planner/" -o /dev/null && \
-          git clone --depth=1 --branch=gh-pages https://github.com/${{ github.repository }}.git existing-pages || \
-          echo "No existing pages found or error downloading - will create new structure"
+          echo "Attempting to download existing GitHub Pages content..."
+          # Try to clone the gh-pages branch to preserve existing content
+          git clone --depth=1 --branch=gh-pages https://github.com/${{ github.repository }}.git existing-pages 2>/dev/null || {
+            echo "No gh-pages branch found or error cloning - will create new deployment"
+            mkdir -p existing-pages
+          }
 
       - name: Prepare v2 sample app for subfolder deployment
         run: |
           echo "Preparing v2 sample app for subfolder deployment..."
           
           # Create the target directory structure
-          mkdir -p ./pages-build/v2
+          mkdir -p ./pages-build
           
           # Copy existing pages content if it exists
-          if [ -d "existing-pages" ]; then
+          if [ -d "existing-pages" ] && [ "$(ls -A existing-pages 2>/dev/null)" ]; then
             echo "Copying existing pages content..."
-            cp -r existing-pages/* ./pages-build/ 2>/dev/null || echo "No existing content to copy"
-            # Remove git files
-            rm -rf ./pages-build/.git
+            # Copy everything except .git directory
+            find existing-pages -maxdepth 1 -not -name "existing-pages" -not -name ".git" -not -name "." -exec cp -r {} ./pages-build/ \;
+            echo "Existing content copied"
+          else
+            echo "No existing content found - creating fresh deployment"
           fi
           
-          # Copy v2 sample app to subfolder
+          # Create v2 directory and copy sample app
+          mkdir -p ./pages-build/v2
           echo "Copying v2 sample app to /v2 subfolder..."
           cp -r ./build-artifact/browser/* ./pages-build/v2/
           
-          # Create or update index.html with links to both apps
-          cat > ./pages-build/index.html << 'EOF'
+          # Only create index.html if it doesn't exist (preserve existing main app)
+          if [ ! -f "./pages-build/index.html" ]; then
+            echo "Creating version selector index.html..."
+            cat > ./pages-build/index.html << 'EOF'
           <!DOCTYPE html>
           <html>
           <head>
               <title>Room Planner - Choose Version</title>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
               <style>
-                  body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
-                  .version-card { border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; }
-                  .version-card h2 { margin-top: 0; }
-                  .btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+                  body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background: #f5f5f5; }
+                  .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                  .version-card { border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; background: #fafafa; }
+                  .version-card h2 { margin-top: 0; color: #333; }
+                  .btn { display: inline-block; padding: 12px 24px; background: #007bff; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }
                   .btn:hover { background: #0056b3; }
+                  .status { color: #28a745; font-weight: bold; }
+                  .dev-status { color: #ffc107; font-weight: bold; }
               </style>
           </head>
           <body>
-              <h1>🏢 Room Planner</h1>
-              <p>Choose which version of the Room Planner application you'd like to access:</p>
-              
-              <div class="version-card">
-                  <h2>📱 Production App (Main)</h2>
-                  <p>The stable production version with PWA capabilities.</p>
-                  <a href="/room-planner/main/" class="btn">Launch Production App</a>
-              </div>
-              
-              <div class="version-card">
-                  <h2>🧪 V2 Library Demo (Development)</h2>
-                  <p>Interactive demo showcasing the new v2 library features and monorepo architecture.</p>
-                  <a href="/room-planner/v2/" class="btn">Launch V2 Demo</a>
-              </div>
-              
-              <div style="margin-top: 40px; text-align: center; color: #666;">
-                  <p>📚 <a href="https://github.com/ramiz4/room-planner">View on GitHub</a></p>
+              <div class="container">
+                  <h1>🏢 Room Planner</h1>
+                  <p>Choose which version of the Room Planner application you'd like to access:</p>
+                  
+                  <div class="version-card">
+                      <h2>📱 Production App</h2>
+                      <p><span class="status">● LIVE</span> - The stable production version with PWA capabilities.</p>
+                      <a href="/room-planner/" class="btn">Launch Production App</a>
+                      <small style="display: block; margin-top: 10px; color: #666;">
+                          Note: If you're seeing this page, the main app might be in a subfolder.
+                      </small>
+                  </div>
+                  
+                  <div class="version-card">
+                      <h2>🧪 V2 Library Demo</h2>
+                      <p><span class="dev-status">● DEVELOPMENT</span> - Interactive demo showcasing the new v2 library features and monorepo architecture.</p>
+                      <a href="/room-planner/v2/" class="btn">Launch V2 Demo</a>
+                  </div>
+                  
+                  <div style="margin-top: 40px; text-align: center; color: #666;">
+                      <p>📚 <a href="https://github.com/ramiz4/room-planner" style="color: #007bff;">View on GitHub</a></p>
+                      <p><small>Last updated: $(date)</small></p>
+                  </div>
               </div>
           </body>
           </html>
           EOF
+          else
+            echo "Existing index.html found - preserving it"
+          fi
           
           echo "Directory structure created:"
           find ./pages-build -type f | head -20

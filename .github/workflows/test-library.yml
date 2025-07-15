@@ -1,4 +1,4 @@
-name: Library Tests
+name: Test Library
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo "Installing dependencies for library testing..."
-          
+
           # First, temporarily remove the problematic dependency from sample app
           cd projects/room-planner-app
           cp package.json package.json.backup

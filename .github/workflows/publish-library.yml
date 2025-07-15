@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo "Installing root dependencies..."
-          
+
           # First, temporarily remove the problematic dependency from sample app
           cd projects/room-planner-app
           cp package.json package.json.backup

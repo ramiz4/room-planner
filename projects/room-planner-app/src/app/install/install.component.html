@@ -1,44 +1,47 @@
 <div class="mx-auto max-w-6xl p-8">
   <div class="mb-8 text-center">
-    <h2 class="mb-2 text-3xl font-bold text-gray-800">
+    <h2 class="mb-2 text-3xl font-bold text-gray-800 dark:text-white">
       Basic Room Planner Demo
     </h2>
-    <p class="text-lg text-gray-600">
+    <p class="text-lg text-gray-600 dark:text-gray-300">
       This demonstrates the basic usage of the room-planner library.
     </p>
   </div>
 
   <div class="grid gap-8">
-    <div class="rounded-lg border-l-4 border-blue-500 bg-gray-50 p-6">
-      <h3 class="mb-4 text-xl font-semibold text-gray-800">
+    <div
+      class="rounded-lg border-l-4 border-blue-500 bg-gray-50 p-6 dark:border-blue-400 dark:bg-gray-800"
+    >
+      <h3 class="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
         To use the room-planner library:
       </h3>
       <ol class="list-inside list-decimal space-y-2">
-        <li>
+        <li class="text-gray-700 dark:text-gray-300">
           Install the package:
-          <code class="rounded bg-gray-200 px-2 py-1 font-mono text-sm"
+          <code
+            class="rounded bg-gray-200 px-2 py-1 font-mono text-sm dark:bg-gray-700 dark:text-gray-200"
             >npm install &#64;ramiz4/room-planner</code
           >
         </li>
-        <li>
+        <li class="text-gray-700 dark:text-gray-300">
           Import the component:
           <code
-            class="mt-1 block rounded bg-gray-200 px-2 py-1 font-mono text-sm"
+            class="mt-1 block rounded bg-gray-200 px-2 py-1 font-mono text-sm dark:bg-gray-700 dark:text-gray-200"
             >import {{ '{' }} RoomPlannerComponent {{ '}' }} from
             '&#64;ramiz4/room-planner';</code
           >
         </li>
-        <li>
+        <li class="text-gray-700 dark:text-gray-300">
           Add it to your template:
           <code
-            class="mt-1 block rounded bg-gray-200 px-2 py-1 font-mono text-sm"
+            class="mt-1 block rounded bg-gray-200 px-2 py-1 font-mono text-sm dark:bg-gray-700 dark:text-gray-200"
             >&lt;room-planner&gt;&lt;/room-planner&gt;</code
           >
         </li>
       </ol>
     </div>
 
-    <div class="rounded-lg bg-gray-900 p-6 text-gray-100">
+    <div class="rounded-lg bg-gray-900 p-6 text-gray-100 dark:bg-gray-950">
       <h3 class="mb-4 text-xl font-semibold text-blue-400">Code Example:</h3>
       <pre
         class="overflow-x-auto text-sm leading-relaxed"

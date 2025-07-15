@@ -1,24 +1,31 @@
-<div class="flex min-h-screen flex-col bg-gray-50">
-  <header class="border-b border-gray-200 bg-white shadow-sm">
+<div class="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-900">
+  <header
+    class="border-b border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800"
+  >
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between py-6">
-        <h1 class="text-2xl font-bold text-gray-900">Room Planner Demo App</h1>
-        <nav class="flex space-x-8">
-          <a
-            routerLink="/install"
-            routerLinkActive="text-blue-600 border-b-2 border-blue-600"
-            class="px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:text-blue-600"
-          >
-            Install
-          </a>
-          <a
-            routerLink="/sample"
-            routerLinkActive="text-blue-600 border-b-2 border-blue-600"
-            class="px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:text-blue-600"
-          >
-            Sample
-          </a>
-        </nav>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+          Room Planner Demo App
+        </h1>
+        <div class="flex items-center space-x-8">
+          <nav class="flex space-x-8">
+            <a
+              routerLink="/install"
+              routerLinkActive="text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400"
+              class="px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+            >
+              Install
+            </a>
+            <a
+              routerLink="/sample"
+              routerLinkActive="text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400"
+              class="px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+            >
+              Sample
+            </a>
+          </nav>
+          <app-theme-toggle></app-theme-toggle>
+        </div>
       </div>
     </div>
   </header>
@@ -27,9 +34,11 @@
     <router-outlet></router-outlet>
   </main>
 
-  <footer class="border-t border-gray-200 bg-white">
+  <footer
+    class="border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+  >
     <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-      <p class="text-center text-sm text-gray-500">
+      <p class="text-center text-sm text-gray-500 dark:text-gray-400">
         Room Planner Library Demo - Built with Angular & Tailwind CSS
       </p>
     </div>

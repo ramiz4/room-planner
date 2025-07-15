@@ -1,0 +1,114 @@
+name: CI - v2 Library Monorepo
+
+on:
+  push:
+    branches:
+      - main
+      - v2/library-monorepo
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+
+          # First, temporarily remove the problematic dependency from sample app
+          cd projects/room-planner-app
+          cp package.json package.json.backup
+          # Remove the local file dependency temporarily
+          node -e "
+            const pkg = JSON.parse(require('fs').readFileSync('package.json', 'utf8'));
+            delete pkg.dependencies['@ramiz4/room-planner'];
+            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+          "
+          cd ../..
+
+          # Now install all dependencies
+          pnpm install --no-frozen-lockfile
+
+          # Restore the original package.json
+          cd projects/room-planner-app
+          mv package.json.backup package.json
+          cd ../..
+
+          echo "Dependencies installed successfully"
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Build library
+        run: |
+          echo "Building library..."
+          pnpm run build:lib
+          echo "Library build complete"
+
+      - name: Install sample app dependencies
+        run: |
+          echo "Installing sample app dependencies (after library build)..."
+          cd projects/room-planner-app
+          pnpm install --no-frozen-lockfile
+          cd ../..
+          echo "Sample app dependencies installed"
+
+      - name: Test library
+        run: pnpm run test:ci
+
+      - name: Build sample app
+        run: pnpm run build:sample
+
+      - name: Verify library build
+        run: |
+          echo "Checking library build artifacts..."
+          ls -la dist/room-planner-lib/
+          echo "Verifying package.json..."
+          test -f dist/room-planner-lib/package.json
+          echo "Verifying compiled files..."
+          echo "Contents of fesm2022 directory:"
+          ls -la dist/room-planner-lib/fesm2022/
+          echo "Contents of lib directory:"
+          ls -la dist/room-planner-lib/lib/
+          echo "Verifying essential files exist..."
+          test -f dist/room-planner-lib/index.d.ts
+          test -f dist/room-planner-lib/public-api.d.ts
+          test -d dist/room-planner-lib/fesm2022
+          test -d dist/room-planner-lib/lib
+          echo "Library build verification complete!"
+
+      - name: Verify sample app build
+        run: |
+          echo "Checking sample app build artifacts..."
+          ls -la dist/room-planner-app/
+          echo "Verifying browser directory..."
+          test -d dist/room-planner-app/browser
+          echo "Verifying index.html..."
+          test -f dist/room-planner-app/browser/index.html
+          echo "Sample app build verification complete!"
+
+      - name: Upload library artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: room-planner-lib
+          path: dist/room-planner-lib
+
+      - name: Upload sample app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: room-planner-sample-app
+          path: dist/room-planner-app

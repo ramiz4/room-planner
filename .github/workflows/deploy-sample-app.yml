@@ -1,0 +1,88 @@
+name: Deploy Sample App to GitHub Pages (v2/library-monorepo)
+
+on:
+  workflow_run:
+    workflows: ['CI - v2 Library Monorepo']
+    branches: [main, v2/library-monorepo]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      artifact_run_id:
+        description: 'CI run ID to deploy (leave empty for latest successful run)'
+        required: false
+        type: string
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+      actions: read
+    steps:
+      - name: Debug workflow trigger information
+        run: |
+          echo "🔍 Debug Information:"
+          echo "Triggered by workflow: ${{ github.event.workflow_run.name }}"
+          echo "Workflow conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Run ID: ${{ github.event.workflow_run.id }}"
+          echo "Event: ${{ github.event_name }}"
+
+      - name: Download sample app artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: room-planner-sample-app
+          run-id: ${{ github.event.workflow_run.id }}
+          repository: ${{ github.repository }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./build-artifact
+
+      - name: Verify sample app deployment files
+        run: |
+          echo "Checking downloaded sample app artifacts..."
+          ls -la ./build-artifact/
+          echo "Moving browser files to build directory..."
+          mv ./build-artifact/browser ./build
+          ls -la ./build/
+          echo "Verifying critical files exist..."
+          test -f ./build/index.html || (echo "ERROR: index.html not found" && exit 1)
+          echo "Checking for main bundle files..."
+          ls -la ./build/*.js | head -5
+          echo "Sample app files verification complete!"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './build'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Verify sample app deployment
+        run: |
+          echo "🚀 Sample app deployed successfully!"
+          echo "📱 Sample App URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "🔧 Visit the URL to see the room-planner library in action"
+          echo "📋 Features available:"
+          echo "  ✅ Interactive room planning demo"
+          echo "  ✅ Library usage examples"
+          echo "  ✅ Restaurant layout samples"
+          echo "  ✅ Real-time drag & drop functionality"
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}

@@ -63,7 +63,7 @@ jobs:
         run: |
           echo "Installing sample app dependencies (after library build)..."
           cd projects/room-planner-app
-          pnpm install
+          pnpm install --no-frozen-lockfile
           cd ../..
           echo "Sample app dependencies installed"
 

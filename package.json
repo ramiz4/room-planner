@@ -23,6 +23,7 @@
     "version:minor": "npm version minor && pnpm run publish:lib",
     "version:major": "npm version major && pnpm run publish:lib",
     "build:sample": "ng build room-planner-app",
+    "build:sample:gh-pages": "ng build room-planner-app --base-href=/room-planner/v2/",
     "serve:sample": "ng serve room-planner-app",
     "test:sample": "ng test room-planner-app",
     "install:lib-in-sample": "pnpm run build:lib && cd projects/room-planner-app && npm install ../../dist/room-planner-lib"

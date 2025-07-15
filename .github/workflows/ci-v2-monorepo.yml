@@ -72,7 +72,7 @@ jobs:
         run: pnpm run test:ci
 
       - name: Build sample app
-        run: pnpm run build:sample
+        run: pnpm run build:sample:gh-pages
 
       - name: Verify library build
         run: |

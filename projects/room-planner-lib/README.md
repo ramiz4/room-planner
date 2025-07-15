@@ -73,10 +73,11 @@ export class MyPlannerComponent {
 
 ### Inputs
 
-| Property          | Type      | Default     | Description                             |
-| ----------------- | --------- | ----------- | --------------------------------------- |
-| `initialRoom`     | `Room`    | `undefined` | Initial room configuration to load      |
-| `showThemeToggle` | `boolean` | `false`     | Whether to show the theme toggle button |
+| Property          | Type      | Default     | Description                                                                         |
+| ----------------- | --------- | ----------- | ----------------------------------------------------------------------------------- |
+| `initialRoom`     | `Room`    | `undefined` | Initial room configuration to load                                                  |
+| `showThemeToggle` | `boolean` | `false`     | Whether to show the theme toggle button                                             |
+| `editable`        | `boolean` | `false`     | Whether to show editing controls (room size, element properties, add/edit elements) |
 
 ### Outputs
 

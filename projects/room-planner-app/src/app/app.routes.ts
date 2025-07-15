@@ -12,5 +12,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./sample/sample.component').then((m) => m.SampleComponent),
   },
+  {
+    path: 'sample-editable',
+    loadComponent: () =>
+      import('./sample-editable/sample-editable.component').then(
+        (m) => m.SampleEditableComponent
+      ),
+  },
   { path: '**', redirectTo: '/install' },
 ];

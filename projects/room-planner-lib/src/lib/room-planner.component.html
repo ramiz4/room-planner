@@ -25,7 +25,10 @@
     </div>
   </div>
 
-  <div class="absolute top-0 z-10 w-full bg-white p-2 dark:bg-gray-700">
+  <div
+    class="absolute top-0 z-10 w-full bg-white p-2 dark:bg-gray-700"
+    *ngIf="editable()"
+  >
     <div class="flex items-center justify-center">
       <app-room-size-controls
         [widthMeters]="room().widthMeters"
@@ -48,6 +51,7 @@
       </div>
 
       <app-add-elements-dropdown
+        *ngIf="editable()"
         (addElementEvent)="onAddElement($event)"
         (clearAllEvent)="onClearElements()"
         (exportLayoutEvent)="toggleExportManager()"
@@ -58,7 +62,7 @@
 
   <!-- Element Properties (when selected) -->
   <div
-    *ngIf="selectedElement()"
+    *ngIf="selectedElement() && editable()"
     class="absolute bottom-16 left-1/2 z-10 w-full max-w-lg -translate-x-1/2 transform rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
   >
     <div class="">

@@ -15,6 +15,7 @@ import { RoomPlannerComponent, Room, RoomElement } from '@ramiz4/room-planner';
   template: \`
     <room-planner
       [initialRoom]="roomData"
+      [editable]="true"
       [showThemeToggle]="true"
       (roomChange)="onRoomChange($event)"
       (elementSelected)="onElementSelected($event)">

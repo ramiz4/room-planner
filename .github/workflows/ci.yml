@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - v2/library-monorepo
   pull_request:
 
 jobs:

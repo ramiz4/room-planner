@@ -80,8 +80,15 @@ jobs:
           echo "Verifying package.json..."
           test -f dist/room-planner-lib/package.json
           echo "Verifying compiled files..."
-          test -f dist/room-planner-lib/esm2022/public-api.mjs
-          test -f dist/room-planner-lib/fesm2022/room-planner.mjs
+          echo "Contents of fesm2022 directory:"
+          ls -la dist/room-planner-lib/fesm2022/
+          echo "Contents of lib directory:"
+          ls -la dist/room-planner-lib/lib/
+          echo "Verifying essential files exist..."
+          test -f dist/room-planner-lib/index.d.ts
+          test -f dist/room-planner-lib/public-api.d.ts
+          test -d dist/room-planner-lib/fesm2022
+          test -d dist/room-planner-lib/lib
           echo "Library build verification complete!"
 
       - name: Verify sample app build

@@ -1,20 +1,22 @@
 # Room Planner Sample App
 
-This is a comprehensive sample application demonstrating how to use the room-planner Angular library in different scenarios.
+A comprehensive sample application demonstrating how to use the `@ramiz4/room-planner` Angular library with different usage patterns and modes.
 
 ## Features
 
-- **Demo Page**: Basic usage examples and code snippets
-- **Restaurant Example**: Shows how to use the library for restaurant layout planning
-- **Office Example**: Demonstrates office space planning with different layout types
+- **📖 Install Guide**: Installation instructions and basic setup
+- **👁️ Sample Viewer**: Read-only mode demonstration with pre-built layouts
+- **✏️ Sample Editable**: Full editor mode with all editing capabilities
+- **🌓 Theme Support**: Light/dark mode toggle functionality
 
 ## Running the Sample App
 
 ```bash
-# Install dependencies (if not already done)
+# From the workspace root
 pnpm install
+pnpm start
 
-# Start the sample app
+# Or specifically for the sample app
 pnpm run serve:sample
 ```
 
@@ -24,83 +26,97 @@ The app will be available at `http://localhost:4200`
 
 ```
 projects/room-planner-app/
-├── src/
-│   ├── app/
-│   │   ├── demo/           # Basic demo component
-│   │   ├── restaurant/     # Restaurant example
-│   │   ├── office/         # Office example
-│   │   ├── app.component.ts
-│   │   └── app.routes.ts
-│   ├── index.html
-│   ├── main.ts
-│   └── styles.scss
-├── tsconfig.app.json
-└── README.md
+├── src/app/
+│   ├── install/              # Installation guide and setup
+│   ├── sample/               # Read-only sample layouts
+│   ├── sample-editable/      # Editable mode demonstration
+│   ├── components/           # Shared components (theme toggle)
+│   ├── services/             # App services (theme service)
+│   ├── app.component.ts      # Main app component
+│   └── app.routes.ts         # Routing configuration
+├── public/                   # Static assets
+├── tsconfig.app.json         # TypeScript configuration
+└── README.md                 # This file
 ```
 
 ## What You'll See
 
-### Demo Page
+### 📖 Install Page (`/install`)
 
-- Code examples showing how to import and use the library
-- Mock data demonstration
-- Basic API documentation
+- Step-by-step installation instructions
+- Basic code examples showing library usage
+- API documentation with input/output properties
+- Getting started guide
 
-### Restaurant Example
+### 👁️ Sample Page (`/sample`)
 
-- Restaurant-specific layout templates
-- Table management features
-- Integration examples with backend services
-- Restaurant metrics and statistics
+- **Read-only mode demonstration**
+- Pre-built restaurant layout with multiple table types
+- Element selection showcase
+- Layout management controls (load template, save, clear)
+- Shows how to use the library for viewing existing layouts
 
-### Office Example
+### ✏️ Editable Page (`/sample-editable`)
 
-- Multiple office layout types:
-  - Traditional cubicle layout
-  - Open office floor plan
-  - Meeting room focused layout
-- Office space metrics
-- Different use case scenarios
+- **Full editor mode with all capabilities**
+- Room size controls for adjusting dimensions
+- Element properties panel for editing selected items
+- Add/edit/delete functionality for all element types
+- Export/import layout capabilities
+- Demonstrates complete editing workflow
 
 ## Using This as a Template
 
-You can use this sample app as a starting point for your own projects:
+The sample app provides excellent starting points for your own projects:
 
-1. Copy the relevant component from `/demo`, `/restaurant`, or `/office`
-2. Install the room-planner library: `npm install @ramiz4/room-planner`
-3. Update the imports to use the actual library instead of placeholders
-4. Customize the layouts and functionality for your specific needs
+### For Read-Only Layouts
 
-## Real Implementation
+```typescript
+// Copy from sample.component.ts
+<room-planner
+  [initialRoom]="roomData"
+  (elementSelected)="onElementSelected($event)"
+></room-planner>
+```
 
-In a real application, you would:
+### For Editable Layouts
 
-1. **Install the library**:
+```typescript
+// Copy from sample-editable.component.ts
+<room-planner
+  [initialRoom]="roomData"
+  [editable]="true"
+  (roomChange)="onRoomChange($event)"
+  (elementSelected)="onElementSelected($event)"
+></room-planner>
+```
 
-   ```bash
-   npm install room-planner
-   ```
+### Integration Steps
 
-2. **Import the component**:
+1. Install the library: `npm install @ramiz4/room-planner`
+2. Copy the relevant component code
+3. Import the library components in your module
+4. Customize layouts and functionality for your needs
 
-   ```typescript
-   import { RoomPlannerComponent } from 'room-planner';
-   ```
+## Key Implementation Examples
 
-3. **Use in your template**:
-   ```html
-   <room-planner [initialRoom]="roomData" (roomChange)="onRoomChange($event)">
-   </room-planner>
-   ```
+### Theme Support
 
-## Integration Examples
+- Dark/light mode toggle implementation
+- Theme persistence using localStorage
+- Component-level theme service integration
 
-The sample app shows how to integrate with:
+### Layout Management
 
-- Backend services for saving/loading layouts
-- Real-time updates for restaurant table status
-- Office space management systems
-- Custom UI components and controls
+- Creating rooms with `createRoom()` factory function
+- Handling room changes and element selection
+- Managing layout state with Angular signals
+
+### Element Handling
+
+- Pre-configured table layouts (2-top, 4-top, 6-top tables)
+- Static elements (entrances, service stations, restrooms)
+- Color-coded element types for visual organization
 
 ## Building the Sample App
 
@@ -110,7 +126,3 @@ pnpm run build:sample
 
 # Output will be in dist/room-planner-app/
 ```
-
-## Contributing
-
-Feel free to enhance the sample app with additional examples or use cases!

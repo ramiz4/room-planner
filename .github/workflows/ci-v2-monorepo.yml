@@ -3,9 +3,10 @@ name: CI - v2 Library Monorepo
 on:
   push:
     branches:
-      - main
       - v2/library-monorepo
   pull_request:
+    branches:
+      - v2/library-monorepo
 
 jobs:
   build-and-test:

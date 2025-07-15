@@ -3,7 +3,6 @@ name: Library Tests (v2/library-monorepo)
 on:
   push:
     branches:
-      - main
       - v2/library-monorepo
     paths:
       - 'projects/room-planner-lib/**'
@@ -11,6 +10,8 @@ on:
       - 'angular.json'
       - 'tsconfig.json'
   pull_request:
+    branches:
+      - v2/library-monorepo
     paths:
       - 'projects/room-planner-lib/**'
       - 'package.json'

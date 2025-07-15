@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Run tests
+        run: pnpm run test:ci
+
+      - name: Build PWA for GitHub Pages
+        run: pnpm run build:pwa
+
+      - name: Ensure .well-known directory exists
+        run: |
+          if [ ! -d dist/room-planner/browser/.well-known ]; then
+            echo "Creating missing .well-known directory..."
+            mkdir -p dist/room-planner/browser/.well-known/appspecific
+            cat > dist/room-planner/browser/.well-known/appspecific/com.chrome.devtools.json << 'EOF'
+          {
+            "chrome-devtools": {
+              "webSocketDebuggerUrl": "ws://localhost:8080/debug"
+            }
+          }
+          EOF
+            echo "✅ .well-known directory created"
+          else
+            echo "✅ .well-known directory already exists"
+          fi
+
+      - name: Verify PWA build
+        run: |
+          echo "Checking PWA build artifacts..."
+          ls -la dist/room-planner/browser/
+          echo "Verifying manifest file..."
+          test -f dist/room-planner/browser/manifest.webmanifest
+          echo "Verifying service worker files..."
+          test -f dist/room-planner/browser/ngsw.json
+          test -f dist/room-planner/browser/ngsw-worker.js
+          echo "Verifying .well-known directory..."
+          if [ -d dist/room-planner/browser/.well-known ]; then
+            echo "✅ .well-known directory found"
+            find dist/room-planner/browser/.well-known -type f
+          else
+            echo "⚠️  WARNING: .well-known directory not found"
+          fi
+          echo "Checking total file count in build..."
+          find dist/room-planner/browser -type f | wc -l
+          echo "PWA build verification complete!"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: room-planner-build
+          path: dist/room-planner/browser

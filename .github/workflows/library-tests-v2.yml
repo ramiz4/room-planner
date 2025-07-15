@@ -1,4 +1,4 @@
-name: Library Tests
+name: Library Tests (v2/library-monorepo)
 
 on:
   push:

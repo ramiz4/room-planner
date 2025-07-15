@@ -1,8 +1,8 @@
-name: Deploy Sample App to GitHub Pages
+name: Deploy Sample App to GitHub Pages (v2/library-monorepo)
 
 on:
   workflow_run:
-    workflows: ['CI']
+    workflows: ['CI (v2/library-monorepo)']
     branches: [main, v2/library-monorepo]
     types:
       - completed

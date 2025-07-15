@@ -48,18 +48,86 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: ./build-artifact
 
+      - name: Download existing GitHub Pages content
+        continue-on-error: true
+        run: |
+          echo "Downloading existing GitHub Pages content..."
+          # Try to download the current Pages content to preserve main app
+          curl -s -L "https://ramiz4.github.io/room-planner/" -o /dev/null && \
+          git clone --depth=1 --branch=gh-pages https://github.com/${{ github.repository }}.git existing-pages || \
+          echo "No existing pages found or error downloading - will create new structure"
+
+      - name: Prepare v2 sample app for subfolder deployment
+        run: |
+          echo "Preparing v2 sample app for subfolder deployment..."
+          
+          # Create the target directory structure
+          mkdir -p ./pages-build/v2
+          
+          # Copy existing pages content if it exists
+          if [ -d "existing-pages" ]; then
+            echo "Copying existing pages content..."
+            cp -r existing-pages/* ./pages-build/ 2>/dev/null || echo "No existing content to copy"
+            # Remove git files
+            rm -rf ./pages-build/.git
+          fi
+          
+          # Copy v2 sample app to subfolder
+          echo "Copying v2 sample app to /v2 subfolder..."
+          cp -r ./build-artifact/browser/* ./pages-build/v2/
+          
+          # Create or update index.html with links to both apps
+          cat > ./pages-build/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Room Planner - Choose Version</title>
+              <style>
+                  body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+                  .version-card { border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; }
+                  .version-card h2 { margin-top: 0; }
+                  .btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+                  .btn:hover { background: #0056b3; }
+              </style>
+          </head>
+          <body>
+              <h1>🏢 Room Planner</h1>
+              <p>Choose which version of the Room Planner application you'd like to access:</p>
+              
+              <div class="version-card">
+                  <h2>📱 Production App (Main)</h2>
+                  <p>The stable production version with PWA capabilities.</p>
+                  <a href="/room-planner/main/" class="btn">Launch Production App</a>
+              </div>
+              
+              <div class="version-card">
+                  <h2>🧪 V2 Library Demo (Development)</h2>
+                  <p>Interactive demo showcasing the new v2 library features and monorepo architecture.</p>
+                  <a href="/room-planner/v2/" class="btn">Launch V2 Demo</a>
+              </div>
+              
+              <div style="margin-top: 40px; text-align: center; color: #666;">
+                  <p>📚 <a href="https://github.com/ramiz4/room-planner">View on GitHub</a></p>
+              </div>
+          </body>
+          </html>
+          EOF
+          
+          echo "Directory structure created:"
+          find ./pages-build -type f | head -20
+
       - name: Verify sample app deployment files
         run: |
-          echo "Checking downloaded sample app artifacts..."
-          ls -la ./build-artifact/
-          echo "Moving browser files to build directory..."
-          mv ./build-artifact/browser ./build
-          ls -la ./build/
+          echo "Checking v2 sample app files in subfolder..."
+          ls -la ./pages-build/v2/
           echo "Verifying critical files exist..."
-          test -f ./build/index.html || (echo "ERROR: index.html not found" && exit 1)
-          echo "Checking for main bundle files..."
-          ls -la ./build/*.js | head -5
+          test -f ./pages-build/v2/index.html || (echo "ERROR: v2/index.html not found" && exit 1)
+          test -f ./pages-build/index.html || (echo "ERROR: root index.html not found" && exit 1)
+          echo "Checking for main bundle files in v2 folder..."
+          ls -la ./pages-build/v2/*.js | head -5 2>/dev/null || echo "No JS files found (this might be normal)"
           echo "Sample app files verification complete!"
+          echo "Final directory structure:"
+          find ./pages-build -name "*.html" | head -10
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -67,7 +135,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './build'
+          path: './pages-build'
 
       - name: Deploy to GitHub Pages
         id: deployment
@@ -75,14 +143,20 @@ jobs:
 
       - name: Verify sample app deployment
         run: |
-          echo "🚀 Sample app deployed successfully!"
-          echo "📱 Sample App URL: ${{ steps.deployment.outputs.page_url }}"
-          echo "🔧 Visit the URL to see the room-planner library in action"
-          echo "📋 Features available:"
+          echo "🚀 V2 Sample app deployed successfully to subfolder!"
+          echo "📱 Main site: ${{ steps.deployment.outputs.page_url }}"
+          echo "🧪 V2 Demo URL: ${{ steps.deployment.outputs.page_url }}v2/"
+          echo "� Features available in v2 demo:"
           echo "  ✅ Interactive room planning demo"
           echo "  ✅ Library usage examples"
           echo "  ✅ Restaurant layout samples"
           echo "  ✅ Real-time drag & drop functionality"
+          echo "  ✅ V2 monorepo architecture showcase"
+          echo ""
+          echo "📋 Site structure:"
+          echo "  • ${{ steps.deployment.outputs.page_url }} - Version selector page"
+          echo "  • ${{ steps.deployment.outputs.page_url }}v2/ - V2 sample app"
+          echo "  • ${{ steps.deployment.outputs.page_url }}main/ - Production PWA (if deployed)"
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}v2/

@@ -145,21 +145,39 @@ jobs:
                       var search = window.location.search;
                       var hash = window.location.hash;
                       
-                      // Check if this is a v2 route
-                      if (path.startsWith('/room-planner/v2/')) {
-                          // Extract the route after /v2/
-                          var v2Route = path.replace('/room-planner/v2/', '');
-                          var redirectUrl = '/room-planner/v2/#/' + v2Route + search + hash;
-                          window.location.replace(redirectUrl);
+                      console.log('404 redirect script - Current path:', path);
+                      
+                      // Check if this is a v2 route (with or without trailing slash)
+                      if (path.startsWith('/room-planner/v2')) {
+                          // If it's exactly /room-planner/v2, redirect to /room-planner/v2/
+                          if (path === '/room-planner/v2') {
+                              window.location.replace('/room-planner/v2/' + search + hash);
+                              return;
+                          }
+                          // If it's a sub-route like /room-planner/v2/install, convert to hash route
+                          if (path.startsWith('/room-planner/v2/')) {
+                              var v2Route = path.replace('/room-planner/v2/', '');
+                              if (v2Route) {
+                                  var redirectUrl = '/room-planner/v2/#/' + v2Route + search + hash;
+                                  console.log('Redirecting v2 sub-route to:', redirectUrl);
+                                  window.location.replace(redirectUrl);
+                                  return;
+                              }
+                          }
                       }
-                      // For main app routes (future)
-                      else if (path.startsWith('/room-planner/') && path !== '/room-planner/') {
+                      
+                      // For future main app routes (only if not v2 related)
+                      if (path.startsWith('/room-planner/') && path !== '/room-planner/' && !path.startsWith('/room-planner/v2')) {
                           var mainRoute = path.replace('/room-planner/', '');
                           var redirectUrl = '/room-planner/#/' + mainRoute + search + hash;
+                          console.log('Redirecting main route to:', redirectUrl);
                           window.location.replace(redirectUrl);
+                          return;
                       }
-                      // Default: redirect to version selector
-                      else {
+                      
+                      // Default: redirect to version selector only if not already there
+                      if (path !== '/room-planner/' && path !== '/room-planner/index.html') {
+                          console.log('Redirecting to version selector');
                           window.location.replace('/room-planner/');
                       }
                   })();

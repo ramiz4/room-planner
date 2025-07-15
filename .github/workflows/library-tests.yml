@@ -51,7 +51,7 @@ jobs:
           cd ../..
 
           # Now install all dependencies
-          pnpm install
+          pnpm install --no-frozen-lockfile
 
           # Restore the original package.json
           cd projects/room-planner-app

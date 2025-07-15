@@ -40,7 +40,17 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          echo "Installing dependencies..."
+          # Install root dependencies first
+          pnpm install --ignore-workspace
+          
+          # Install library dependencies
+          cd projects/room-planner-lib
+          pnpm install
+          cd ../..
+          
+          echo "Dependencies installed successfully"
 
       - name: Run tests
         run: pnpm run test:ci
@@ -49,7 +59,22 @@ jobs:
         run: pnpm run lint
 
       - name: Build library
-        run: pnpm run build:lib
+        run: |
+          echo "Starting library build..."
+          pnpm run build:lib
+          echo "Build completed. Checking output..."
+          if [ ! -d "dist/room-planner-lib" ]; then
+            echo "ERROR: Build failed - dist/room-planner-lib directory was not created!"
+            echo "Current working directory: $(pwd)"
+            echo "Contents of current directory:"
+            ls -la
+            if [ -d "dist" ]; then
+              echo "Contents of dist directory:"
+              ls -la dist/
+            fi
+            exit 1
+          fi
+          echo "Build successful - dist/room-planner-lib directory created"
 
       - name: Version bump (if manual trigger)
         if: github.event_name == 'workflow_dispatch'
@@ -79,13 +104,32 @@ jobs:
       - name: Verify library package
         run: |
           echo "Checking library package contents..."
+          if [ ! -d "dist/room-planner-lib" ]; then
+            echo "ERROR: dist/room-planner-lib directory not found!"
+            echo "Available directories in dist:"
+            ls -la dist/ || echo "dist directory does not exist"
+            echo "Current working directory contents:"
+            ls -la .
+            exit 1
+          fi
           ls -la dist/room-planner-lib/
+          if [ ! -f "dist/room-planner-lib/package.json" ]; then
+            echo "ERROR: package.json not found in dist/room-planner-lib!"
+            exit 1
+          fi
           cat dist/room-planner-lib/package.json
           echo "Library package verification complete!"
 
       - name: Publish to NPM
         run: |
+          if [ ! -d "dist/room-planner-lib" ]; then
+            echo "ERROR: Cannot publish - dist/room-planner-lib directory not found!"
+            exit 1
+          fi
           cd dist/room-planner-lib
+          echo "Publishing from directory: $(pwd)"
+          echo "Package contents:"
+          ls -la
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

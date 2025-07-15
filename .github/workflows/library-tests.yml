@@ -36,7 +36,17 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          echo "Installing dependencies..."
+          # Install root dependencies first
+          pnpm install --ignore-workspace
+          
+          # Install library dependencies
+          cd projects/room-planner-lib
+          pnpm install
+          cd ../..
+          
+          echo "Dependencies installed successfully"
 
       - name: Lint library
         run: pnpm run lint

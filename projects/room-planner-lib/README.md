@@ -2,6 +2,8 @@
 
 Angular room planner component library for creating interactive floor plans and restaurant layouts.
 
+> **Status**: GitHub workflows are now properly configured and running on the `v2/library-monorepo` branch.
+
 ## Installation
 
 ```bash

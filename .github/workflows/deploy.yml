@@ -1,11 +1,17 @@
-name: Deploy to GitHub Pages
+name: Deploy Sample App to GitHub Pages
 
 on:
   workflow_run:
-    workflows: ['CI']
+    workflows: ['CI - Library and Sample App']
     branches: [main]
     types:
       - completed
+  workflow_dispatch:
+    inputs:
+      artifact_run_id:
+        description: 'CI run ID to deploy (leave empty for latest successful run)'
+        required: false
+        type: string
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
@@ -15,7 +21,7 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -23,31 +29,53 @@ jobs:
       contents: read
       actions: read
     steps:
-      - name: Download build artifact
+      - name: Debug workflow trigger information
+        run: |
+          echo "🔍 Debug Information:"
+          echo "Triggered by workflow: ${{ github.event.workflow_run.name }}"
+          echo "Workflow conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Run ID: ${{ github.event.workflow_run.id }}"
+          echo "Event: ${{ github.event_name }}"
+
+      - name: Download sample app artifact
         uses: actions/download-artifact@v4
         with:
-          name: room-planner-build
+          name: room-planner-sample-app
           run-id: ${{ github.event.workflow_run.id }}
           repository: ${{ github.repository }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: ./build
+          path: ./build-artifact
 
-      - name: Verify PWA deployment files
+      - name: Prepare sample app for deployment
         run: |
-          echo "Checking downloaded build artifacts..."
-          ls -la ./build/
-          echo "Verifying critical PWA files exist..."
-          test -f ./build/manifest.webmanifest || (echo "ERROR: manifest.webmanifest not found" && exit 1)
-          test -f ./build/ngsw.json || (echo "ERROR: ngsw.json not found" && exit 1)
-          test -f ./build/ngsw-worker.js || (echo "ERROR: ngsw-worker.js not found" && exit 1)
-          echo "Verifying optional PWA files..."
-          if [ -d ./build/.well-known ]; then
-            echo "✅ .well-known directory found"
-            ls -la ./build/.well-known/
-          else
-            echo "⚠️  WARNING: .well-known directory not found (Chrome DevTools support disabled)"
-          fi
-          echo "PWA files verification complete!"
+          echo "Preparing sample app for GitHub Pages deployment..."
+          
+          # Create the target directory structure
+          mkdir -p ./pages-build
+          
+          # Copy sample app to root
+          echo "Copying sample app to root..."
+          cp -r ./build-artifact/browser/* ./pages-build/
+          
+          # Create 404.html for SPA routing support
+          echo "Creating 404.html for SPA routing support..."
+          cp ./pages-build/index.html ./pages-build/404.html
+          
+          echo "Directory structure created:"
+          find ./pages-build -type f | head -20
+
+      - name: Verify sample app deployment files
+        run: |
+          echo "Checking sample app files..."
+          ls -la ./pages-build/
+          echo "Verifying critical files exist..."
+          test -f ./pages-build/index.html || (echo "ERROR: index.html not found" && exit 1)
+          test -f ./pages-build/404.html || (echo "ERROR: 404.html not found" && exit 1)
+          echo "Checking for main bundle files..."
+          ls -la ./pages-build/*.js | head -5 2>/dev/null || echo "No JS files found (this might be normal)"
+          echo "Sample app files verification complete!"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -55,22 +83,22 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './build'
+          path: './pages-build'
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Verify PWA deployment
+      - name: Verify sample app deployment
         run: |
-          echo "🚀 PWA deployed successfully!"
-          echo "📱 PWA URL: ${{ steps.deployment.outputs.page_url }}"
-          echo "🔧 Install the PWA by visiting the URL and clicking the install button"
-          echo "📋 PWA Features available:"
-          echo "  ✅ Offline functionality"
-          echo "  ✅ Service Worker caching"
-          echo "  ✅ Install prompt"
-          echo "  ✅ App manifest"
+          echo "🚀 Sample app deployed successfully!"
+          echo "📱 Sample App URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "🧪 Features available in sample app:"
+          echo "  ✅ Interactive room planning demo"
+          echo "  ✅ Library usage examples"
+          echo "  ✅ Restaurant layout samples"
+          echo "  ✅ Real-time drag & drop functionality"
+          echo "  ✅ Library showcase"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

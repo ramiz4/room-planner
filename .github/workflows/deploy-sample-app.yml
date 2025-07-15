@@ -61,10 +61,10 @@ jobs:
       - name: Prepare v2 sample app for subfolder deployment
         run: |
           echo "Preparing v2 sample app for subfolder deployment..."
-          
+
           # Create the target directory structure
           mkdir -p ./pages-build
-          
+
           # Copy existing pages content if it exists
           if [ -d "existing-pages" ] && [ "$(ls -A existing-pages 2>/dev/null)" ]; then
             echo "Copying existing pages content..."
@@ -72,18 +72,19 @@ jobs:
             find existing-pages -maxdepth 1 -not -name "existing-pages" -not -name ".git" -not -name "." -exec cp -r {} ./pages-build/ \;
             echo "Existing content copied"
           else
-            echo "No existing content found - creating fresh deployment"
+            echo "No existing content found - creating fresh deployment structure"
+            # For fresh deployments, we still want the v2 app in the subfolder
+            # Don't copy anything to root - we'll create a proper structure below
           fi
-          
+
           # Create v2 directory and copy sample app
           mkdir -p ./pages-build/v2
           echo "Copying v2 sample app to /v2 subfolder..."
           cp -r ./build-artifact/browser/* ./pages-build/v2/
-          
-          # Only create index.html if it doesn't exist (preserve existing main app)
-          if [ ! -f "./pages-build/index.html" ]; then
-            echo "Creating version selector index.html..."
-            cat > ./pages-build/index.html << 'EOF'
+
+          # Always create index.html for version selection (will overwrite current incorrect deployment)
+          echo "Creating version selector index.html..."
+          cat > ./pages-build/index.html << 'EOF'
           <!DOCTYPE html>
           <html>
           <head>
@@ -105,22 +106,20 @@ jobs:
               <div class="container">
                   <h1>🏢 Room Planner</h1>
                   <p>Choose which version of the Room Planner application you'd like to access:</p>
-                  
+
                   <div class="version-card">
                       <h2>📱 Production App</h2>
-                      <p><span class="status">● LIVE</span> - The stable production version with PWA capabilities.</p>
-                      <a href="/room-planner/" class="btn">Launch Production App</a>
-                      <small style="display: block; margin-top: 10px; color: #666;">
-                          Note: If you're seeing this page, the main app might be in a subfolder.
-                      </small>
+                      <p><span class="status">● COMING SOON</span> - The stable production version with PWA capabilities.</p>
+                      <p style="color: #666; font-style: italic;">The main production app will be deployed here when ready.</p>
+                      <a href="https://github.com/ramiz4/room-planner" class="btn" style="background: #6c757d;">View Source Code</a>
                   </div>
-                  
+
                   <div class="version-card">
                       <h2>🧪 V2 Library Demo</h2>
                       <p><span class="dev-status">● DEVELOPMENT</span> - Interactive demo showcasing the new v2 library features and monorepo architecture.</p>
                       <a href="/room-planner/v2/" class="btn">Launch V2 Demo</a>
                   </div>
-                  
+
                   <div style="margin-top: 40px; text-align: center; color: #666;">
                       <p>📚 <a href="https://github.com/ramiz4/room-planner" style="color: #007bff;">View on GitHub</a></p>
                       <p><small>Last updated: $(date)</small></p>
@@ -129,10 +128,7 @@ jobs:
           </body>
           </html>
           EOF
-          else
-            echo "Existing index.html found - preserving it"
-          fi
-          
+
           echo "Directory structure created:"
           find ./pages-build -type f | head -20
 

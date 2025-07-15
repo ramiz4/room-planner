@@ -1,8 +1,6 @@
 # @ramiz4/room-planner
 
-Angular room planner component library for creating interactive floor plans and restaurant layouts.
-
-> **Status**: GitHub workflows are now properly configured and running on the `v2/library-monorepo` branch. Deployment workflow updated with correct base href for Angular routing.
+An Angular component library for creating interactive floor plans and restaurant layouts with drag-and-drop functionality, customizable elements, and export/import capabilities.
 
 ## Installation
 
@@ -18,6 +16,10 @@ pnpm add @ramiz4/room-planner
 
 ## Quick Start
 
+### Read-Only Mode (Default)
+
+Perfect for displaying layouts without editing capabilities:
+
 ```typescript
 import { Component } from '@angular/core';
 import {
@@ -28,10 +30,61 @@ import {
 } from '@ramiz4/room-planner';
 
 @Component({
-  selector: 'app-my-planner',
+  selector: 'app-layout-viewer',
   template: `
     <room-planner
       [initialRoom]="roomData"
+      (elementSelected)="onElementSelected($event)"
+    >
+    </room-planner>
+  `,
+  imports: [RoomPlannerComponent],
+})
+export class LayoutViewerComponent {
+  roomData = createRoom({
+    widthMeters: 12,
+    heightMeters: 8,
+    tables: [
+      {
+        id: 'table-1',
+        x: 100,
+        y: 100,
+        width: 80,
+        height: 80,
+        label: 'Table 1',
+        elementType: 'table',
+        shapeType: 'rectangle',
+        color: '#3498db',
+      },
+    ],
+    staticElements: [],
+  });
+
+  onElementSelected(element: RoomElement | null) {
+    console.log('Selected:', element?.label || 'None');
+  }
+}
+```
+
+### Editable Mode
+
+Full editing capabilities including room size controls and element management:
+
+```typescript
+import { Component } from '@angular/core';
+import {
+  RoomPlannerComponent,
+  createRoom,
+  Room,
+  RoomElement,
+} from '@ramiz4/room-planner';
+
+@Component({
+  selector: 'app-layout-editor',
+  template: `
+    <room-planner
+      [initialRoom]="roomData"
+      [editable]="true"
       [showThemeToggle]="true"
       (roomChange)="onRoomChange($event)"
       (elementSelected)="onElementSelected($event)"
@@ -40,7 +93,7 @@ import {
   `,
   imports: [RoomPlannerComponent],
 })
-export class MyPlannerComponent {
+export class LayoutEditorComponent {
   roomData = createRoom({
     widthMeters: 10,
     heightMeters: 8,
@@ -49,7 +102,8 @@ export class MyPlannerComponent {
   });
 
   onRoomChange(room: Room) {
-    console.log('Room updated:', room);
+    console.log('Layout updated:', room);
+    // Save to your backend or local storage
   }
 
   onElementSelected(element: RoomElement | null) {
@@ -60,39 +114,60 @@ export class MyPlannerComponent {
 
 ## Features
 
-- 🪑 Interactive table placement and management
-- 📐 Custom room dimensions with metric support
-- 🎨 Customizable element colors and properties
-- 📱 Responsive design for mobile and desktop
-- 🖱️ Drag and drop interface
-- 💾 Export/import room layouts as JSON
-- 🌓 Optional dark/light theme toggle
-- ⚡ Built with Angular 19 and modern web standards
+- 🎯 **Dual Modes**: Read-only viewer or full editor with permissions control
+- 🪑 **Interactive Elements**: Drag-and-drop tables, chairs, and static elements
+- 📐 **Metric Support**: Real-world room dimensions in meters
+- 🎨 **Customization**: Colors, shapes, labels, and element properties
+- 📱 **Responsive**: Works seamlessly on desktop and mobile devices
+- 🖱️ **Intuitive Interface**: Point-and-click editing with visual feedback
+- 💾 **Data Management**: Export/import layouts as JSON
+- 🌓 **Theme Support**: Optional dark/light mode toggle
+- 🔍 **Zoom & Pan**: Navigate large floor plans with ease
+- ⚡ **Modern Stack**: Built with Angular 19 and optimized performance
 
-## API
+## API Reference
 
-### Inputs
+### Component Properties
 
-| Property          | Type      | Default     | Description                                                                         |
-| ----------------- | --------- | ----------- | ----------------------------------------------------------------------------------- |
-| `initialRoom`     | `Room`    | `undefined` | Initial room configuration to load                                                  |
-| `showThemeToggle` | `boolean` | `false`     | Whether to show the theme toggle button                                             |
-| `editable`        | `boolean` | `false`     | Whether to show editing controls (room size, element properties, add/edit elements) |
+#### Inputs
 
-### Outputs
+| Property          | Type      | Default     | Description                                                                       |
+| ----------------- | --------- | ----------- | --------------------------------------------------------------------------------- |
+| `initialRoom`     | `Room`    | `undefined` | Initial room configuration to load                                                |
+| `editable`        | `boolean` | `false`     | Enable editing controls (room size, element properties, add/edit/delete elements) |
+| `showThemeToggle` | `boolean` | `false`     | Show dark/light theme toggle button                                               |
+
+#### Outputs
 
 | Event             | Type                  | Description                                    |
 | ----------------- | --------------------- | ---------------------------------------------- |
 | `roomChange`      | `Room`                | Emitted when the room layout changes           |
 | `elementSelected` | `RoomElement \| null` | Emitted when an element is selected/deselected |
 
-## Documentation
+### Available Controls by Mode
 
-For complete documentation, examples, and API reference, see the [main repository](https://github.com/ramiz4/room-planner).
+#### Read-Only Mode (`editable="false"`)
 
-## Live Demo
+- ✅ Zoom and pan controls
+- ✅ Element selection (click to select)
+- ✅ Theme toggle (if `showThemeToggle="true"`)
+- ❌ Room size editing
+- ❌ Element editing/deletion
+- ❌ Add new elements
 
-Try the interactive demo at: [https://ramiz4.github.io/room-planner/](https://ramiz4.github.io/room-planner/)
+#### Editable Mode (`editable="true"`)
+
+- ✅ All read-only features
+- ✅ Room size controls (resize room dimensions)
+- ✅ Element properties panel (edit selected elements)
+- ✅ Add elements dropdown (tables, chairs, static elements)
+- ✅ Export/import layout functionality
+
+## Links
+
+- 🌐 **Live Demo**: [https://ramiz4.github.io/room-planner/](https://ramiz4.github.io/room-planner/)
+- 📚 **Documentation**: [GitHub Repository](https://github.com/ramiz4/room-planner)
+- 📦 **NPM Package**: [@ramiz4/room-planner](https://www.npmjs.com/package/@ramiz4/room-planner)
 
 ## License
 

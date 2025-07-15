@@ -129,8 +129,50 @@ jobs:
           </html>
           EOF
 
-          # Create 404.html for Angular routing support in v2 subfolder
+          # Create 404.html at root for SPA routing support (handles both main and v2 apps)
           echo "Creating 404.html for SPA routing support..."
+          cat > ./pages-build/404.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>Room Planner - Redirecting...</title>
+              <script>
+                  // GitHub Pages SPA redirect script
+                  // This handles client-side routing for Angular apps
+                  (function() {
+                      var path = window.location.pathname;
+                      var search = window.location.search;
+                      var hash = window.location.hash;
+                      
+                      // Check if this is a v2 route
+                      if (path.startsWith('/room-planner/v2/')) {
+                          // Extract the route after /v2/
+                          var v2Route = path.replace('/room-planner/v2/', '');
+                          var redirectUrl = '/room-planner/v2/#/' + v2Route + search + hash;
+                          window.location.replace(redirectUrl);
+                      }
+                      // For main app routes (future)
+                      else if (path.startsWith('/room-planner/') && path !== '/room-planner/') {
+                          var mainRoute = path.replace('/room-planner/', '');
+                          var redirectUrl = '/room-planner/#/' + mainRoute + search + hash;
+                          window.location.replace(redirectUrl);
+                      }
+                      // Default: redirect to version selector
+                      else {
+                          window.location.replace('/room-planner/');
+                      }
+                  })();
+              </script>
+          </head>
+          <body>
+              <p>Redirecting to Room Planner...</p>
+              <p>If you are not redirected automatically, <a href="/room-planner/">click here</a>.</p>
+          </body>
+          </html>
+          EOF
+
+          # Also create a 404.html inside v2 folder as backup
           cp ./pages-build/v2/index.html ./pages-build/v2/404.html
 
           echo "Directory structure created:"

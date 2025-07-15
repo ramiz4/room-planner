@@ -9,22 +9,11 @@
 ![PNPM](https://img.shields.io/badge/PNPM-8.15-orange?style=flat-square&logo=pnpm)
 ![CI](https://github.com/ramiz4/room-planner/workflows/CI/badge.svg)
 ![Deploy](https://github.com/ramiz4/room-planner/workflows/Deploy%20Sample%20App%20to%20GitHub%20Pages/badge.svg)
+![Library Tests](https://github.com/ramiz4/room-planner/workflows/Library%20Tests/badge.svg)
 
 A modern, reusable Angular library for designing and managing room layouts with an intuitive drag-and-drop interface. Perfect for restaurant management, office planning, and any space management application.
 
-[📚 Library Documentation](projects/room-planner-lib/README.md) | [🎯 Sample App](projects/room-planner-app/README.md) | [🔧 Workflows](.github/WORKFLOWS.md) | [🐛 Report Bug](https://github.com/ramiz4/room-planner/issues) | [💡 Feature Request](https://github.com/ramiz4/room-planner/issues)r Angular Library 📐
-
-<div align="center">
-
-![Angular](https://img.shields.io/badge/Angular-19.2-red?style=flat-square&logo=angular)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript)
-![Library](https://img.shields.io/badge/Library-Ready-green?style=flat-square)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1-blue?style=flat-square&logo=tailwindcss)
-![PNPM](https://img.shields.io/badge/PNPM-8.15-orange?style=flat-square&logo=pnpm)
-
-A modern, reusable Angular library for designing and managing room layouts with an intuitive drag-and-drop interface. Perfect for restaurant management, office planning, and any space management application.
-
-[� Library Documentation](projects/room-planner-lib/README.md) | [🎯 Sample App](projects/room-planner-app/README.md) | [🐛 Report Bug](https://github.com/ramiz4/room-planner/issues) | [💡 Feature Request](https://github.com/ramiz4/room-planner/issues)
+[📚 Library Documentation](projects/room-planner-lib/README.md) | [🎯 Sample App](projects/room-planner-app/README.md) | [🔧 Workflows](.github/WORKFLOWS.md) | [🐛 Report Bug](https://github.com/ramiz4/room-planner/issues) | [💡 Feature Request](https://github.com/ramiz4/room-planner/issues)
 
 </div>
 

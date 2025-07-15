@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo "Installing dependencies..."
-          
+
           # First, temporarily remove the problematic dependency from sample app
           cd projects/room-planner-app
           cp package.json package.json.backup
@@ -49,15 +49,15 @@ jobs:
             require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
           "
           cd ../..
-          
+
           # Now install all dependencies
           pnpm install
-          
+
           # Restore the original package.json
           cd projects/room-planner-app
           mv package.json.backup package.json
           cd ../..
-          
+
           echo "Dependencies installed successfully"
 
       - name: Lint library

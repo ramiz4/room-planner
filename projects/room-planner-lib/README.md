@@ -32,6 +32,7 @@ import {
   template: `
     <room-planner
       [initialRoom]="roomData"
+      [showThemeToggle]="true"
       (roomChange)="onRoomChange($event)"
       (elementSelected)="onElementSelected($event)"
     >
@@ -65,7 +66,24 @@ export class MyPlannerComponent {
 - 📱 Responsive design for mobile and desktop
 - 🖱️ Drag and drop interface
 - 💾 Export/import room layouts as JSON
+- 🌓 Optional dark/light theme toggle
 - ⚡ Built with Angular 19 and modern web standards
+
+## API
+
+### Inputs
+
+| Property          | Type      | Default     | Description                             |
+| ----------------- | --------- | ----------- | --------------------------------------- |
+| `initialRoom`     | `Room`    | `undefined` | Initial room configuration to load      |
+| `showThemeToggle` | `boolean` | `false`     | Whether to show the theme toggle button |
+
+### Outputs
+
+| Event             | Type                  | Description                                    |
+| ----------------- | --------------------- | ---------------------------------------------- |
+| `roomChange`      | `Room`                | Emitted when the room layout changes           |
+| `elementSelected` | `RoomElement \| null` | Emitted when an element is selected/deselected |
 
 ## Documentation
 

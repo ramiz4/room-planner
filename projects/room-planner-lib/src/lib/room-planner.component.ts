@@ -66,6 +66,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
 
   // Input/Output properties for library usage
   initialRoom = input<Room>();
+  showThemeToggle = input<boolean>(false);
   roomChange = output<Room>();
   elementSelected = output<RoomElement | null>();
 

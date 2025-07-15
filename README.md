@@ -94,7 +94,10 @@ room-planner/
 import { RoomPlannerComponent } from '@ramiz4/room-planner';
 
 @Component({
-  template: `<room-planner [initialRoom]="roomData"></room-planner>`,
+  template: `<room-planner
+    [initialRoom]="roomData"
+    [showThemeToggle]="true"
+  ></room-planner>`,
   imports: [RoomPlannerComponent],
 })
 export class MyComponent {
@@ -238,6 +241,7 @@ import {
   template: `
     <room-planner
       [initialRoom]="roomData"
+      [showThemeToggle]="true"
       (roomChange)="onRoomChange($event)"
       (elementSelected)="onElementSelected($event)"
     >

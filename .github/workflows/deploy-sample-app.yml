@@ -129,6 +129,10 @@ jobs:
           </html>
           EOF
 
+          # Create 404.html for Angular routing support in v2 subfolder
+          echo "Creating 404.html for SPA routing support..."
+          cp ./pages-build/v2/index.html ./pages-build/v2/404.html
+
           echo "Directory structure created:"
           find ./pages-build -type f | head -20
 

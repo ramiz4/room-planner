@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
 })
 export class InstallComponent {
   codeExample = `import { Component } from '@angular/core';
-import { RoomPlannerComponent, Room } from '@ramiz4/room-planner';
+import { RoomPlannerComponent, Room, RoomElement } from '@ramiz4/room-planner';
 
 @Component({
   selector: 'app-layout',
@@ -34,8 +34,8 @@ export class LayoutComponent {
     console.log('Room updated:', room);
   }
 
-  onElementSelected(elementId: string | null) {
-    console.log('Element selected:', elementId);
+  onElementSelected(element: RoomElement | null) {
+    console.log('Element selected:', element);
   }
 }`;
 }

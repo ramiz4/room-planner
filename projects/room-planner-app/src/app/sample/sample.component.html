@@ -59,7 +59,7 @@
           >
             <span class="font-medium text-gray-600">Selected:</span>
             <span class="font-semibold text-gray-800">{{
-              selectedElement() || 'None'
+              selectedElement()?.label || selectedElement()?.id || 'None'
             }}</span>
           </div>
         </div>

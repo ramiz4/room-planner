@@ -226,7 +226,12 @@ pnpm run publish:lib
 
 ```typescript
 import { Component } from '@angular/core';
-import { RoomPlannerComponent, createRoom } from '@ramiz4/room-planner';
+import {
+  RoomPlannerComponent,
+  createRoom,
+  Room,
+  RoomElement,
+} from '@ramiz4/room-planner';
 
 @Component({
   selector: 'app-my-planner',
@@ -252,8 +257,8 @@ export class MyPlannerComponent {
     console.log('Room updated:', room);
   }
 
-  onElementSelected(elementId: string | null) {
-    console.log('Selected element:', elementId);
+  onElementSelected(element: RoomElement | null) {
+    console.log('Selected element:', element);
   }
 }
 ```

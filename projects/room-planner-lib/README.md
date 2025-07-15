@@ -20,7 +20,12 @@ pnpm add @ramiz4/room-planner
 
 ```typescript
 import { Component } from '@angular/core';
-import { RoomPlannerComponent, createRoom } from '@ramiz4/room-planner';
+import {
+  RoomPlannerComponent,
+  createRoom,
+  Room,
+  RoomElement,
+} from '@ramiz4/room-planner';
 
 @Component({
   selector: 'app-my-planner',
@@ -46,7 +51,7 @@ export class MyPlannerComponent {
     console.log('Room updated:', room);
   }
 
-  onElementSelected(element: any) {
+  onElementSelected(element: RoomElement | null) {
     console.log('Element selected:', element);
   }
 }

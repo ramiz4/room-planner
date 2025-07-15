@@ -67,7 +67,7 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
   // Input/Output properties for library usage
   initialRoom = input<Room>();
   roomChange = output<Room>();
-  elementSelected = output<string | null>();
+  elementSelected = output<RoomElement | null>();
 
   private ctx!: CanvasRenderingContext2D;
   private drawingService = inject(CanvasDrawingService);
@@ -167,8 +167,8 @@ export class RoomPlannerComponent implements AfterViewInit, OnDestroy {
 
     // 🎯 Selected element change effect
     effect(() => {
-      const selectedId = this.selectedId();
-      this.elementSelected.emit(selectedId);
+      const selectedElement = this.selectedElement();
+      this.elementSelected.emit(selectedElement);
     });
 
     // 🔍 Auto-save zoom level effect

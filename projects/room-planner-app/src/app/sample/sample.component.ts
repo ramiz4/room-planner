@@ -3,6 +3,7 @@ import { Component, signal } from '@angular/core';
 import {
   ElementTypeEnum,
   Room,
+  RoomElement,
   RoomPlannerComponent,
   ShapeTypeEnum,
   createRoom,
@@ -15,7 +16,7 @@ import {
 })
 export class SampleComponent {
   showTemplate = signal(false);
-  selectedElement = signal<string | null>(null);
+  selectedElement = signal<RoomElement | null>(null);
 
   templateData = signal<Room>(
     createRoom({
@@ -471,8 +472,8 @@ export class SampleComponent {
     this.updateStats(room);
   }
 
-  onElementSelected(elementId: string | null) {
-    console.log('Element selected:', elementId);
-    this.selectedElement.set(elementId);
+  onElementSelected(element: RoomElement | null) {
+    console.log('Element selected:', element);
+    this.selectedElement.set(element);
   }
 }

@@ -1,4 +1,4 @@
-name: CI (v2/library-monorepo)
+name: CI - v2 Library Monorepo
 
 on:
   push:

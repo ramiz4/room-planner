@@ -1,39 +1,43 @@
-<div class="mx-auto max-w-7xl p-8">
-  <div class="mb-8 text-center">
-    <h2 class="mb-2 text-3xl font-bold text-gray-800 dark:text-white">
+<div class="mx-auto max-w-7xl p-4 sm:p-8">
+  <div class="mb-6 text-center sm:mb-8">
+    <h2
+      class="mb-2 text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white"
+    >
       Room Planner Sample
     </h2>
-    <p class="text-lg text-gray-600 dark:text-gray-300">
+    <p class="text-base text-gray-600 sm:text-lg dark:text-gray-300">
       This shows how to use the room-planner library with different layouts and
       elements.
     </p>
   </div>
 
-  <div class="mb-8 grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr]">
+  <div
+    class="mb-6 grid grid-cols-1 gap-6 sm:mb-8 sm:gap-8 lg:grid-cols-[300px_1fr]"
+  >
     <div
-      class="h-fit rounded-lg bg-white p-6 shadow-md dark:bg-gray-800 dark:shadow-gray-900"
+      class="h-fit rounded-lg bg-white p-4 shadow-md sm:p-6 dark:bg-gray-800 dark:shadow-gray-900"
     >
-      <div class="space-y-4">
+      <div class="space-y-3 sm:space-y-4">
         <h3
-          class="mb-4 border-b-2 border-blue-500 pb-2 text-xl font-semibold text-gray-800 dark:border-blue-400 dark:text-white"
+          class="mb-3 border-b-2 border-blue-500 pb-2 text-lg font-semibold text-gray-800 sm:mb-4 sm:text-xl dark:border-blue-400 dark:text-white"
         >
           Layout Management
         </h3>
         <button
           (click)="loadSampleTemplate()"
-          class="w-full rounded bg-blue-500 px-4 py-3 font-medium text-white transition-colors duration-300 hover:bg-blue-600"
+          class="w-full rounded bg-blue-500 px-4 py-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-600 sm:text-base"
         >
           Load Sample Template
         </button>
         <button
           (click)="saveLayout()"
-          class="w-full rounded bg-green-500 px-4 py-3 font-medium text-white transition-colors duration-300 hover:bg-green-600"
+          class="w-full rounded bg-green-500 px-4 py-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-green-600 sm:text-base"
         >
           Save Layout
         </button>
         <button
           (click)="clearLayout()"
-          class="w-full rounded bg-orange-500 px-4 py-3 font-medium text-white transition-colors duration-300 hover:bg-orange-600"
+          class="w-full rounded bg-orange-500 px-4 py-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-orange-600 sm:text-base"
         >
           Clear Layout
         </button>
@@ -41,14 +45,16 @@
 
       <div
         *ngIf="roomStats()"
-        class="mt-8 rounded bg-gray-50 p-4 dark:bg-gray-700"
+        class="mt-6 rounded bg-gray-50 p-3 sm:mt-8 sm:p-4 dark:bg-gray-700"
       >
-        <h4 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white">
+        <h4
+          class="mb-2 text-base font-semibold text-gray-800 sm:mb-3 sm:text-lg dark:text-white"
+        >
           Layout Stats
         </h4>
         <div class="space-y-2">
           <div
-            class="flex items-center justify-between border-b border-gray-200 py-1 last:border-b-0 dark:border-gray-600"
+            class="flex items-center justify-between border-b border-gray-200 py-1 text-sm last:border-b-0 sm:text-base dark:border-gray-600"
           >
             <span class="font-medium text-gray-600 dark:text-gray-300"
               >Total Tables:</span
@@ -58,7 +64,7 @@
             }}</span>
           </div>
           <div
-            class="flex items-center justify-between border-b border-gray-200 py-1 last:border-b-0 dark:border-gray-600"
+            class="flex items-center justify-between border-b border-gray-200 py-1 text-sm last:border-b-0 sm:text-base dark:border-gray-600"
           >
             <span class="font-medium text-gray-600 dark:text-gray-300"
               >Room Size:</span
@@ -68,7 +74,7 @@
             }}</span>
           </div>
           <div
-            class="flex items-center justify-between border-b border-gray-200 py-1 last:border-b-0 dark:border-gray-600"
+            class="flex items-center justify-between border-b border-gray-200 py-1 text-sm last:border-b-0 sm:text-base dark:border-gray-600"
           >
             <span class="font-medium text-gray-600 dark:text-gray-300"
               >Selected:</span

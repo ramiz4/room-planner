@@ -1,7 +1,11 @@
 <!-- Fullscreen Canvas Container -->
-<div class="relative inset-0 overflow-hidden bg-gray-100 dark:bg-gray-900">
+<div
+  class="relative inset-0 min-h-[500px] overflow-hidden bg-gray-100 sm:min-h-[600px] md:min-h-screen dark:bg-gray-900"
+>
   <!-- Canvas Container -->
-  <div class="relative h-full w-full overflow-hidden">
+  <div
+    class="relative h-full min-h-[500px] w-full overflow-hidden sm:min-h-[600px]"
+  >
     <canvas
       #canvas
       appCanvasInteraction
@@ -26,7 +30,7 @@
   </div>
 
   <div
-    class="absolute top-0 z-10 w-full bg-white p-2 dark:bg-gray-700"
+    class="absolute top-0 z-10 w-full bg-white p-1.5 sm:p-2 dark:bg-gray-700"
     *ngIf="editable()"
   >
     <div class="flex items-center justify-center">
@@ -39,9 +43,11 @@
     </div>
   </div>
 
-  <div class="absolute bottom-0 z-10 w-full bg-white p-2 dark:bg-gray-700">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2">
+  <div
+    class="absolute bottom-0 z-10 w-full bg-white p-1.5 sm:p-2 dark:bg-gray-700"
+  >
+    <div class="flex items-center justify-between gap-1 sm:gap-2">
+      <div class="flex items-center gap-1 sm:gap-2">
         <app-zoom-controls
           [zoom]="zoomLevel()"
           (zoomChange)="onZoomChange($event)"
@@ -63,7 +69,7 @@
   <!-- Element Properties (when selected) -->
   <div
     *ngIf="selectedElement() && editable()"
-    class="absolute bottom-16 left-1/2 z-10 w-full max-w-lg -translate-x-1/2 transform rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+    class="absolute bottom-14 left-1/2 z-10 mx-2 w-[calc(100%-1rem)] max-w-lg -translate-x-1/2 transform rounded-lg border border-gray-200 bg-white p-3 shadow-lg sm:bottom-16 sm:mx-0 sm:w-full sm:p-4 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
   >
     <div class="">
       <app-element-properties
